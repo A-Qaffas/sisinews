@@ -1,0 +1,37 @@
+<?php
+
+return [
+    'title' => 'Live',
+    'title_governorate' => 'Live: :name',
+    'intro' => 'Live broadcasts from across Egypt, governorate by governorate. Nothing is loaded from the video service until you press play.',
+    'description' => 'Watch live broadcasts from across Egypt on :site. Filter by governorate and see what is coming up next.',
+    'description_governorate' => 'Watch live broadcasts from :name on :site, and see what is coming up next.',
+    'filter_label' => 'Governorate',
+    'all_egypt' => 'All Egypt',
+    'egypt_wide' => 'Egypt-wide',
+    'live_badge' => 'LIVE',
+    'live_now' => 'Live now',
+    'now_streaming' => 'a broadcast is live now',
+    'coming_up' => 'Coming up',
+    'recently_ended' => 'Recently ended',
+    'untitled' => 'Live broadcast',
+    'play' => 'Play live broadcast: :title',
+    'watch_on' => 'Watch on :provider',
+    'started' => 'Started :when',
+    'cairo_time' => 'Cairo time',
+    'to_be_announced' => 'Time to be announced',
+    'ended' => 'Ended :when',
+    'when' => ':date, :time',
+    'empty' => [
+        'title' => 'No broadcast is live right now',
+        'text' => 'Broadcasts appear here the moment they start. Check the schedule below or come back soon.',
+        'text_nothing_scheduled' => 'Broadcasts appear here the moment they start. Please come back soon.',
+        'title_governorate' => 'No broadcast is live right now in :name',
+        'text_governorate' => 'Egypt-wide broadcasts also appear here. Pick another governorate or see all of Egypt.',
+        'show_all' => 'Show all of Egypt',
+    ],
+    'strip' => [
+        'label' => 'Live broadcasts now',
+        'all' => 'All live broadcasts',
+    ],
+];

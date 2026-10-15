@@ -1,0 +1,60 @@
+<?php
+
+return [
+    'skip' => 'Skip to content',
+    'menu' => 'Menu',
+    'home' => 'Home',
+    'sections' => 'Sections',
+    'primary_nav' => 'Primary',
+    'search' => 'Search',
+    'search_label' => 'Search the site',
+    'search_placeholder' => 'Search the news',
+    'breaking' => 'Breaking',
+    'breaking_label' => 'Breaking news',
+    'live' => 'Live',
+    'by' => 'By :name',
+    'top_stories' => 'Top stories',
+    'latest' => 'Latest news',
+    'most_read' => 'Most read',
+    'tabs_label' => 'Most read and latest news',
+    'empty' => [
+        'title' => 'Our first stories are on the way',
+        'text' => 'We are preparing our first reports. Please check back shortly.',
+    ],
+    'footer' => [
+        'about' => 'A news site that keeps Egypt in focus, bringing you the key stories and analysis from Egypt, the region and the world in clear language.',
+        'follow' => 'Follow us',
+        'contact' => 'Contact',
+        'rss' => 'RSS feed',
+        'pages' => 'About',
+        'rights' => '© :year :name. All rights reserved.',
+    ],
+    'newsletter' => [
+        'title' => 'Newsletter',
+        'text' => 'Join the list for our upcoming newsletter.',
+        'email' => 'Email address',
+        'submit' => 'Subscribe',
+    ],
+    'pagination' => [
+        'label' => 'Pagination',
+        'previous' => 'Previous',
+        'next' => 'Next',
+        'page' => 'Page :page',
+    ],
+    'pages' => [
+        'breadcrumb' => 'Breadcrumb',
+        'updated' => 'Last updated :date',
+        // Replaces the [[contact]] token in a page body while no contact address is configured.
+        'editorial_team' => 'the editorial team',
+    ],
+    'errors' => [
+        'home' => 'Back to the home page',
+        'newsroom' => 'Back to the newsroom',
+        '403' => ['title' => 'No access', 'text' => 'This page is not available to your account. Ask an administrator if you need it.'],
+        '404' => ['title' => 'Page not found', 'text' => 'The page may have moved or been removed, or the link is wrong.'],
+        '419' => ['title' => 'Page expired', 'text' => 'Go back, refresh the page and try again.'],
+        '429' => ['title' => 'Too many requests', 'text' => 'Please wait a moment and try again.'],
+        '500' => ['title' => 'Something went wrong', 'text' => 'We are sorry. Please try again in a moment.'],
+        '503' => ['title' => 'Down for maintenance', 'text' => 'We are making a quick update and will be back shortly.'],
+    ],
+];

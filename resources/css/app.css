@@ -1,0 +1,702 @@
+@import 'tailwindcss';
+@import './article.css';
+@import './live.css';
+
+/*
+ * One stylesheet serves Arabic (rtl) and English (ltr): everything is written with
+ * logical properties (margin-inline, padding-inline, inset-inline-start, text-align:start)
+ * and Tailwind's ms-/me-/ps-/pe-/text-start utilities, never left/right.
+ */
+
+@theme {
+    --color-cream: #f7f2e9;
+    --color-cream-deep: #ede5d4;
+    --color-ink: #162938;
+    --color-ink-soft: #34444f;
+    --color-muted: #55616c;
+    --color-line: #d8cfbd;
+    --color-crimson: #9b2c2c;
+    --color-crimson-deep: #7a2020;
+    --color-alert-soft: #ffc9c9;
+
+    /* The `--font-*` variables inside var() come from the inline @fonts block the layout emits. */
+    --font-sans: var(--font-ibm-plex-sans-arabic, 'IBM Plex Sans Arabic'), ui-sans-serif, system-ui, 'Segoe UI', Tahoma,
+        sans-serif;
+    --font-headline: var(--font-sans);
+}
+
+html:lang(en) {
+    --font-sans: var(--font-ibm-plex-sans, 'IBM Plex Sans'), ui-sans-serif, system-ui, 'Segoe UI', Tahoma, sans-serif;
+    --font-headline: var(--font-playfair-display, 'Playfair Display'), 'Iowan Old Style', Georgia, 'Times New Roman',
+        serif;
+}
+
+@layer base {
+    @media (prefers-reduced-motion: no-preference) {
+        html {
+            scroll-behavior: smooth;
+        }
+    }
+
+    html {
+        scroll-padding-block-start: 1rem;
+    }
+
+    /* A column so a short page (404, empty search) pushes the footer to the bottom of the viewport. */
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100dvh;
+        background: var(--color-cream);
+        color: var(--color-ink);
+        font-family: var(--font-sans);
+        /* Arabic needs generous leading for its stacked diacritics and tall ascenders. */
+        line-height: 1.8;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    html:lang(en) body {
+        line-height: 1.65;
+    }
+
+    main {
+        flex: 1 0 auto;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+        font-family: var(--font-headline);
+        font-weight: 700;
+        line-height: 1.5;
+        text-wrap: balance;
+    }
+
+    html:lang(en) :is(h1, h2, h3, h4) {
+        line-height: 1.22;
+    }
+
+    a {
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.22em;
+    }
+
+    :focus-visible {
+        outline: 3px solid var(--color-crimson);
+        outline-offset: 2px;
+    }
+
+    .on-dark :focus-visible {
+        outline-color: var(--color-cream);
+    }
+
+    main:focus {
+        outline: none;
+    }
+}
+
+@layer components {
+    .container-site {
+        width: 100%;
+        max-width: 75rem;
+        margin-inline: auto;
+        padding-inline: 1rem;
+    }
+
+    @media (min-width: 40rem) {
+        .container-site {
+            padding-inline: 1.5rem;
+        }
+    }
+
+    .skip-link {
+        position: absolute;
+        inset-inline-start: 0.5rem;
+        inset-block-start: -5rem;
+        z-index: 100;
+        padding: 0.6rem 1rem;
+        background: var(--color-ink);
+        color: var(--color-cream);
+        font-weight: 700;
+    }
+
+    .skip-link:focus {
+        inset-block-start: 0.5rem;
+    }
+
+    /* ---------- Header ---------- */
+
+    .topbar {
+        background: var(--color-ink);
+        color: var(--color-cream);
+        font-size: 0.875rem;
+        line-height: 1.5;
+    }
+
+    .topbar a {
+        text-decoration: none;
+    }
+
+    .topbar a:hover {
+        text-decoration: underline;
+    }
+
+    /* The Arabic label on English pages must not pull the 40 KB Arabic font file in for one word. */
+    .lang-switch {
+        font-family: ui-sans-serif, system-ui, 'Segoe UI', Tahoma, sans-serif;
+        font-weight: 600;
+        /* Invisible padding grows the tap area to 44px without making the thin top bar taller. */
+        display: inline-block;
+        padding: 0.7rem 0.75rem;
+        margin: -0.7rem -0.75rem;
+    }
+
+    .masthead-tagline {
+        color: var(--color-muted);
+        font-family: var(--font-headline);
+        font-size: 1.05rem;
+    }
+
+    html:lang(en) .masthead-tagline {
+        font-style: italic;
+    }
+
+    .nav-bar {
+        border-block: 2px solid var(--color-ink);
+        background: var(--color-cream);
+    }
+
+    .nav-link {
+        display: block;
+        padding: 0.7rem 0.85rem;
+        font-weight: 700;
+        text-decoration: none;
+        border-block-end: 3px solid transparent;
+    }
+
+    .nav-link:hover {
+        color: var(--color-crimson);
+    }
+
+    .nav-link[aria-current='page'] {
+        color: var(--color-crimson);
+        border-block-end-color: var(--color-crimson);
+    }
+
+    .menu-toggle {
+        display: none;
+        align-items: center;
+        gap: 0.5rem;
+        min-height: 2.75rem;
+        padding-inline: 0.9rem;
+        border: 2px solid var(--color-ink);
+        background: transparent;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .menu-toggle:hover {
+        background: var(--color-cream-deep);
+    }
+
+    .js .menu-toggle {
+        display: inline-flex;
+    }
+
+    @media (min-width: 48rem) {
+        .js .menu-toggle {
+            display: none;
+        }
+    }
+
+    @media (width < 48rem) {
+        .js .nav-panel:not(.is-open) {
+            display: none;
+        }
+
+        .nav-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .nav-link {
+            border-block-end: 1px solid var(--color-line);
+        }
+
+        .nav-link[aria-current='page'] {
+            border-block-end-color: var(--color-crimson);
+        }
+    }
+
+    .search-form {
+        display: flex;
+        align-items: stretch;
+    }
+
+    .search-form input {
+        min-width: 0;
+        flex: 1;
+        min-height: 2.5rem;
+        padding-inline: 0.75rem;
+        border: 1px solid var(--color-ink);
+        border-inline-end: 0;
+        background: #fff;
+        color: var(--color-ink);
+    }
+
+    .search-form input::placeholder {
+        color: var(--color-muted);
+    }
+
+    .search-form button {
+        min-width: 2.75rem;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--color-ink);
+        background: var(--color-ink);
+        color: var(--color-cream);
+        cursor: pointer;
+    }
+
+    .search-form button:hover {
+        background: var(--color-crimson);
+        border-color: var(--color-crimson);
+    }
+
+    /* ---------- Breaking ticker (CSS-only marquee) ---------- */
+
+    .ticker {
+        display: flex;
+        align-items: stretch;
+        border-block-end: 1px solid var(--color-line);
+        background: var(--color-cream-deep);
+    }
+
+    .ticker-label {
+        flex: none;
+        display: flex;
+        align-items: center;
+        padding-inline: 1rem;
+        background: var(--color-crimson);
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.95rem;
+    }
+
+    .ticker-viewport {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        mask-image: linear-gradient(to right, transparent, #000 1.5rem, #000 calc(100% - 1.5rem), transparent);
+    }
+
+    .ticker-track {
+        display: flex;
+        width: max-content;
+        animation: ticker-ltr var(--ticker-duration, 40s) linear infinite;
+    }
+
+    html[dir='rtl'] .ticker-track {
+        animation-name: ticker-rtl;
+    }
+
+    /* Each group is at least one viewport wide so the loop never shows a gap. */
+    .ticker-group {
+        display: flex;
+        flex: none;
+        min-width: 100vw;
+        align-items: center;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .ticker-group li {
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+    }
+
+    .ticker-group li::after {
+        content: '';
+        width: 0.4rem;
+        height: 0.4rem;
+        margin-inline: 1.25rem;
+        background: var(--color-crimson);
+        transform: rotate(45deg);
+    }
+
+    .ticker-group a {
+        display: block;
+        padding-block: 0.55rem;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .ticker-group a:hover,
+    .ticker-group a:focus-visible {
+        color: var(--color-crimson);
+        text-decoration: underline;
+    }
+
+    .ticker:hover .ticker-track,
+    .ticker:focus-within .ticker-track,
+    .ticker-track:active {
+        animation-play-state: paused;
+    }
+
+    @keyframes ticker-ltr {
+        to {
+            transform: translateX(-50%);
+        }
+    }
+
+    @keyframes ticker-rtl {
+        to {
+            transform: translateX(50%);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .ticker-track {
+            animation: none;
+        }
+
+        .ticker-viewport {
+            overflow-x: auto;
+            mask-image: none;
+        }
+
+        .ticker-group[aria-hidden='true'] {
+            display: none;
+        }
+    }
+
+    /* ---------- Section headings ---------- */
+
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-block-end: 1rem;
+        padding-block-end: 0.55rem;
+        border-block-end: 2px solid var(--color-ink);
+        font-size: 1.3rem;
+    }
+
+    .section-title::before {
+        content: '';
+        flex: none;
+        width: 0.4rem;
+        height: 1.15em;
+        background: var(--color-crimson);
+    }
+
+    .section-title a {
+        text-decoration: none;
+    }
+
+    .section-title a:hover {
+        color: var(--color-crimson);
+    }
+
+    /* ---------- Story cards ---------- */
+
+    .story {
+        position: relative;
+    }
+
+    /* One link per card: the headline link stretches over the whole card. */
+    .story-link {
+        text-decoration: none;
+    }
+
+    .story-link::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+    }
+
+    .story-link:focus-visible {
+        outline: none;
+    }
+
+    .story:has(.story-link:focus-visible) {
+        outline: 3px solid var(--color-crimson);
+        outline-offset: 4px;
+    }
+
+    .story:hover .story-title,
+    .story-title:has(.story-link:focus-visible) {
+        color: var(--color-crimson);
+    }
+
+    /* The invisible ::before grows the tap area of a one-word label to a thumb-sized target. */
+    a.story-cat::before {
+        content: '';
+        position: absolute;
+        inset: -0.55rem -0.4rem;
+    }
+
+    .story-cat {
+        position: relative;
+        z-index: 2;
+        color: var(--color-crimson);
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    a.story-cat:hover {
+        text-decoration: underline;
+    }
+
+    .story-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.15rem 0.6rem;
+        color: var(--color-muted);
+        font-size: 0.8125rem;
+        line-height: 1.6;
+    }
+
+    .story-meta > * + *::before {
+        content: '';
+        display: inline-block;
+        width: 3px;
+        height: 3px;
+        margin-inline-end: 0.6rem;
+        vertical-align: middle;
+        border-radius: 50%;
+        background: currentcolor;
+    }
+
+    .media {
+        position: relative;
+        overflow: hidden;
+        background: var(--color-cream-deep);
+    }
+
+    .media img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* No hero image: the current brand logo on a cream panel. */
+    .media--placeholder {
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--color-line);
+    }
+
+    .media--placeholder img {
+        position: static;
+        width: 46%;
+        max-width: 15rem;
+        height: auto;
+        object-fit: contain;
+        opacity: 0.9;
+    }
+
+    .media--placeholder.is-mark img {
+        width: 56%;
+        max-width: 5rem;
+    }
+
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+        .story .media:not(.media--placeholder) img {
+            transition: transform 0.4s ease;
+        }
+
+        .story:hover .media:not(.media--placeholder) img {
+            transform: scale(1.03);
+        }
+    }
+
+    /* ---------- Sidebar tabs and ranked list ---------- */
+
+    .tab-list {
+        display: flex;
+        gap: 0.25rem;
+        margin-block-end: 1rem;
+        border-block-end: 2px solid var(--color-ink);
+    }
+
+    .tab {
+        flex: 1;
+        padding: 0.6rem 0.75rem;
+        border: 0;
+        background: transparent;
+        color: var(--color-ink);
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .tab:hover {
+        background: var(--color-cream-deep);
+    }
+
+    .tab[aria-selected='true'] {
+        background: var(--color-ink);
+        color: var(--color-cream);
+    }
+
+    /* Stacked (no JS): space only between panels that are actually showing. */
+    .tabs-stack > [role='tabpanel']:not([hidden]) + [role='tabpanel']:not([hidden]) {
+        margin-block-start: 2rem;
+    }
+
+    .ranked {
+        counter-reset: rank;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .ranked > li {
+        counter-increment: rank;
+        display: flex;
+        gap: 0.85rem;
+        padding-block: 0.85rem;
+        border-block-end: 1px solid var(--color-line);
+    }
+
+    .ranked > li:last-child {
+        border-block-end: 0;
+    }
+
+    .ranked > li::before {
+        content: counter(rank);
+        flex: none;
+        min-width: 1.6rem;
+        color: var(--color-crimson);
+        font-family: var(--font-headline);
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.1;
+        text-align: center;
+    }
+
+    .ranked > li > * {
+        flex: 1;
+        min-width: 0;
+    }
+
+    /* ---------- Footer ---------- */
+
+    .site-footer {
+        margin-block-start: 3rem;
+        border-block-start: 4px solid var(--color-ink);
+        background: var(--color-cream-deep);
+    }
+
+    .site-footer a {
+        text-decoration: none;
+    }
+
+    .site-footer a:hover {
+        color: var(--color-crimson);
+        text-decoration: underline;
+    }
+
+    .footer-links a {
+        display: inline-block;
+        padding-block: 0.5rem;
+    }
+
+    @media (min-width: 48rem) {
+        .footer-links a {
+            padding-block: 0.2rem;
+        }
+    }
+
+    .footer-base {
+        background: var(--color-ink);
+        color: var(--color-cream);
+        font-size: 0.875rem;
+    }
+
+    .footer-base a:hover {
+        color: inherit;
+    }
+
+    .footer-heading {
+        margin-block-end: 0.75rem;
+        font-size: 1.15rem;
+    }
+
+    .field-input {
+        width: 100%;
+        min-height: 2.75rem;
+        padding-inline: 0.85rem;
+        border: 1px solid var(--color-ink);
+        background: #fff;
+        color: var(--color-ink);
+    }
+
+    .field-input::placeholder {
+        color: var(--color-muted);
+    }
+
+    .btn-dark {
+        min-height: 2.75rem;
+        padding-inline: 1.25rem;
+        border: 1px solid var(--color-ink);
+        background: var(--color-ink);
+        color: var(--color-cream);
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .btn-dark:hover {
+        background: var(--color-crimson);
+        border-color: var(--color-crimson);
+    }
+
+    .social-link {
+        display: inline-block;
+        padding: 0.3rem 0.8rem;
+        border: 1px solid var(--color-ink);
+        font-size: 0.9rem;
+    }
+
+    .social-link:hover {
+        border-color: var(--color-crimson);
+        text-decoration: none;
+    }
+
+    /* ---------- Pagination ---------- */
+
+    .page-link {
+        display: inline-grid;
+        min-width: 2.5rem;
+        min-height: 2.5rem;
+        place-items: center;
+        padding-inline: 0.6rem;
+        border: 1px solid var(--color-line);
+        background: #fff;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    a.page-link:hover {
+        border-color: var(--color-ink);
+    }
+
+    .page-link[aria-current='page'] {
+        border-color: var(--color-ink);
+        background: var(--color-ink);
+        color: var(--color-cream);
+    }
+
+    .page-link[aria-disabled='true'] {
+        color: var(--color-muted);
+        background: transparent;
+    }
+}

@@ -1,0 +1,428 @@
+{
+    "desk": {
+        "name": "sisi.news Desk",
+        "name_ar": "تحرير سيسي نيوز"
+    },
+    "stories": [
+        {
+            "key": "nile-through-cairo",
+            "category": "egypt",
+            "image": "images/nile-felucca-cairo.jpg",
+            "featured": true,
+            "published_hours_ago": 2,
+            "tags": [
+                {
+                    "en": "Nile",
+                    "ar": "النيل"
+                },
+                {
+                    "en": "Cairo",
+                    "ar": "القاهرة"
+                },
+                {
+                    "en": "Greater Cairo",
+                    "ar": "القاهرة الكبرى"
+                }
+            ],
+            "en": {
+                "title": "The Nile in Cairo: a river that shaped the capital",
+                "excerpt": "Cairo stands near the head of the Nile delta, and the river helps explain the capital’s founding, its geography and where Egyptians live.",
+                "hero_caption": "A felucca on the Nile in central Cairo, with the Cairo Tower in the background. Photo: Mo7amedsalim / Wikimedia Commons / CC BY-SA 3.0 (cropped)",
+                "meta_description": "How the Nile shaped Cairo: the capital’s founding in 969, its river islands, and why most Egyptians live along the river and the delta.",
+                "body": "<p>Seen from above, the Nile in Cairo looks less like a boundary than a main street. It arrives from the south as a single broad channel, divides briefly around islands, and leaves the city as the first stretch of the delta that fans out toward the Mediterranean Sea. Much about the capital, from where it was founded to where its people live, follows from that position.</p>\n<h2>A city beside the river</h2>\n<p>Cairo as a city dates from 969, when the Fatimid dynasty founded it, and it became the seat of the Fatimid caliphate in 973. Its Arabic name, al-Qahira, means “the Vanquisher” or “the Conqueror”. An earlier settlement, Fustat, had been founded nearby after the Muslim conquest in 641–642.</p>\n<h2>Islands and sails</h2>\n<p>In central Cairo the river passes around Gezira, an island whose northern third is the district of Zamalek. Feluccas, sailing boats rigged with the triangular lateen sail, are still used on the Nile, and one appears in this story’s lead photograph.</p>\n<h2>A river and its people</h2>\n<p>About 95 per cent of Egyptians live within roughly 20 kilometres of the Nile and its delta, on only a small share of the country’s land, while vast areas elsewhere are sparsely populated or uninhabited. Greater Cairo alone is home to more than 20 million people, making it one of the largest urban areas in Africa and the Arab world.</p>\n<p>How long the river is depends on who is measuring. The Encyclopaedia Britannica gives about 6,650 kilometres, though published measurements differ with where the river is taken to begin and how its course is measured. By any of them the Nile is among the longest rivers on Earth, and Cairo lies near the point where it opens out into its delta.</p>"
+            },
+            "ar": {
+                "title": "النيل في القاهرة: نهرٌ صاغ ملامح العاصمة",
+                "excerpt": "تقع القاهرة عند مشارف دلتا النيل، وللنهر أثر واضح في نشأة العاصمة وجغرافيتها وفي الأماكن التي يعيش فيها المصريون.",
+                "hero_caption": "فلوكة على النيل في وسط القاهرة، ويظهر برج القاهرة في الخلفية. تصوير: Mo7amedsalim / ويكيميديا كومنز / CC BY-SA 3.0 (بعد الاقتصاص)",
+                "meta_description": "كيف صاغ النيل ملامح القاهرة: نشأة العاصمة عام 969، وجزر النهر، وسبب تركّز معظم المصريين على ضفافه وفي الدلتا.",
+                "body": "<p>يبدو النيل في القاهرة، إذا نُظر إليه من الأعلى، أشبه بشارع رئيسي منه بحدّ فاصل. فهو يدخل المدينة من الجنوب مجرىً واحدًا عريضًا، وينقسم لوقت قصير حول الجزر، ثم يغادرها ليبدأ امتداده نحو الدلتا التي تنفتح على البحر المتوسط. وكثير مما يميّز العاصمة، من موضع نشأتها إلى أماكن سكن أهلها، له صلة بهذا الموقع.</p>\n<h2>مدينة على ضفة النهر</h2>\n<p>تعود نشأة القاهرة مدينةً إلى عام 969، حين أسّسها الفاطميون، وأصبحت مقرّ الخلافة الفاطمية سنة 973. واسم «القاهرة» مأخوذ من القهر والغلبة. وكانت مدينة الفسطاط قد أُسّست قبلها، على مقربة منها، بعد الفتح الإسلامي في عامي 641 و642.</p>\n<h2>جزر وأشرعة</h2>\n<p>وفي وسط القاهرة ينقسم النيل حول جزيرة الجزيرة التي يشغل حيُّ الزمالك ثلثها الشمالي. ولا تزال الفلوكة، وهي مركب شراعي ذو شراع مثلثي يسمّى الشراع اللاتيني، مستخدمة على النهر، ويظهر أحدها في الصورة الرئيسية لهذا الموضوع.</p>\n<h2>نهر وسكان</h2>\n<p>يعيش نحو 95 في المئة من المصريين على بعد نحو 20 كيلومترًا من النيل ودلتاه، فوق جزء صغير من مساحة البلاد، بينما تقلّ الكثافة السكانية في مساحات شاسعة أخرى أو ينعدم فيها السكان. وتضم القاهرة الكبرى وحدها أكثر من 20 مليون نسمة، فهي من أكبر التجمعات الحضرية في أفريقيا والعالم العربي.</p>\n<p>أما طول النيل فيتوقف على جهة القياس: إذ تذكر «دائرة المعارف البريطانية» نحو 6650 كيلومترًا، وإن اختلفت القياسات المنشورة بحسب موضع بداية النهر وطريقة قياس مجراه. وفي كل الأحوال يُعدّ من أطول أنهار العالم، وتقع القاهرة قرب الموضع الذي ينفتح فيه النهر على دلتاه.</p>"
+            }
+        },
+        {
+            "key": "suez-canal-193-kilometre-shortcut",
+            "category": "business",
+            "image": "images/suez-canal-bridge.jpg",
+            "featured": false,
+            "published_hours_ago": 9,
+            "tags": [
+                {
+                    "en": "Suez Canal",
+                    "ar": "قناة السويس"
+                },
+                {
+                    "en": "Shipping",
+                    "ar": "الملاحة البحرية"
+                },
+                {
+                    "en": "Trade",
+                    "ar": "التجارة"
+                }
+            ],
+            "en": {
+                "title": "The Suez Canal: a 193-kilometre shortcut between two seas",
+                "excerpt": "Opened in 1869 and run by Egypt’s Suez Canal Authority, the canal links the Mediterranean and the Red Sea without a single lock.",
+                "hero_caption": "The Egyptian-Japanese Friendship Bridge crosses the Suez Canal at El Qantara. Photo: Andrew Shiva / Wikimedia Commons / CC BY-SA 4.0",
+                "meta_description": "The Suez Canal explained: opened in 1869, 193 kilometres long, lock-free, and run by Egypt’s Suez Canal Authority.",
+                "body": "<p>The Suez Canal is a sea-level waterway that links the Mediterranean Sea to the Red Sea across the Isthmus of Suez. It was inaugurated on 17 November 1869, and the Suez Canal Authority gives its length as 193.30 kilometres, running from Port Said in the north to Suez in the south.</p>\n<h2>Why a canal without locks</h2>\n<p>The land between the two seas is low and flat, and the two seas lie at close to the same level, so the canal needs no locks. Ships that use it avoid the long voyage around the Cape of Good Hope at the southern end of Africa, the route that sailors relied on before the canal opened.</p>\n<h2>Who runs it</h2>\n<p>The waterway is operated by the Suez Canal Authority, an Egyptian body established on 26 July 1956. The Authority’s own figures show a canal that opened at a depth of about 8 metres and is listed at a maximum water depth of 24 metres by 2015, a sign that the channel has been enlarged in stages since it opened.</p>\n<h2>A bridge over the water</h2>\n<p>At El Qantara, near Ismailia, the canal is spanned by the Egyptian-Japanese Friendship Bridge, a cable-stayed crossing completed in 2001 with a Japanese grant that covered about 60 per cent of its cost. The bridge leaves 70 metres of clearance above the water, and its two 154-metre pylons are styled after ancient Egyptian obelisks.</p>\n<p>Shipping carries around 80 per cent of the volume of world trade in goods, according to UNCTAD, the United Nations trade and development body. That is why narrow waterways such as the Suez Canal draw so much attention from people who follow trade and transport.</p>"
+            },
+            "ar": {
+                "title": "قناة السويس: ممرٌّ بطول 193 كيلومترًا يصل بين بحرين",
+                "excerpt": "افتُتحت القناة عام 1869 وتديرها هيئة قناة السويس المصرية، وهي تصل البحر المتوسط بالبحر الأحمر من دون أي هويس.",
+                "hero_caption": "جسر الصداقة المصري الياباني يعبر قناة السويس عند القنطرة. تصوير: Andrew Shiva / ويكيميديا كومنز / CC BY-SA 4.0",
+                "meta_description": "قناة السويس في سطور: افتُتحت عام 1869، وطولها 193 كيلومترًا، وهي بلا هويسات، وتديرها هيئة قناة السويس المصرية.",
+                "body": "<p>قناة السويس ممرّ مائي على مستوى سطح البحر يربط البحر المتوسط بالبحر الأحمر عبر برزخ السويس. افتُتحت للملاحة في 17 نوفمبر 1869، وتذكر هيئة قناة السويس أن طولها 193.30 كيلومترًا، من بورسعيد شمالًا إلى السويس جنوبًا.</p>\n<h2>لماذا بلا هويسات؟</h2>\n<p>الأرض الفاصلة بين البحرين منخفضة ومنبسطة، ومنسوب البحرين متقارب، ولذلك لا تحتاج القناة إلى هويسات. وتتجنب السفن العابرة فيها الرحلة الطويلة حول رأس الرجاء الصالح عند الطرف الجنوبي لأفريقيا، وهي الطريق التي كان البحّارة يعتمدون عليها قبل افتتاح القناة.</p>\n<h2>من يديرها؟</h2>\n<p>تتولى تشغيل القناة هيئة قناة السويس، وهي هيئة مصرية أُنشئت في 26 يوليو 1956. وتُظهر بيانات الهيئة نفسها أن القناة افتُتحت بعمق نحو 8 أمتار، وأن أقصى عمق للمياه فيها بلغ 24 مترًا بحلول عام 2015، وهو ما يدل على أن المجرى جرى توسيعه على مراحل منذ افتتاحه.</p>\n<h2>جسر فوق الماء</h2>\n<p>وعند القنطرة، قرب الإسماعيلية، يعبر القناة جسر الصداقة المصري الياباني، وهو جسر ذو كابلات مائلة اكتمل عام 2001 بمنحة يابانية غطّت نحو 60 في المئة من كلفته. ويترك الجسر ارتفاعًا قدره 70 مترًا فوق سطح الماء، وتحاكي أبراجه الاثنان، البالغ ارتفاع كل منهما 154 مترًا، شكل المسلّات المصرية القديمة.</p>\n<p>ويحمل النقل البحري نحو 80 في المئة من حجم التجارة العالمية في السلع، بحسب «أونكتاد»، وهو مؤتمر الأمم المتحدة للتجارة والتنمية. ولذلك تحظى الممرات المائية الضيقة، ومنها قناة السويس، باهتمام كبير لدى المتابعين لشؤون التجارة والنقل.</p>"
+            }
+        },
+        {
+            "key": "egypt-parliament-two-chambers",
+            "category": "politics",
+            "image": "images/egypt-parliament.jpg",
+            "featured": false,
+            "published_hours_ago": 14,
+            "tags": [
+                {
+                    "en": "Parliament",
+                    "ar": "البرلمان"
+                },
+                {
+                    "en": "Constitution",
+                    "ar": "الدستور"
+                },
+                {
+                    "en": "Senate",
+                    "ar": "مجلس الشيوخ"
+                }
+            ],
+            "en": {
+                "title": "Two chambers: how Egypt’s Parliament is organised",
+                "excerpt": "Egypt’s legislature has a House of Representatives and a Senate, and the Constitution sets out a distinct role for each.",
+                "hero_caption": "The Parliament building in the New Administrative Capital. Photo: Abdelrhman 1990 / Wikimedia Commons / CC BY 4.0",
+                "meta_description": "An explainer on Egypt’s two-chamber Parliament: the House of Representatives, the Senate and what the Constitution says about each.",
+                "body": "<p>Egypt’s Parliament has two chambers. The House of Representatives holds the country’s legislative authority, while the Senate, an upper house, has an advisory and proposing role. Both are set out in the Constitution as amended in 2019, and the article numbers below refer to the English translation of that text.</p>\n<h2>The House of Representatives</h2>\n<p>Under Article 101 the House is entrusted with legislative authority. It also approves the state’s general policy, the economic and social development plan and the state budget, and it oversees the executive branch. Members serve for five calendar years from the House’s first session (Article 106). The Constitution requires at least 450 members, with at least a quarter of the seats reserved for women (Article 102).</p>\n<h2>The Senate</h2>\n<p>The Senate was restored by constitutional amendments approved in a referendum held on 20–22 April 2019. Its predecessor, the Shura Council, had been dropped from the 2014 constitution. Article 248 describes the Senate’s task as studying and proposing what it sees as a tool to consolidate democracy and support social peace, the basic values of society, and rights, freedoms and public duties, and to deepen the democratic system. Under Article 249 its opinion is sought on matters that include proposed amendments to the Constitution, the general plan for economic and social development, and treaties affecting sovereignty.</p>\n<p>The Senate has a number of members set by law and not fewer than 180. Two-thirds are elected by direct, secret, universal suffrage, and the President of the Republic appoints the remaining third (Article 250). Membership of the two chambers cannot be combined (Article 252), and the prime minister, his deputies, ministers and other members of the government are not accountable to the Senate (Article 253).</p>\n<p>A new parliament complex stands in the New Administrative Capital, about 45 kilometres east of Cairo. Egypt’s parliamentary history is usually traced back to 1866.</p>"
+            },
+            "ar": {
+                "title": "برلمان من غرفتين: كيف يتألف البرلمان المصري؟",
+                "excerpt": "يتألف البرلمان المصري من مجلس النواب ومجلس الشيوخ، ولكل منهما دور حدّده الدستور.",
+                "hero_caption": "مبنى البرلمان في العاصمة الإدارية الجديدة. تصوير: Abdelrhman 1990 / ويكيميديا كومنز / CC BY 4.0",
+                "meta_description": "شرح لتكوين البرلمان المصري من غرفتين: مجلس النواب ومجلس الشيوخ، وما ينص عليه الدستور بشأن كل منهما.",
+                "body": "<p>يتكوّن البرلمان المصري من غرفتين: مجلس النواب الذي أُسندت إليه السلطة التشريعية، ومجلس الشيوخ وهو غرفة عليا ذات دور استشاري واقتراحي. وقد حدّد الدستور بصيغته المعدَّلة عام 2019 اختصاصات كل منهما، وتشير أرقام المواد الواردة أدناه إلى هذا النص.</p>\n<h2>مجلس النواب</h2>\n<p>تنص المادة 101 من الدستور على أن مجلس النواب يتولى سلطة التشريع، ويقرّ السياسة العامة للدولة والخطة العامة للتنمية الاقتصادية والاجتماعية والموازنة العامة للدولة، ويمارس الرقابة على أعمال السلطة التنفيذية. ومدة عضويته خمس سنوات ميلادية تبدأ من تاريخ أول اجتماع له (المادة 106). ويشترط الدستور ألا يقل عدد الأعضاء عن 450 عضوًا، على أن يُخصَّص ربع المقاعد على الأقل للمرأة (المادة 102).</p>\n<h2>مجلس الشيوخ</h2>\n<p>أُعيد إنشاء مجلس الشيوخ بتعديلات دستورية أُقرّت في استفتاء أُجري بين 20 و22 أبريل 2019، وكان سلفه، مجلس الشورى، قد أُلغي بموجب دستور 2014. وتصف المادة 248 مهمة المجلس بأنها دراسة واقتراح ما يراه كفيلًا بتوسيد دعائم الديمقراطية ودعم السلام الاجتماعي والمقومات الأساسية للمجتمع والحقوق والحريات والواجبات العامة، وتعميق النظام الديمقراطي. وبموجب المادة 249 يؤخذ رأيه في أمور منها مقترحات تعديل الدستور، والخطة العامة للتنمية الاقتصادية والاجتماعية، والمعاهدات التي تتعلق بحقوق السيادة.</p>\n<p>ويتكوّن المجلس من عدد يحدده القانون على ألا يقل عن 180 عضوًا؛ يُنتخب ثلثاه بالاقتراع العام السري المباشر، ويعيّن رئيس الجمهورية الثلث الباقي (المادة 250). ولا يجوز الجمع بين عضوية المجلسين (المادة 252)، ورئيس مجلس الوزراء ونوابه والوزراء وغيرهم من أعضاء الحكومة غير مسؤولين أمام مجلس الشيوخ (المادة 253).</p>\n<p>ويقوم مجمّع برلماني جديد في العاصمة الإدارية الجديدة على بعد نحو 45 كيلومترًا شرق القاهرة. ويؤرَّخ لبدايات الحياة النيابية في مصر عادةً بعام 1866.</p>"
+            }
+        },
+        {
+            "key": "grand-egyptian-museum-beside-the-pyramids",
+            "category": "culture",
+            "image": "images/grand-egyptian-museum.jpg",
+            "featured": false,
+            "published_hours_ago": 22,
+            "tags": [
+                {
+                    "en": "Grand Egyptian Museum",
+                    "ar": "المتحف المصري الكبير"
+                },
+                {
+                    "en": "Museums",
+                    "ar": "المتاحف"
+                },
+                {
+                    "en": "Ancient Egypt",
+                    "ar": "مصر القديمة"
+                }
+            ],
+            "en": {
+                "title": "The Grand Egyptian Museum: a museum beside the pyramids",
+                "excerpt": "About two kilometres from the Giza pyramids, the museum is described as the world’s largest for a single civilisation and was officially opened on 1 November 2025.",
+                "hero_caption": "Inside the Grand Egyptian Museum. Photo: Habib Mhenni / Wikimedia Commons / CC BY-SA 4.0",
+                "meta_description": "A guide to the Grand Egyptian Museum near the Giza pyramids: its scale, its grand staircase, its Ramesses II statue and its Tutankhamun galleries.",
+                "body": "<p>The Grand Egyptian Museum stands about two kilometres from the Giza Pyramid complex. It was officially opened on 1 November 2025 and is described as the largest museum in the world for a single civilisation, with galleries that cover seven millennia of Egyptian history. The museum occupies a site of about 500,000 square metres.</p>\n<h2>A grand staircase and a colossal king</h2>\n<p>A grand staircase, which rises about 50 metres and displays more than 60 artefacts, is lined with statues of ancient rulers and leads to an upper level that frames a view of the Giza pyramids. In the Grand Hall stands an 11-metre statue of Ramesses II, which was moved in 2006 from Ramses Square in central Cairo and placed in the hall in 2018.</p>\n<h2>Tutankhamun’s tomb</h2>\n<p>The museum presents objects from the tomb of Tutankhamun, which was discovered in 1922 by the British archaeologist Howard Carter.</p>\n<h2>A long road to opening</h2>\n<p>According to published chronologies, the idea of a new museum near the pyramids was proposed in 1992, the foundation stone was laid in 2002 and construction began in 2005. A trial run of part of the galleries began in October 2024, and the museum was officially opened on 1 November 2025.</p>"
+            },
+            "ar": {
+                "title": "المتحف المصري الكبير: متحف على مرمى البصر من الأهرامات",
+                "excerpt": "يقع المتحف على بعد نحو كيلومترين من أهرامات الجيزة، ويوصف بأنه أكبر متحف في العالم مخصص لحضارة واحدة، وقد افتُتح رسميًا في الأول من نوفمبر 2025.",
+                "hero_caption": "من داخل المتحف المصري الكبير. تصوير: Habib Mhenni / ويكيميديا كومنز / CC BY-SA 4.0",
+                "meta_description": "دليل إلى المتحف المصري الكبير قرب أهرامات الجيزة: حجمه، وسلمه العظيم، وتمثال رمسيس الثاني، وقاعات توت عنخ آمون.",
+                "body": "<p>يقع المتحف المصري الكبير على بعد نحو كيلومترين من مجمع أهرامات الجيزة. وقد افتُتح رسميًا في الأول من نوفمبر 2025، ويوصف بأنه أكبر متحف في العالم مخصص لحضارة واحدة، إذ تغطي قاعاته سبعة آلاف عام من التاريخ المصري. ويقوم المتحف على أرض تبلغ مساحتها نحو 500 ألف متر مربع.</p>\n<h2>الدرج العظيم وملك ضخم</h2>\n<p>يرتفع الدرج العظيم نحو 50 مترًا ويضم أكثر من 60 قطعة أثرية، وتصطف على جانبيه تماثيل لحكام مصر القديمة، ويؤدي إلى طابق علوي يتيح إطلالة مؤطَّرة على أهرامات الجيزة. وفي القاعة الكبرى يقف تمثال رمسيس الثاني الذي يبلغ ارتفاعه 11 مترًا، وكان قد نُقل عام 2006 من ميدان رمسيس في وسط القاهرة، ثم وُضع في القاعة عام 2018.</p>\n<h2>مقبرة توت عنخ آمون</h2>\n<p>ويعرض المتحف قطعًا من مقبرة توت عنخ آمون التي اكتشفها عالم الآثار البريطاني هوارد كارتر عام 1922.</p>\n<h2>طريق طويل إلى الافتتاح</h2>\n<p>وبحسب التسلسلات الزمنية المنشورة، طُرحت فكرة إنشاء متحف جديد قرب الأهرامات عام 1992، ووُضع حجر الأساس عام 2002، وبدأ البناء عام 2005. وفي أكتوبر 2024 بدأ تشغيل تجريبي لجزء من قاعاته، ثم افتُتح المتحف رسميًا في الأول من نوفمبر 2025.</p>"
+            }
+        },
+        {
+            "key": "united-nations-six-organs-193-members",
+            "category": "world",
+            "image": "images/un-headquarters.jpg",
+            "featured": false,
+            "published_hours_ago": 31,
+            "tags": [
+                {
+                    "en": "United Nations",
+                    "ar": "الأمم المتحدة"
+                },
+                {
+                    "en": "Security Council",
+                    "ar": "مجلس الأمن"
+                },
+                {
+                    "en": "Diplomacy",
+                    "ar": "الدبلوماسية"
+                }
+            ],
+            "en": {
+                "title": "How the United Nations is organised: six organs, 193 members",
+                "excerpt": "Egypt was among the original members of the United Nations, whose Charter sets out six principal organs, from the General Assembly to the Secretariat.",
+                "hero_caption": "The United Nations Headquarters (left) on the East River, New York. Photo: Jakub Hałun / Wikimedia Commons / CC BY 4.0",
+                "meta_description": "The United Nations explained: its six principal organs, how the General Assembly and Security Council vote, and Egypt’s role as an original member.",
+                "body": "<p>The United Nations officially began on 24 October 1945, after representatives of 50 countries gathered in San Francisco for the conference that produced its Charter. Egypt was one of its original Members, and the organisation counts 193 Member States.</p>\n<h2>Six principal organs</h2>\n<p>Article 7 of the Charter establishes six principal organs: the General Assembly, the Security Council, the Economic and Social Council, the Trusteeship Council, the International Court of Justice and the Secretariat. Five are based in New York, while the International Court of Justice sits at the Peace Palace in The Hague. The Trusteeship Council suspended operation on 1 November 1994.</p>\n<h2>The General Assembly and the Security Council</h2>\n<p>The General Assembly consists of all Member States, and each has one vote (Articles 9 and 18). Decisions on important questions require a two-thirds majority of the members present and voting.</p>\n<p>The Security Council has 15 members. Five are permanent: China, France, the Russian Federation, the United Kingdom and the United States. The other ten are elected by the General Assembly for two-year terms, five of them each year, and each member of the Council has one vote. The Economic and Social Council has 54 members.</p>\n<p>The Secretariat is headed by the Secretary-General, who is appointed for a five-year, renewable term. The sixth holder of the post, from January 1992 to December 1996, was Boutros Boutros-Ghali of Egypt, who was born in Cairo and was the first African to serve as Secretary-General.</p>"
+            },
+            "ar": {
+                "title": "كيف تنتظم الأمم المتحدة؟ ستة أجهزة رئيسية و193 دولة عضوًا",
+                "excerpt": "كانت مصر من الأعضاء الأصليين في الأمم المتحدة التي يحدد ميثاقها ستة أجهزة رئيسية، من الجمعية العامة إلى الأمانة العامة.",
+                "hero_caption": "مقر الأمم المتحدة (إلى اليسار) على النهر الشرقي في نيويورك. تصوير: Jakub Hałun / ويكيميديا كومنز / CC BY 4.0",
+                "meta_description": "الأمم المتحدة في سطور: أجهزتها الرئيسية الستة، وكيف تصوّت الجمعية العامة ومجلس الأمن، ودور مصر عضوًا أصليًا فيها.",
+                "body": "<p>بدأت الأمم المتحدة عملها رسميًا في 24 أكتوبر 1945، بعد أن اجتمع ممثلو 50 دولة في سان فرانسيسكو في المؤتمر الذي أسفر عن ميثاقها. وكانت مصر من الأعضاء الأصليين في المنظمة التي تضم 193 دولة عضوًا.</p>\n<h2>ستة أجهزة رئيسية</h2>\n<p>تنشئ المادة 7 من الميثاق ستة أجهزة رئيسية، هي الجمعية العامة ومجلس الأمن والمجلس الاقتصادي والاجتماعي ومجلس الوصاية ومحكمة العدل الدولية والأمانة العامة. ويقع خمسة منها في نيويورك، أما محكمة العدل الدولية فمقرها قصر السلام في لاهاي. وقد علّق مجلس الوصاية عمله في الأول من نوفمبر 1994.</p>\n<h2>الجمعية العامة ومجلس الأمن</h2>\n<p>تتكون الجمعية العامة من جميع الدول الأعضاء، ولكل منها صوت واحد (المادتان 9 و18)، وتصدر قراراتها في المسائل المهمة بأغلبية ثلثي الأعضاء الحاضرين والمشتركين في التصويت.</p>\n<p>ويتألف مجلس الأمن من 15 عضوًا: خمسة دائمون هم الصين وفرنسا والاتحاد الروسي والمملكة المتحدة والولايات المتحدة، وعشرة تنتخبهم الجمعية العامة لمدة سنتين، ويُنتخب خمسة منهم كل عام، ولكل عضو في المجلس صوت واحد. أما المجلس الاقتصادي والاجتماعي فيضم 54 عضوًا.</p>\n<p>ويرأس الأمانة العامة الأمين العام الذي يُعيَّن لمدة خمس سنوات قابلة للتجديد. وكان سادس من شغل المنصب، من يناير 1992 إلى ديسمبر 1996، المصري بطرس بطرس غالي المولود في القاهرة، وهو أول أفريقي يتولى هذا المنصب.</p>"
+            }
+        },
+        {
+            "key": "cairo-metro-africas-first-full-metro",
+            "category": "business",
+            "image": "images/cairo-metro-train.jpg",
+            "featured": false,
+            "published_hours_ago": 40,
+            "tags": [
+                {
+                    "en": "Cairo Metro",
+                    "ar": "مترو القاهرة"
+                },
+                {
+                    "en": "Transport",
+                    "ar": "النقل"
+                },
+                {
+                    "en": "Infrastructure",
+                    "ar": "البنية التحتية"
+                }
+            ],
+            "en": {
+                "title": "The Cairo Metro: how Africa’s first full metro moves a megacity",
+                "excerpt": "The first line opened in 1987 with French financing, and the network is owned by Egypt’s National Authority for Tunnels.",
+                "hero_caption": "Inside a Cairo Metro train car. Photo: محمد عيد صالح / Wikimedia Commons / CC BY-SA 4.0 (cropped)",
+                "meta_description": "A short history of the Cairo Metro: Line 1 opened in 1987, Line 2 in 1996 and the first section of Line 3 in 2012.",
+                "body": "<p>The Cairo Metro serves Greater Cairo, a metropolitan area of more than 20 million people. Its first line opened in 1987, and it is often described as the first full metro system in Africa.</p>\n<h2>From Helwan to Ramses Square</h2>\n<p>That first segment of Line 1 ran 29 kilometres from Helwan to Ramses Square. Construction had begun in 1982, after the French government agreed to give Egypt the necessary loan, and the line was later extended northwards to El Marg.</p>\n<h2>More lines</h2>\n<p>Line 2 first opened in 1996, and the first section of Line 3, from Attaba to Abbassia, opened on 21 February 2012.</p>\n<p>The network is owned by the National Authority for Tunnels, while Lines 1 and 2 are run by the Egyptian Company for Metro Management and Operation.</p>\n<p>Each train reserves cars for women, and the network carries millions of passengers every day.</p>"
+            },
+            "ar": {
+                "title": "مترو القاهرة: أول شبكة مترو كاملة في أفريقيا تخدم مدينة ضخمة",
+                "excerpt": "افتُتح الخط الأول عام 1987 بتمويل فرنسي، وتملك الهيئة القومية للأنفاق شبكة المترو المصرية.",
+                "hero_caption": "من داخل إحدى عربات مترو القاهرة. تصوير: محمد عيد صالح / ويكيميديا كومنز / CC BY-SA 4.0 (بعد الاقتصاص)",
+                "meta_description": "لمحة عن تاريخ مترو القاهرة: افتُتح الخط الأول عام 1987 والثاني عام 1996 والمرحلة الأولى من الثالث عام 2012.",
+                "body": "<p>يخدم مترو القاهرة منطقة القاهرة الكبرى التي يزيد عدد سكانها على 20 مليون نسمة. وقد افتُتح خطه الأول عام 1987، ويوصف عادةً بأنه أول شبكة مترو كاملة في أفريقيا.</p>\n<h2>من حلوان إلى ميدان رمسيس</h2>\n<p>بلغ طول المقطع الأول من الخط الأول 29 كيلومترًا بين حلوان وميدان رمسيس. وكان إنشاؤه قد بدأ عام 1982 بعد أن وافقت الحكومة الفرنسية على منح مصر القرض اللازم، ثم امتد الخط لاحقًا شمالًا حتى المرج.</p>\n<h2>خطوط أخرى</h2>\n<p>وافتُتح الخط الثاني لأول مرة عام 1996، وافتُتحت المرحلة الأولى من الخط الثالث، بين العتبة والعباسية، في 21 فبراير 2012.</p>\n<p>وتملك الهيئة القومية للأنفاق شبكة المترو، أما الخطان الأول والثاني فتتولى تشغيلهما الشركة المصرية لإدارة وتشغيل المترو.</p>\n<p>وتُخصَّص في كل قطار عربات للسيدات، وينقل المترو ملايين الركاب كل يوم.</p>"
+            }
+        },
+        {
+            "key": "arab-league-pact-cairo-1945",
+            "category": "regional-affairs",
+            "image": "images/arab-league-cairo.jpg",
+            "featured": false,
+            "published_hours_ago": 55,
+            "tags": [
+                {
+                    "en": "Arab League",
+                    "ar": "جامعة الدول العربية"
+                },
+                {
+                    "en": "Cairo",
+                    "ar": "القاهرة"
+                },
+                {
+                    "en": "Diplomacy",
+                    "ar": "الدبلوماسية"
+                }
+            ],
+            "en": {
+                "title": "The Arab League: a pact signed in Cairo in 1945",
+                "excerpt": "The League of Arab States has its permanent seat in Cairo and works through a Council in which every member state has one vote.",
+                "hero_caption": "The Arab League headquarters building in Cairo. Photo: R Prazeres / Wikimedia Commons / CC BY-SA 4.0 (cropped)",
+                "meta_description": "How the Arab League is structured: the 1945 Pact, the Council where each state has one vote, and the role of the Secretary-General.",
+                "body": "<p>The League of Arab States was formed in Cairo, and its founding Pact is dated 22 March 1945. Egypt was among the founding signatories, and the Pact names Cairo as the League’s permanent seat (Article 10). The League has 22 member states.</p>\n<h2>Its purpose</h2>\n<p>Article 2 of the Pact says the League’s purpose is to draw closer the relations between member states and to coordinate their political activities. It also provides for close cooperation among members in economic and financial matters, communications, cultural matters, nationality, passports and visas, the execution of judgments and extradition, social welfare and health.</p>\n<h2>How the Council works</h2>\n<p>The League’s Council is composed of representatives of the member states, and each state has one vote regardless of how many representatives it sends (Article 3). The Council meets in ordinary session twice a year, in March and October (Article 11).</p>\n<p>Decisions the Council takes by a unanimous vote bind all member states, while those reached by a majority vote bind only the states that accept them (Article 7). The Secretary-General is appointed by the Council on the vote of two-thirds of the member states (Article 12), and a special committee is formed for each of the areas of cooperation listed in the Pact (Article 4).</p>\n<p>Article 1 describes the League as composed of the independent Arab states that have signed the Pact. The text carries two dates: 22 March 1945 in the Gregorian calendar and 8 Rabi’ al-Thani 1364 in the Islamic calendar.</p>"
+            },
+            "ar": {
+                "title": "جامعة الدول العربية: ميثاق وُقّع في القاهرة عام 1945",
+                "excerpt": "مقر جامعة الدول العربية الدائم في القاهرة، ويتولى مجلسها إدارة شؤونها، ولكل دولة عضو في هذا المجلس صوت واحد.",
+                "hero_caption": "مبنى مقر جامعة الدول العربية في القاهرة. تصوير: R Prazeres / ويكيميديا كومنز / CC BY-SA 4.0 (بعد الاقتصاص)",
+                "meta_description": "كيف تتكوّن جامعة الدول العربية: ميثاق 1945، والمجلس الذي لكل دولة فيه صوت واحد، ودور الأمين العام.",
+                "body": "<p>تأسست جامعة الدول العربية في القاهرة، ويحمل ميثاقها تاريخ 22 مارس 1945، وكانت مصر من الدول الموقِّعة عليه عند التأسيس. وتنص المادة 10 من الميثاق على أن مقر الجامعة الدائم هو القاهرة. وتضم الجامعة 22 دولة عضوًا.</p>\n<h2>أهدافها</h2>\n<p>تقول المادة 2 من الميثاق إن غرض الجامعة توثيق الصلات بين الدول المشتركة فيها وتنسيق خططها السياسية. كما تنص على تعاون وثيق بين الدول الأعضاء في الشؤون الاقتصادية والمالية والمواصلات والشؤون الثقافية وشؤون الجنسية والجوازات والتأشيرات وتنفيذ الأحكام وتسليم المجرمين والشؤون الاجتماعية والصحية.</p>\n<h2>كيف يعمل المجلس؟</h2>\n<p>يتكوّن مجلس الجامعة من ممثلي الدول الأعضاء، ولكل دولة صوت واحد مهما بلغ عدد ممثليها (المادة 3). وينعقد المجلس في دورة عادية مرتين في السنة، في شهري مارس وأكتوبر (المادة 11).</p>\n<p>والقرارات التي يتخذها المجلس بالإجماع ملزمة لجميع الدول الأعضاء، أما القرارات التي تصدر بأغلبية الأصوات فلا تُلزم إلا الدول التي قبلتها (المادة 7). ويُعيَّن الأمين العام بقرار من المجلس بأغلبية ثلثي الدول الأعضاء (المادة 12)، وتُشكَّل لجنة خاصة لكل مجال من مجالات التعاون المنصوص عليها في الميثاق (المادة 4).</p>\n<p>وتصف المادة 1 الجامعة بأنها تتألف من الدول العربية المستقلة التي وقّعت الميثاق. ويحمل نص الميثاق تاريخين: 22 مارس 1945 بالتقويم الميلادي، و8 ربيع الآخر 1364 بالتقويم الهجري.</p>"
+            }
+        },
+        {
+            "key": "giza-pyramids-edge-of-cairo",
+            "category": "egypt",
+            "image": "images/giza-pyramids-aerial.jpg",
+            "featured": false,
+            "published_hours_ago": 68,
+            "tags": [
+                {
+                    "en": "Pyramids of Giza",
+                    "ar": "أهرامات الجيزة"
+                },
+                {
+                    "en": "Giza",
+                    "ar": "الجيزة"
+                },
+                {
+                    "en": "World Heritage",
+                    "ar": "التراث العالمي"
+                }
+            ],
+            "en": {
+                "title": "Where the pyramids meet the city: Giza at the edge of Cairo",
+                "excerpt": "The Pyramids of Giza stand at the edge of the Western Desert, about 13 kilometres south-west of central Cairo, with the city spreading out beside them.",
+                "hero_caption": "An aerial view of the Giza pyramids on the edge of Greater Cairo. Photo: lumoplank / Wikimedia Commons / CC0 (cropped)",
+                "meta_description": "The Pyramids of Giza sit on Cairo’s doorstep. A short guide to the plateau, the Great Pyramid and the World Heritage site around them.",
+                "body": "<p>Seen from the air, the Pyramids of Giza stand on the edge of the Western Desert, with the districts of Greater Cairo spreading up to the plateau. The complex lies about nine kilometres west of the Nile and about 13 kilometres south-west of the centre of Cairo, within the city of Giza.</p>\n<h2>Three pyramids, one of the Seven Wonders</h2>\n<p>The complex is home to the Great Pyramid, built for the pharaoh Khufu, and to the pyramids of Khafre and Menkaure. The Great Pyramid was completed roughly 4,500 years ago. Its original height was about 147 metres, and it is the only one of the Seven Wonders of the Ancient World that still stands.</p>\n<h2>A protected landscape</h2>\n<p>The pyramids form part of the UNESCO World Heritage site Memphis and its Necropolis – the Pyramid Fields from Giza to Dahshur, which was inscribed in 1979.</p>\n<p>About two kilometres away stands the Grand Egyptian Museum, and the plateau shares its horizon with one of the largest urban areas in Africa, Greater Cairo, which is home to more than 20 million people.</p>"
+            },
+            "ar": {
+                "title": "حيث تلتقي الأهرامات بالمدينة: الجيزة على تخوم القاهرة",
+                "excerpt": "تقف أهرامات الجيزة على حافة الصحراء الغربية، على بعد نحو 13 كيلومترًا جنوب غرب وسط القاهرة، فيما تمتد المدينة إلى جوارها.",
+                "hero_caption": "منظر جوي لأهرامات الجيزة على حافة القاهرة الكبرى. تصوير: lumoplank / ويكيميديا كومنز / CC0 (بعد الاقتصاص)",
+                "meta_description": "أهرامات الجيزة على أعتاب القاهرة: دليل موجز إلى الهضبة والهرم الأكبر وموقع التراث العالمي المحيط بهما.",
+                "body": "<p>تُظهر هذه الصورة الجوية أهرامات الجيزة قائمة على حافة الصحراء الغربية، وقد امتدت أحياء القاهرة الكبرى إلى أطراف الهضبة. ويقع المجمع على بعد نحو تسعة كيلومترات غرب النيل ونحو 13 كيلومترًا جنوب غرب وسط القاهرة، داخل مدينة الجيزة.</p>\n<h2>ثلاثة أهرامات وإحدى عجائب الدنيا السبع</h2>\n<p>يضم المجمع الهرم الأكبر الذي بُني للملك خوفو، وهرمي خفرع ومنكاورع. واكتمل بناء الهرم الأكبر قبل نحو 4500 عام، وبلغ ارتفاعه الأصلي نحو 147 مترًا، وهو العجيبة الوحيدة الباقية قائمةً من عجائب الدنيا السبع في العالم القديم.</p>\n<h2>موقع محمي</h2>\n<p>تشكّل الأهرامات جزءًا من موقع التراث العالمي لدى اليونسكو الذي يضم ممفيس ومقبرتها وحقول الأهرام الممتدة من الجيزة إلى دهشور، وقد أُدرج عام 1979.</p>\n<p>وعلى بعد نحو كيلومترين منها يقوم المتحف المصري الكبير، ويشاركها الأفق واحد من أكبر التجمعات الحضرية في أفريقيا، هو القاهرة الكبرى التي يزيد عدد سكانها على 20 مليون نسمة.</p>"
+            }
+        },
+        {
+            "key": "nile-basin-eleven-countries-one-river",
+            "category": "regional-affairs",
+            "image": "images/victoria-nile.jpg",
+            "featured": false,
+            "published_hours_ago": 84,
+            "tags": [
+                {
+                    "en": "Nile Basin",
+                    "ar": "حوض النيل"
+                },
+                {
+                    "en": "Nile",
+                    "ar": "النيل"
+                },
+                {
+                    "en": "Geography",
+                    "ar": "الجغرافيا"
+                }
+            ],
+            "en": {
+                "title": "Eleven countries, one river: the geography of the Nile basin",
+                "excerpt": "The White Nile and the Blue Nile meet at Khartoum, and the Nile Basin Initiative gives the basin’s countries a forum for consultation and coordination.",
+                "hero_caption": "The Victoria Nile north of Jinja, Uganda. Photo: Bernard DUPONT / Wikimedia Commons / CC BY-SA 2.0 (cropped)",
+                "meta_description": "The Nile basin explained: two main branches that meet at Khartoum, eleven countries in the basin, and the Nile Basin Initiative.",
+                "body": "<p>The Nile does not start in Egypt, and it does not start as a single river. Its two main branches, the White Nile and the Blue Nile, begin far upstream, in different countries, and meet at Khartoum, the Sudanese capital, from where the combined river flows north through Sudan and Egypt to the Mediterranean Sea.</p>\n<h2>Two branches</h2>\n<p>The White Nile begins near Lake Victoria and flows through Uganda and South Sudan. The Blue Nile begins near Lake Tana in Ethiopia and flows into Sudan from the south-east. The photograph shows the Victoria Nile, the stretch of the White Nile that leaves Lake Victoria in Uganda; it was taken north of the town of Jinja.</p>\n<h2>A shared basin</h2>\n<p>Eleven countries lie wholly or partly within the basin: Burundi, the Democratic Republic of the Congo, Egypt, Eritrea, Ethiopia, Kenya, Rwanda, South Sudan, Sudan, Tanzania and Uganda. Estimates of its size vary with how the basin is drawn; the Encyclopaedia Britannica puts the area at about 3.35 million square kilometres.</p>\n<p>Since 22 February 1999 the basin’s countries have had a shared forum in the Nile Basin Initiative, an intergovernmental partnership that describes itself as a forum for consultation and coordination. The Initiative lists ten member countries: Burundi, the Democratic Republic of the Congo, Egypt, Ethiopia, Kenya, Rwanda, South Sudan, Sudan, Tanzania and Uganda, with Eritrea taking part as an observer. Its secretariat is in Entebbe, Uganda.</p>\n<p>At its northern end the river fans out into a delta that begins at Cairo and is about 160 kilometres long from north to south.</p>"
+            },
+            "ar": {
+                "title": "أحد عشر بلدًا ونهر واحد: جغرافيا حوض النيل",
+                "excerpt": "يلتقي النيل الأبيض والنيل الأزرق في الخرطوم، وتتيح مبادرة حوض النيل لدول الحوض منتدى للتشاور والتنسيق.",
+                "hero_caption": "نيل فيكتوريا شمال مدينة جنجا في أوغندا. تصوير: Bernard DUPONT / ويكيميديا كومنز / CC BY-SA 2.0 (بعد الاقتصاص)",
+                "meta_description": "حوض النيل في سطور: فرعان رئيسيان يلتقيان في الخرطوم، وإحدى عشرة دولة في الحوض، ومبادرة حوض النيل.",
+                "body": "<p>لا ينبع النيل من مصر، ولا يبدأ نهرًا واحدًا. فرعاه الرئيسيان، النيل الأبيض والنيل الأزرق، يبدآن بعيدًا عن مصر في بلدين مختلفين ويلتقيان في الخرطوم عاصمة السودان، ومنها يتجه النهر الموحَّد شمالًا عبر السودان ومصر حتى البحر المتوسط.</p>\n<h2>فرعان</h2>\n<p>يبدأ النيل الأبيض قرب بحيرة فيكتوريا ويمرّ بأوغندا وجنوب السودان، أما النيل الأزرق فيبدأ قرب بحيرة تانا في إثيوبيا ويدخل السودان من الجنوب الشرقي. وتُظهر الصورة نيل فيكتوريا، وهو المقطع من النيل الأبيض الذي يخرج من بحيرة فيكتوريا في أوغندا، وقد التُقطت شمال مدينة جنجا.</p>\n<h2>حوض مشترك</h2>\n<p>تقع إحدى عشرة دولة كليًا أو جزئيًا في الحوض، هي: بوروندي وجمهورية الكونغو الديمقراطية ومصر وإريتريا وإثيوبيا وكينيا ورواندا وجنوب السودان والسودان وتنزانيا وأوغندا. وتختلف التقديرات بحسب طريقة رسم حدود الحوض، وتقدّر «دائرة المعارف البريطانية» مساحته بنحو 3.35 مليون كيلومتر مربع.</p>\n<p>ومنذ 22 فبراير 1999 تجمع دول الحوض مبادرة حوض النيل، وهي شراكة حكومية دولية تصف نفسها بأنها منتدى للتشاور والتنسيق. وتذكر المبادرة أن أعضاءها عشر دول هي بوروندي والكونغو الديمقراطية ومصر وإثيوبيا وكينيا ورواندا وجنوب السودان والسودان وتنزانيا وأوغندا، فيما تشارك إريتريا بصفة مراقب. ويقع مقر أمانتها في عنتيبي بأوغندا.</p>\n<p>وعند طرفه الشمالي ينفتح النهر في دلتا تبدأ من القاهرة، ويبلغ طولها نحو 160 كيلومترًا من الشمال إلى الجنوب.</p>"
+            }
+        },
+        {
+            "key": "supreme-constitutional-court-built-like-a-temple",
+            "category": "politics",
+            "image": "images/constitutional-court.jpg",
+            "featured": false,
+            "published_hours_ago": 101,
+            "tags": [
+                {
+                    "en": "Supreme Constitutional Court",
+                    "ar": "المحكمة الدستورية العليا"
+                },
+                {
+                    "en": "Constitution",
+                    "ar": "الدستور"
+                },
+                {
+                    "en": "Maadi",
+                    "ar": "المعادي"
+                }
+            ],
+            "en": {
+                "title": "A court built like a temple: Egypt’s Supreme Constitutional Court",
+                "excerpt": "On the Nile Corniche in Maadi, the court that reviews the constitutionality of laws sits in a building inspired by ancient Egyptian architecture.",
+                "hero_caption": "The Supreme Constitutional Court building on the Nile Corniche in Maadi. Photo: Ahmad Badr / Wikimedia Commons / CC BY-SA 3.0 (cropped)",
+                "meta_description": "What Egypt’s Supreme Constitutional Court does, what the Constitution says about it, and the temple-style building that houses it.",
+                "body": "<p>On the Nile Corniche in the Cairo suburb of Maadi stands a building whose columns recall the temples of ancient Egypt. It is the seat of the Supreme Constitutional Court, the judicial body that decides whether laws and regulations comply with the Constitution.</p>\n<h2>What the court does</h2>\n<p>Article 191 of the Constitution describes the court as an independent judicial body based in Cairo. Under Article 192 it alone decides on the constitutionality of laws and regulations. It also interprets legislative texts and settles certain disputes, including disputes between judicial bodies and cases of conflicting final rulings. Article 195 provides that its rulings are published in the Official Gazette and are binding on everyone and on all state authorities.</p>\n<h2>A short history</h2>\n<p>The court as it exists was set up by Law No. 48 of 1979, which regulates its structure and jurisdiction, while its name dates from the 1971 Constitution. Before it, constitutional review was handled by a Supreme Court created by Law No. 81 of 1969.</p>\n<p>The building combines elements of ancient Egyptian architecture with contemporary design, and is said to take inspiration from the Temple of Luxor.</p>"
+            },
+            "ar": {
+                "title": "محكمة على هيئة معبد: المحكمة الدستورية العليا في مصر",
+                "excerpt": "على كورنيش النيل في المعادي يقع مقر المحكمة التي تراقب دستورية القوانين، في مبنى تستلهم عمارته العمارة المصرية القديمة.",
+                "hero_caption": "مبنى المحكمة الدستورية العليا على كورنيش النيل في المعادي. تصوير: Ahmad Badr / ويكيميديا كومنز / CC BY-SA 3.0 (بعد الاقتصاص)",
+                "meta_description": "ما الذي تفعله المحكمة الدستورية العليا في مصر، وماذا يقول الدستور عنها، والمبنى المستلهَم من المعابد الذي تتخذه مقرًا.",
+                "body": "<p>على كورنيش النيل في ضاحية المعادي بالقاهرة يقوم مبنى تذكّر أعمدته بمعابد مصر القديمة. إنه مقر المحكمة الدستورية العليا، الجهة القضائية التي تفصل في مدى اتفاق القوانين واللوائح مع الدستور.</p>\n<h2>ما اختصاص المحكمة؟</h2>\n<p>تنص المادة 191 من الدستور على أن المحكمة الدستورية العليا جهة قضائية مستقلة، مقرها مدينة القاهرة. وبموجب المادة 192 تنفرد المحكمة بالفصل في دستورية القوانين واللوائح، وتتولى كذلك تفسير النصوص التشريعية والفصل في بعض المنازعات، ومنها المنازعات بين الجهات القضائية وحالات تناقض الأحكام النهائية. وتقضي المادة 195 بنشر أحكامها وقراراتها في الجريدة الرسمية، وبأنها ملزمة للكافة ولجميع سلطات الدولة.</p>\n<h2>لمحة تاريخية</h2>\n<p>نشأت المحكمة بصيغتها القائمة بالقانون رقم 48 لسنة 1979 الذي ينظّم تشكيلها واختصاصاتها، أما تسميتها فتعود إلى دستور 1971. وقبلها كانت الرقابة الدستورية من اختصاص المحكمة العليا التي أُنشئت بالقانون رقم 81 لسنة 1969.</p>\n<p>ويجمع تصميم المبنى بين عناصر من العمارة المصرية القديمة وتصميم معاصر، ويُقال إنه مستوحى من معبد الأقصر.</p>"
+            }
+        },
+        {
+            "key": "abu-simbel-the-temples-that-moved",
+            "category": "world",
+            "image": "images/abu-simbel-lake.jpg",
+            "featured": false,
+            "published_hours_ago": 124,
+            "tags": [
+                {
+                    "en": "Abu Simbel",
+                    "ar": "أبو سمبل"
+                },
+                {
+                    "en": "UNESCO",
+                    "ar": "اليونسكو"
+                },
+                {
+                    "en": "World Heritage",
+                    "ar": "التراث العالمي"
+                }
+            ],
+            "en": {
+                "title": "The temples that moved: how the world saved Abu Simbel",
+                "excerpt": "In the 1960s UNESCO led an international campaign to move the Abu Simbel temples to higher ground before the reservoir of the Aswan High Dam could flood them.",
+                "hero_caption": "The Abu Simbel temples seen from Lake Nasser. Photo: Olaf Tausch / Wikimedia Commons / CC BY 3.0 (cropped)",
+                "meta_description": "How an international UNESCO campaign cut the Abu Simbel temples into blocks and rebuilt them on higher ground, finishing in 1968.",
+                "body": "<p>Abu Simbel, in Aswan Governorate near Egypt’s border with Sudan, was carved out of a hillside in the 13th century BCE, during the reign of Ramesses II. The Great Temple is fronted by four colossal seated statues of the king, and a smaller temple beside it is dedicated to the goddess Hathor, personified by his chief wife, Nefertari.</p>\n<h2>A race against rising water</h2>\n<p>In the 1960s the reservoir behind the Aswan High Dam, Lake Nasser, was filling, and its waters would have submerged Abu Simbel and other sites of ancient Nubia.</p>\n<p>UNESCO launched the International Campaign to Save the Monuments of Nubia on 8 March 1960. Some 30 countries set up national committees to support it, and donations from around 50 countries covered half of its cost of roughly US$80 million. In all, 22 monuments and complexes were saved.</p>\n<p>At Abu Simbel the temples were cut into more than a thousand blocks, moved to higher ground and reassembled inside an artificial hill built to recreate their original setting. The site was inaugurated in its higher position on 22 September 1968.</p>\n<h2>A model for World Heritage</h2>\n<p>Nubian Monuments from Abu Simbel to Philae was inscribed on the World Heritage List in 1979. UNESCO says the Nubian campaign spurred the development of the World Heritage Convention, which was adopted in 1972.</p>"
+            },
+            "ar": {
+                "title": "المعابد التي انتقلت من مكانها: كيف أنقذ العالم أبو سمبل",
+                "excerpt": "قادت اليونسكو في ستينيات القرن العشرين حملة دولية لنقل معابد أبو سمبل إلى أرض أعلى قبل أن تغمرها مياه بحيرة ناصر خلف السد العالي.",
+                "hero_caption": "معابد أبو سمبل من بحيرة ناصر. تصوير: Olaf Tausch / ويكيميديا كومنز / CC BY 3.0 (بعد الاقتصاص)",
+                "meta_description": "كيف قطعت حملة دولية بقيادة اليونسكو معابد أبو سمبل إلى كتل وأعادت بناءها في موضع أعلى، وانتهت عام 1968.",
+                "body": "<p>نُحتت معابد أبو سمبل في سفح جبل بمحافظة أسوان، قرب حدود مصر مع السودان، خلال القرن الثالث عشر قبل الميلاد في عهد رمسيس الثاني. وتتصدّر واجهةَ المعبد الكبير أربعة تماثيل ضخمة جالسة للملك، وإلى جواره معبد أصغر مكرَّس للإلهة حتحور التي تجسّدها نفرتاري زوجته الرئيسية.</p>\n<h2>سباق مع ارتفاع المياه</h2>\n<p>في ستينيات القرن العشرين كانت بحيرة ناصر، خلف السد العالي، تمتلئ بالمياه التي كانت ستغمر أبو سمبل ومواقع أخرى في بلاد النوبة القديمة.</p>\n<p>وأطلقت اليونسكو الحملة الدولية لإنقاذ آثار النوبة في 8 مارس 1960. وأنشأت نحو 30 دولة لجانًا وطنية لدعمها، وغطّت تبرعات نحو 50 دولة نصف كلفتها البالغة نحو 80 مليون دولار أمريكي. وأُنقذ في المجموع 22 معلمًا ومجمعًا أثريًا.</p>\n<p>وفي أبو سمبل قُطعت المعابد إلى أكثر من ألف كتلة، ونُقلت إلى أرض أعلى وأُعيد تركيبها داخل تل اصطناعي أُقيم ليحاكي موضعها الأصلي. وافتُتح الموقع في موضعه المرتفع في 22 سبتمبر 1968.</p>\n<h2>نموذج للتراث العالمي</h2>\n<p>أُدرجت «آثار النوبة من أبو سمبل إلى فيلة» في قائمة التراث العالمي عام 1979. وتقول اليونسكو إن حملة النوبة دفعت إلى وضع اتفاقية التراث العالمي التي اعتُمدت عام 1972.</p>"
+            }
+        },
+        {
+            "key": "bibliotheca-alexandrina-reading-room-tilted-disc",
+            "category": "culture",
+            "image": "images/bibliotheca-alexandrina.jpg",
+            "featured": false,
+            "published_hours_ago": 150,
+            "tags": [
+                {
+                    "en": "Bibliotheca Alexandrina",
+                    "ar": "مكتبة الإسكندرية"
+                },
+                {
+                    "en": "Alexandria",
+                    "ar": "الإسكندرية"
+                },
+                {
+                    "en": "Libraries",
+                    "ar": "المكتبات"
+                }
+            ],
+            "en": {
+                "title": "The Bibliotheca Alexandrina: a reading room beneath a tilted disc",
+                "excerpt": "Inaugurated on 16 October 2002, the library was built to recall the ancient Library of Alexandria and is designed to hold up to eight million volumes.",
+                "hero_caption": "The reading hall of the Bibliotheca Alexandrina. Photo: Ahmedsalahemam / Wikimedia Commons / CC BY-SA 4.0",
+                "meta_description": "A look at the Bibliotheca Alexandrina: its slanted-disc design, granite wall of scripts, seven-level reading hall and room for eight million books.",
+                "body": "<p>The Bibliotheca Alexandrina was officially inaugurated on 16 October 2002 on the Alexandria waterfront. It was conceived to recapture the spirit of the ancient Library of Alexandria, and, according to the library, its plaza stands where the old library and the royal palace of the Ptolemies once stood. The library’s own history dates the start of the ancient Mouseion, part academy, part research centre and part library, to 288 BCE under Ptolemy I.</p>\n<h2>The building</h2>\n<p>The building’s dominant image is a slanted disc, and its curved outer wall is covered in grey granite that displays letters from the alphabets of some 120 languages. It was designed by the Snøhetta Hamza Consortium of Norwegian and Egyptian architects.</p>\n<h2>The reading hall</h2>\n<p>Inside, the main reading area cascades down seven levels beneath the sloping roof and accommodates 2,000 readers. The library was designed to house up to eight million volumes, with 500,000 on open shelves in the main hall and 7.5 million in storage within the building.</p>\n<p>Beyond the books, the complex includes a planetarium, three museums covering antiquities, manuscripts and the history of science, and several specialised libraries, among them libraries for children, for the visually impaired and for rare books.</p>\n<p>Alexandria itself was founded in 331 BCE, when Alexander the Great chose the site for a new capital, and its lighthouse, the Pharos, was counted among the Seven Wonders of the Ancient World.</p>"
+            },
+            "ar": {
+                "title": "مكتبة الإسكندرية: قاعة قراءة تحت قرص مائل",
+                "excerpt": "افتُتحت المكتبة رسميًا في 16 أكتوبر 2002 لتستعيد روح مكتبة الإسكندرية القديمة، وصُمّمت لاستيعاب ما يصل إلى ثمانية ملايين مجلد.",
+                "hero_caption": "قاعة القراءة في مكتبة الإسكندرية. تصوير: Ahmedsalahemam / ويكيميديا كومنز / CC BY-SA 4.0",
+                "meta_description": "نظرة على مكتبة الإسكندرية: تصميم القرص المائل، وجدار الغرانيت المنقوش بالحروف، وقاعة القراءة ذات المستويات السبعة، ومساحة لثمانية ملايين كتاب.",
+                "body": "<p>افتُتحت مكتبة الإسكندرية رسميًا في 16 أكتوبر 2002 على كورنيش الإسكندرية، وهي تسعى إلى استعادة روح مكتبة الإسكندرية القديمة، وتذكر المكتبة أن ساحتها تقوم في الموضع الذي كانت تقوم فيه المكتبة القديمة وقصر البطالمة الملكي. وتؤرخ المكتبة نفسها لبداية «الموسيون»، وهو مزيج من أكاديمية ومركز بحث ومكتبة، بعام 288 قبل الميلاد في عهد بطليموس الأول.</p>\n<h2>المبنى</h2>\n<p>الصورة الغالبة على المبنى قرص مائل، ويكسو جداره الخارجي المنحني حجر الغرانيت الرمادي الذي تظهر عليه حروف من أبجديات نحو 120 لغة. وقد صمّمه ائتلاف «سنوهيتا حمزة» الذي يضم معماريين نرويجيين ومصريين.</p>\n<h2>قاعة القراءة</h2>\n<p>وفي الداخل تتدرّج منطقة القراءة الرئيسية على سبعة مستويات تحت السقف المائل، وتتسع لألفي قارئ. وقد صُممت المكتبة لتضم ما يصل إلى ثمانية ملايين مجلد، منها 500 ألف على الأرفف المفتوحة في القاعة الرئيسية و7.5 مليون في المخازن داخل المبنى.</p>\n<p>وإلى جانب الكتب يضم المجمع قبة سماوية وثلاثة متاحف للآثار والمخطوطات وتاريخ العلوم، وعددًا من المكتبات المتخصصة، منها مكتبة للأطفال ومكتبة لذوي الإعاقة البصرية ومكتبة للكتب النادرة.</p>\n<p>أما الإسكندرية نفسها فقد أسّسها الإسكندر الأكبر عام 331 قبل الميلاد حين اختار موقع عاصمة جديدة، وكان فنارها، فاروس، يُعدّ من عجائب الدنيا السبع في العالم القديم.</p>"
+            }
+        }
+    ]
+}

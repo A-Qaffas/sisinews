@@ -1,0 +1,123 @@
+# sisi.news front-controller rules and hardening.
+#
+# Every addition sits inside an <IfModule> guard, so a module that is not loaded on the host
+# switches that feature off instead of answering every request with a 500.
+#
+# Deliberately NOT in this file: any PHP handler lines (cPanel writes its own block when the PHP
+# version is chosen).
+
+# --- https and www redirect (OFF until the certificate exists) ---------------------------------
+#
+# Both rules only fire while the flag file storage/app/force-https exists. deploy/go-live.sh creates it
+# once https://sisi.news answers with a valid certificate, so a deploy can never switch it on or off by
+# accident (the flag lives in storage/, which deploys never touch) and a missing certificate can never lock
+# visitors out. /.well-known/ stays reachable over plain http so certificate renewal keeps working.
+# This must stay ABOVE the Laravel rules: below them it would never see a routed URL.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteCond %{DOCUMENT_ROOT}/../storage/app/force-https -f
+    RewriteCond %{REQUEST_URI} !^/\.well-known/
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^ https://sisi.news%{REQUEST_URI} [L,R=301]
+
+    RewriteCond %{DOCUMENT_ROOT}/../storage/app/force-https -f
+    RewriteCond %{HTTP_HOST} ^www\.sisi\.news$ [NC]
+    RewriteRule ^ https://sisi.news%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# --- Directory listings and private files ---------------------------------------------------
+
+<IfModule mod_autoindex.c>
+    Options -Indexes
+</IfModule>
+
+# Files that must never be downloadable even if one lands in the document root by mistake
+# (a database dump, an editor backup, the PHP error log, the Composer files, artisan).
+<IfModule mod_authz_core.c>
+    <FilesMatch "(?i)^(error_log|artisan|composer\..*|\.env.*)$|\.(sql|bak)$">
+        Require all denied
+    </FilesMatch>
+    # Every other dotfile (.git*, .DS_Store, .user.ini, ...). /.well-known/ is a folder, so
+    # certificate validation files inside it are not matched here.
+    <FilesMatch "^\.">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+<IfModule !mod_authz_core.c>
+    <IfModule mod_access_compat.c>
+        <FilesMatch "(?i)^(error_log|artisan|composer\..*|\.env.*)$|\.(sql|bak)$">
+            Order allow,deny
+            Deny from all
+        </FilesMatch>
+        <FilesMatch "^\.">
+            Order allow,deny
+            Deny from all
+        </FilesMatch>
+    </IfModule>
+</IfModule>
+
+# Folders that start with a dot (.git, .svn, ...) hold files whose own names do not, so the rule
+# above cannot see them. Again /.well-known/ is the one exception. Must run before the front
+# controller rule below, which would otherwise hand the request to Laravel.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule (^|/)\.(?!well-known(/|$)) - [F,L]
+</IfModule>
+
+# --- Compression -----------------------------------------------------------------------------
+
+<IfModule mod_deflate.c>
+    <IfModule mod_filter.c>
+        AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml text/javascript
+        AddOutputFilterByType DEFLATE application/javascript application/x-javascript application/json application/ld+json
+        AddOutputFilterByType DEFLATE application/xml application/rss+xml application/atom+xml application/xhtml+xml
+        AddOutputFilterByType DEFLATE application/manifest+json image/svg+xml image/x-icon
+    </IfModule>
+</IfModule>
+
+# --- Browser caching -------------------------------------------------------------------------
+#
+# Only static files are matched here, by the URL the browser asked for. Pages and feeds come from
+# Laravel and keep the Cache-Control it sends (no-cache), so they are never cached for long.
+# There is no ExpiresDefault: a blanket default would hit HTML too.
+
+<IfModule mod_setenvif.c>
+    # Vite file names carry a content hash, so a changed file is a new URL and can be kept for good.
+    # (build/manifest.json is not hashed, hence assets/ only.)
+    SetEnvIfNoCase Request_URI "^/build/assets/" SISI_CACHE_IMMUTABLE
+    # Pictures keep their names when replaced, so a month, not a year.
+    SetEnvIfNoCase Request_URI "^/(brand|storage)/.+\.(jpe?g|png|gif|webp|avif|svg|ico)$" SISI_CACHE_MONTH
+</IfModule>
+<IfModule mod_headers.c>
+    Header set Cache-Control "public, max-age=31536000, immutable" env=SISI_CACHE_IMMUTABLE
+    Header set Cache-Control "public, max-age=2592000" env=SISI_CACHE_MONTH
+</IfModule>
+
+# --- Laravel ---------------------------------------------------------------------------------
+
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Handle X-XSRF-Token Header
+    RewriteCond %{HTTP:x-xsrf-token} .
+    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Send Requests To Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>

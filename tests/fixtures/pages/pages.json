@@ -1,0 +1,34 @@
+{
+    "pages": [
+        {
+            "slug": "about",
+            "sort_order": 1,
+            "show_in_footer": true,
+            "en": {
+                "title": "About us",
+                "meta_description": "Who we are and how the newsroom works.",
+                "body": "<p>We are a small newsroom. Write to <strong>[[contact]]</strong> or read our standards.</p><h2>How we work</h2><ul><li>Check</li><li>Publish</li></ul>"
+            },
+            "ar": {
+                "title": "من نحن",
+                "meta_description": "من نحن وكيف تعمل غرفة الأخبار.",
+                "body": "<p>نحن غرفة أخبار صغيرة. راسلوا [[contact]] أو اقرأوا معاييرنا.</p><h2>كيف نعمل</h2><ul><li>نتحقق</li><li>ننشر</li></ul>"
+            }
+        },
+        {
+            "slug": "terms",
+            "sort_order": 5,
+            "show_in_footer": false,
+            "en": {
+                "title": "Terms of use",
+                "meta_description": "The terms for using this site.",
+                "body": "<p>Using the site means accepting these terms.</p>"
+            },
+            "ar": {
+                "title": "شروط الاستخدام",
+                "meta_description": "شروط استخدام الموقع.",
+                "body": "<p>استخدام الموقع يعني قبول هذه الشروط.</p>"
+            }
+        }
+    ]
+}

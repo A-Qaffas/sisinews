@@ -1,0 +1,29 @@
+{
+  "images/nile-corniche.jpg": {
+    "title": "Nile Corniche (test fixture)",
+    "author": "Test Author",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Fixture-1.jpg",
+    "credit_en": "Photo: Test Author / Wikimedia Commons / CC BY-SA 4.0",
+    "credit_ar": "تصوير: كاتب الاختبار / ويكيميديا كومنز / CC BY-SA 4.0"
+  },
+  "images/gulf-trade.webp": {
+    "title": "Gulf trade (test fixture)",
+    "author": "Other Author",
+    "license": "CC BY 2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0/",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Fixture-2.webp",
+    "credit_en": "Photo: Other Author / Wikimedia Commons / CC BY 2.0",
+    "credit_ar": "تصوير: مصور آخر / ويكيميديا كومنز / CC BY 2.0"
+  },
+  "images/museum.jpg": {
+    "title": "Museum (test fixture)",
+    "author": "Third Author",
+    "license": "CC0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Fixture-3.jpg",
+    "credit_en": "Photo: Third Author / Wikimedia Commons / CC0",
+    "credit_ar": "تصوير: مصور ثالث / ويكيميديا كومنز / CC0"
+  }
+}

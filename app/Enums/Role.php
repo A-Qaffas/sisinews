@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Enums;
+
+enum Role: string
+{
+    case Journalist = 'journalist';
+    // The stored value stays "editor"; only the name staff read changed (Arabic: رئيس التحرير).
+    case Editor = 'editor';
+    case Admin = 'admin';
+
+    public function isReviewer(): bool
+    {
+        return $this === self::Editor || $this === self::Admin;
+    }
+
+    /** The name staff read in the panel. */
+    public function label(): string
+    {
+        return match ($this) {
+            self::Journalist => 'Journalist',
+            self::Editor => 'Editor-in-chief',
+            self::Admin => 'Admin',
+        };
+    }
+}

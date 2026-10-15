@@ -1,0 +1,522 @@
+/*
+ * Live broadcasts: the Live page, the click-to-load player, the home-page strip and the pulsing dot in the
+ * header. Imported by app.css, so it uses the layout's colour tokens. Logical properties only: one rule
+ * serves Arabic (rtl) and English (ltr). Animation only inside prefers-reduced-motion: no-preference.
+ */
+
+/* ---------- Live dot (header link, strip, chips, player badge) ---------- */
+
+.live-dot {
+    position: relative;
+    display: inline-block;
+    flex: none;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--color-crimson, #9b2c2c);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .live-dot--pulse::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: inherit;
+        animation: live-pulse 1.8s ease-out infinite;
+    }
+}
+
+@keyframes live-pulse {
+    from {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+
+    to {
+        transform: scale(2.8);
+        opacity: 0;
+    }
+}
+
+.nav-link--live {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+/*
+ * Below md the navigation (and its Live link) folds into the Menu panel, so while something is on air a compact
+ * Live link sits beside the Menu button. Only with JavaScript: without it the navigation is never folded away.
+ */
+.live-quick {
+    display: none;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 2.75rem;
+    padding-inline: 0.75rem;
+    color: var(--color-crimson, #9b2c2c);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.live-quick:hover {
+    text-decoration: underline;
+}
+
+@media (width < 48rem) {
+    .js .live-quick {
+        display: inline-flex;
+    }
+}
+
+/* ---------- Home strip ---------- */
+
+.live-strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 1.25rem;
+    margin-block-end: 1.5rem;
+    padding: 0.6rem 1rem;
+    background: var(--color-crimson, #9b2c2c);
+    color: #fff;
+    line-height: 1.6;
+}
+
+.live-strip a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.live-strip :focus-visible {
+    outline-color: #fff;
+}
+
+.live-strip .live-dot {
+    background: #fff;
+}
+
+.live-strip__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+}
+
+.live-strip__list {
+    display: flex;
+    flex: 1 1 16rem;
+    flex-wrap: wrap;
+    gap: 0 1.5rem;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.live-strip__list a {
+    display: inline-block;
+    padding-block: 0.15rem;
+}
+
+.live-strip__where {
+    margin-inline-end: 0.4rem;
+    color: var(--color-alert-soft, #ffc9c9);
+    font-weight: 700;
+}
+
+.live-strip__list a:hover .live-strip__title,
+.live-strip__list a:focus-visible .live-strip__title {
+    text-decoration: underline;
+}
+
+.live-strip__all {
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: underline !important;
+}
+
+/* Beside the titles it sits at the far end; wrapped on a phone it stays at the start of its own line. */
+@media (min-width: 40rem) {
+    .live-strip__all {
+        margin-inline-start: auto;
+    }
+}
+
+/* ---------- Live page ---------- */
+
+.live-intro {
+    max-width: 46rem;
+    margin: 0;
+    color: var(--color-ink-soft, #34444f);
+}
+
+.live-filter {
+    margin-block: 1.25rem 0.5rem;
+}
+
+.live-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.live-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 2.5rem;
+    padding: 0.15rem 0.8rem;
+    border: 1px solid var(--color-line, #d8cfbd);
+    background: #fff;
+    color: var(--color-ink, #162938);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-decoration: none;
+}
+
+.live-chip:hover {
+    border-color: var(--color-ink, #162938);
+}
+
+/*
+ * Twenty-eight chips wrapped into seven or eight rows on a phone and pushed the first player below the fold. There they
+ * are one row that scrolls sideways (the selected chip is scrolled into view by resources/js/live-filter.js), so
+ * "Live now" and its player follow straight after.
+ */
+@media (width < 40rem) {
+    .live-chips {
+        flex-wrap: nowrap;
+        gap: 0.3rem;
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x proximity;
+        scrollbar-width: thin;
+        /* Room for the 3px focus outline, which a scrolling box would clip; the negative margin keeps the chips in line. */
+        margin-inline: -0.3rem;
+        padding: 0.3rem 0.3rem 0.5rem;
+    }
+
+    .live-chips > li {
+        flex: none;
+        scroll-snap-align: start;
+    }
+
+    .live-chip {
+        min-height: 2.5rem;
+        padding-inline: 0.7rem;
+        font-size: 0.875rem;
+        white-space: nowrap;
+    }
+}
+
+.live-chip[aria-current='page'] {
+    border-color: var(--color-ink, #162938);
+    background: var(--color-ink, #162938);
+    color: var(--color-cream, #f7f2e9);
+}
+
+.live-chip[aria-current='page'] .live-dot {
+    background: var(--color-alert-soft, #ffc9c9);
+}
+
+.live-section {
+    margin-block-start: 2.25rem;
+}
+
+.live-grid {
+    display: grid;
+    gap: 2rem 1.5rem;
+    grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 48rem) {
+    .live-grid:not(.live-grid--single) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* One broadcast: the player gets two thirds of the width and its text sits beside it. */
+@media (min-width: 64rem) {
+    .live-grid--single .live-card {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+        align-items: start;
+        gap: 2rem;
+    }
+}
+
+.live-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    scroll-margin-block-start: 1rem;
+}
+
+.live-card__title {
+    margin: 0.1rem 0 0;
+    font-size: 1.3rem;
+}
+
+.live-tag {
+    margin: 0;
+    color: var(--color-crimson, #9b2c2c);
+    font-size: 0.8125rem;
+    font-weight: 700;
+}
+
+.live-meta {
+    margin: 0.2rem 0 0;
+    color: var(--color-muted, #55616c);
+    font-size: 0.875rem;
+}
+
+.live-desc {
+    margin: 0.5rem 0 0;
+    color: var(--color-ink-soft, #34444f);
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+/*
+ * A title or description shown in the other language carries its own lang and dir, so its words run in the right
+ * order. Its alignment follows the page instead (match-parent), so it lines up with the tag and time beside it
+ * rather than zig-zagging to the opposite edge.
+ */
+.live-card__title[dir],
+.live-row__title[dir],
+.live-ended__title[dir],
+.live-desc[dir],
+.live-strip__title[dir] {
+    text-align: match-parent;
+}
+
+/* ---------- Player (the facade: placeholder until a visitor presses play) ---------- */
+
+.live-player {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.live-player__stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 50% 35%, #27465f 0%, var(--color-ink, #162938) 72%);
+    color: #fff;
+}
+
+.live-player__mark {
+    position: absolute;
+    inset-block-end: 0.75rem;
+    inset-inline-end: 0.75rem;
+    width: 2.75rem;
+    height: 2.75rem;
+}
+
+.live-badge {
+    position: absolute;
+    inset-block-start: 0.75rem;
+    inset-inline-start: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.1rem 0.65rem;
+    background: var(--color-crimson, #9b2c2c);
+    color: #fff;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    line-height: 1.7;
+}
+
+.live-badge .live-dot {
+    background: #fff;
+}
+
+/* Needs JavaScript, so it only exists under html.js (set by the inline script in the layout). */
+.live-player__play {
+    display: none;
+    place-items: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    padding: 0;
+    border: 3px solid var(--color-cream, #f7f2e9);
+    border-radius: 50%;
+    background: var(--color-crimson, #9b2c2c);
+    color: #fff;
+    cursor: pointer;
+}
+
+.js .live-player__play {
+    display: grid;
+}
+
+.live-player__play:hover {
+    background: var(--color-crimson-deep, #7a2020);
+}
+
+.live-player__play:focus-visible {
+    outline: 3px solid var(--color-cream, #f7f2e9);
+    outline-offset: 3px;
+}
+
+/* The triangle always points right (it is a picture of "play", not a direction), so it is nudged in physical pixels. */
+.live-player__play svg {
+    transform: translateX(2px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .live-player__play {
+        transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+
+    .live-player__play:hover {
+        transform: scale(1.06);
+    }
+}
+
+.live-player__frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.live-player__watch {
+    align-self: flex-start;
+    color: var(--color-muted, #55616c);
+    font-size: 0.875rem;
+}
+
+.live-player__watch:hover {
+    color: var(--color-crimson, #9b2c2c);
+}
+
+/* Without JavaScript this link is the whole player, so it looks like the button it stands in for. */
+html:not(.js) .live-player__watch {
+    padding: 0.55rem 1.1rem;
+    background: var(--color-crimson, #9b2c2c);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+/* ---------- Coming up ---------- */
+
+.live-rows {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.live-row {
+    display: grid;
+    gap: 0.5rem 1.5rem;
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: 1.1rem;
+    border-block-end: 1px solid var(--color-line, #d8cfbd);
+}
+
+.live-row:first-child {
+    padding-block-start: 0;
+}
+
+@media (min-width: 40rem) {
+    .live-row {
+        grid-template-columns: 11rem minmax(0, 1fr);
+    }
+}
+
+.live-row__when time {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.5;
+}
+
+.live-row__date {
+    font-weight: 700;
+}
+
+.live-row__time {
+    color: var(--color-crimson, #9b2c2c);
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.live-row__zone {
+    display: block;
+    color: var(--color-muted, #55616c);
+    font-size: 0.8125rem;
+}
+
+.live-row__title {
+    margin: 0.1rem 0 0;
+    font-size: 1.2rem;
+}
+
+/* ---------- Recently ended ---------- */
+
+.live-ended {
+    display: grid;
+    gap: 1rem 2rem;
+    grid-template-columns: minmax(0, 1fr);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+@media (min-width: 48rem) {
+    .live-ended {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.live-ended__item {
+    padding-block-end: 0.9rem;
+    border-block-end: 1px solid var(--color-line, #d8cfbd);
+}
+
+.live-ended__title {
+    margin: 0.1rem 0 0;
+    font-size: 1.05rem;
+}
+
+/* ---------- Empty state ---------- */
+
+.live-empty {
+    padding: 2.25rem 1rem;
+    border: 1px dashed var(--color-line, #d8cfbd);
+    background: rgb(255 255 255 / 0.5);
+    text-align: center;
+}
+
+.live-empty h3 {
+    margin-block-end: 0.5rem;
+    font-size: 1.25rem;
+}
+
+.live-empty p {
+    max-width: 36rem;
+    margin: 0 auto;
+    color: var(--color-muted, #55616c);
+}
+
+.live-empty a {
+    display: inline-block;
+    margin-block-start: 1rem;
+    color: var(--color-crimson, #9b2c2c);
+    font-weight: 700;
+}

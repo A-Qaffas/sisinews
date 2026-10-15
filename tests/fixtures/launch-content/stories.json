@@ -1,0 +1,76 @@
+{
+  "desk": { "name": "sisi.news Desk", "name_ar": "تحرير سيسي نيوز" },
+  "stories": [
+    {
+      "key": "nile-corniche-evening",
+      "category": "egypt",
+      "image": "images/nile-corniche.jpg",
+      "featured": true,
+      "published_hours_ago": 2,
+      "tags": [
+        { "en": "Cairo", "ar": "القاهرة" },
+        { "en": "Nile", "ar": "النيل" }
+      ],
+      "en": {
+        "title": "Evening on the Nile Corniche",
+        "excerpt": "Cairo's riverside promenade fills up as the heat breaks.",
+        "body": "<p>Families, fishermen and students share the <strong>Corniche</strong> once the sun goes down.</p><p>Vendors say the season has been the busiest in years.</p>",
+        "hero_caption": "Photo: Test Author / Wikimedia Commons / CC BY-SA 4.0",
+        "meta_description": "Cairo's riverside promenade fills up as the heat breaks."
+      },
+      "ar": {
+        "title": "مساء على كورنيش النيل",
+        "excerpt": "تمتلئ كورنيش القاهرة بالأسر مع انكسار حرارة النهار.",
+        "body": "<p>تجتمع الأسر والصيادون والطلاب على <strong>الكورنيش</strong> بعد غروب الشمس.</p><p>ويقول الباعة إن هذا الموسم هو الأكثر ازدحاما منذ سنوات.</p>",
+        "hero_caption": "تصوير: كاتب الاختبار / ويكيميديا كومنز / CC BY-SA 4.0",
+        "meta_description": "تمتلئ كورنيش القاهرة بالأسر مع انكسار حرارة النهار."
+      }
+    },
+    {
+      "key": "gulf-trade-talks",
+      "category": "business",
+      "image": "images/gulf-trade.webp",
+      "featured": false,
+      "published_hours_ago": 9,
+      "tags": [
+        { "en": "Cairo", "ar": "القاهرة" },
+        { "en": "Trade", "ar": "التجارة" }
+      ],
+      "en": {
+        "title": "Gulf and Egyptian Firms Open Trade Talks",
+        "excerpt": "Delegations meet in Cairo to discuss logistics and customs.",
+        "body": "<h2>What is on the table</h2><p>Negotiators will look at port fees, customs paperwork and shipping times.</p>",
+        "hero_caption": "Photo: Other Author / Wikimedia Commons / CC BY 2.0"
+      },
+      "ar": {
+        "title": "شركات خليجية ومصرية تفتتح محادثات تجارية",
+        "excerpt": "وفود تلتقي في القاهرة لبحث الخدمات اللوجستية والجمارك.",
+        "body": "<h2>ما المطروح على الطاولة</h2><p>سيبحث المفاوضون رسوم الموانئ والإجراءات الجمركية ومدد الشحن.</p>",
+        "hero_caption": "تصوير: مصور آخر / ويكيميديا كومنز / CC BY 2.0"
+      }
+    },
+    {
+      "key": "museum-after-dark",
+      "category": "culture",
+      "image": "images/museum.jpg",
+      "published_hours_ago": 30,
+      "tags": [
+        { "en": "Museums", "ar": "المتاحف" }
+      ],
+      "en": {
+        "title": "A Museum After Dark",
+        "slug": "museum-after-dark",
+        "excerpt": "Late openings bring a younger crowd to the galleries.",
+        "body": "<p>Evening tickets sold out within a day.</p><script>alert('xss-marker')</script><p onclick=\"steal()\">Curators call it a turning point.</p><img src=\"x\" onerror=\"steal()\">",
+        "hero_caption": "Photo: Third Author / Wikimedia Commons / CC0",
+        "meta_description": "Late openings bring a younger crowd to the galleries."
+      },
+      "ar": {
+        "title": "متحف بعد حلول الظلام",
+        "excerpt": "ساعات الافتتاح المتأخرة تجذب جمهورا أصغر سنا إلى القاعات.",
+        "body": "<p>نفدت تذاكر المساء خلال يوم واحد.</p><p>ويصف القائمون على المتحف ذلك بنقطة تحول.</p>",
+        "hero_caption": "تصوير: مصور ثالث / ويكيميديا كومنز / CC0"
+      }
+    }
+  ]
+}

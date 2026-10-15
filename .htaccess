@@ -1,0 +1,16 @@
+# Safety net for the application folder (~/sisi.news). The ONLY folder the web may serve is public/.
+#
+# On the server the document root of sisi.news must be  ~/sisi.news/public  and then this file is inert:
+# Apache does not apply a parent folder's rewrite rules inside a document root that has its own .htaccess,
+# and every request maps to a file under public/ anyway.
+#
+# If someone ever points the domain at THIS folder by mistake (cPanel's "Create A New Domain" form
+# pre-fills "sisi.news" instead of "sisi.news/public"), the rule below refuses every file outside public/,
+# so .env, vendor/, storage/logs/ and the source code can never be downloaded.
+#
+# Do not add "Require all denied" here: Apache merges it into public/ and takes the whole site offline.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} ^.*/sisi\.news/(?!public(/|$)).+
+    RewriteRule ^ - [F,L]
+</IfModule>

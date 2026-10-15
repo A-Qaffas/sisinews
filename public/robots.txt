@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /newsletter
+
+Sitemap: https://sisi.news/sitemap.xml
