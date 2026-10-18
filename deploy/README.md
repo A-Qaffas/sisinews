@@ -36,6 +36,15 @@ This is the operational truth for the GoDaddy cPanel account `wxr46gn9f7ld@92.20
    `cp -p manifest.json manifest.json.prev && mv manifest.json.new manifest.json` (the swap is atomic; pages read the
    manifest per request, and old asset files are left in place so a page rendered a second earlier still loads).
    The working tree keeps the change, so the next full release carries it. First used 2026-10-18 for the masthead restyle.
+8. Small update (Blade templates and/or CSS/JS; nothing under `app/`, `config/`, `routes/`, `lang/`, `composer.*` or
+   migrations): `deploy/remote-small-update.sh`, ~2 minutes instead of ~15. Commit first, `npm run build`, then pack ONLY
+   the changed files at their project paths plus the new `public/build/assets/*` files and `public/build/manifest.json`,
+   with a `SHA256SUMS` file (`sha256sum <files> > SHA256SUMS`), into `<name>.tgz`; `scp` it to `~/sisi.news-uploads/`;
+   `ssh host 'bash -s -- <name>' < deploy/remote-small-update.sh`. It refuses to change anything if a checksum fails,
+   saves every file it replaces to `~/sisi.news-uploads/<name>-prev/`, puts new assets in place before the manifest
+   switch, renames each template into place, and recompiles the template cache (`view:clear` + `view:cache`).
+   Before packing, compare the server's copies of the files you replace with the last deployed commit
+   (`sha256sum` both sides) so nothing unexpected is overwritten. First used 2026-10-18 for the share-bar icons.
 
 ## Hard-won lessons (all happened on 2026-10-12/13)
 
@@ -85,15 +94,18 @@ This is the operational truth for the GoDaddy cPanel account `wxr46gn9f7ld@92.20
 2. Then, with the owner's go-ahead, fill in the two Arabic names (report first, then write; it never overwrites a name an
    admin has typed in the panel and changes nothing a second time):
    `ssh wxr46gn9f7ld@92.205.88.46 'cd ~/sisi.news && DRY_RUN=1 php' < deploy/one-off/2026-10-18-masthead.php`, then the
-   same command without `DRY_RUN=1`. Each line ends in "Saved.", "left as it is." or "left empty (...)"; a "CHECK BY HAND"
-   line means the table is missing (the deploy's `migrate` did not run).
+   same command without `DRY_RUN=1`. Each line ends in "Saved." or "left as it is."; a "CHECK BY HAND" line means the
+   table is missing (the deploy's `migrate` did not run). Done on the live site 2026-10-18: Arabic names first, the English
+   spellings (Taghreed Refaay, Nagy Abu Moghanem) by a second run the same day.
 3. Check: `/ar` shows "رئيس مجلس الإدارة: تغريد رفاعي" and "رئيس التحرير: ناجي أبو مغنم" beside the logo, roles in crimson and
-   names in bold ink (on a phone, two centred lines under the logo row), and in the footer's bottom bar. `/en` shows no credits until an admin types the English spellings
-   in the panel (Site > Site settings, admins only).
+   names in bold ink (on a phone, two centred lines under the logo row), and in the footer's bottom bar. `/en` shows the English names the same way. Admins change any of the four
+   names in the panel (Site > Site settings, admins only).
 
 ## Rollback
 
 - Code: re-run step 3 with the previous tarball from `~/sisi.news-uploads/`.
 - Style-only change (step 7): `cd ~/sisi.news/public/build && mv manifest.json.prev manifest.json`.
+- Small update (step 8): `cp -a ~/sisi.news-uploads/<name>-prev/. ~/sisi.news/ && cd ~/sisi.news && php artisan view:clear && php artisan view:cache`
+  (a file that was new in that update stays behind, unused, unless deleted by hand).
 - https: delete `storage/app/force-https`, set `APP_FORCE_HTTPS=false` and `SESSION_SECURE_COOKIE=false` in `.env`, `php artisan config:cache`.
 - Data: restore from `~/sisi.news-backups/sisi-db-*.sql.gz` and `sisi-files-*.tgz`.
