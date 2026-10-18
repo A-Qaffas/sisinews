@@ -41,9 +41,11 @@ class MastheadCreditsTest extends TestCase
         if (preg_match('#<dl class="masthead-credits masthead-credits--'.$variant.'[^"]*">(.*?)</dl>#s', $html, $list) !== 1) {
             return null;
         }
-        preg_match_all('#<div><dt>([^<]*)</dt> <dd><bdi lang="([a-z]{2})">([^<]*)</bdi></dd></div>#', $list[1], $lines, PREG_SET_ORDER);
+        preg_match_all('#<div><dt data-role="[a-z]+">(.*?)</dt> <dd><bdi lang="([a-z]{2})">([^<]*)</bdi></dd></div>#', $list[1], $lines, PREG_SET_ORDER);
+        // A stretched (tatweel) label is shown aria-hidden; what it says is the plain label read to screen readers.
+        $label = fn (string $dt): string => preg_match('#<span class="sr-only">([^<]*)</span>#', $dt, $m) === 1 ? $m[1] : $dt;
 
-        return array_map(fn (array $line): string => html_entity_decode($line[1]).' '.html_entity_decode($line[3]).' ['.$line[2].']', $lines);
+        return array_map(fn (array $line): string => html_entity_decode($label($line[1])).' '.html_entity_decode($line[3]).' ['.$line[2].']', $lines);
     }
 
     /** @return array<string, list<string>|null> */

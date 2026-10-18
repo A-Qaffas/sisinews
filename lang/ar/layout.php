@@ -26,6 +26,11 @@ return [
         'chairman' => 'رئيس مجلس الإدارة',
         'editor' => 'رئيس التحرير',
     ],
+    // The editor's label stretched with tatweel so its line ends with the chairman's beside the logo (measured in IBM Plex
+    // Sans Arabic Bold: 8 + 16 tatweel). Shown there only; screen readers and the footer get the plain label above.
+    'masthead_fitted' => [
+        'editor' => 'رئيــــــــس التحريــــــــــــــــر',
+    ],
     'footer' => [
         'about' => 'موقع إخباري يضع مصر في بؤرة الضوء، ويقدّم لك أهم الأخبار والتحليلات من مصر والمنطقة والعالم بلغة واضحة.',
         'follow' => 'تابعنا',

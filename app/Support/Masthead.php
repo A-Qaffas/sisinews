@@ -4,6 +4,7 @@ namespace App\Support;
 
 use App\Enums\Locale;
 use App\Services\SiteSettings;
+use Illuminate\Support\Facades\Lang;
 
 /**
  * The masthead credits Egyptian news sites print beside the logo (رئيس مجلس الإدارة / رئيس التحرير), here also in the
@@ -42,7 +43,9 @@ final class Masthead
      * The lines for a page in $locale. A role whose name is empty in THAT language is left out: an English page never
      * falls back to the Arabic name, so no Arabic script appears on it.
      *
-     * @return list<array{role: string, name: string}>
+     * `fitted` is the label stretched to line up beside the logo (layout.masthead_fitted.*), when the language has one.
+     *
+     * @return list<array{key: string, role: string, fitted: ?string, name: string}>
      */
     public static function credits(Locale $locale): array
     {
@@ -53,7 +56,13 @@ final class Masthead
             $name = trim((string) $settings->get(self::key($role, $locale)));
 
             if ($name !== '') {
-                $credits[] = ['role' => __($label, [], $locale->value), 'name' => $name];
+                $fitted = "layout.masthead_fitted.{$role}";
+                $credits[] = [
+                    'key' => $role,
+                    'role' => __($label, [], $locale->value),
+                    'fitted' => Lang::has($fitted, $locale->value, false) ? __($fitted, [], $locale->value) : null,
+                    'name' => $name,
+                ];
             }
         }
 

@@ -203,6 +203,21 @@ html:lang(en) {
         display: contents;
     }
 
+    /*
+     * Both titles end on one line too. Arabic: the editor's title is stretched with tatweel (layout.masthead_fitted) and
+     * justify hands its word space the last pixel. English: Latin cannot stretch, so "Editor-in-Chief:" is tracked to
+     * the width of "Chairman of the Board:" (measured in IBM Plex Sans Bold); the negative margin drops the tracking
+     * after the colon. Re-measure both if a label's wording changes.
+     */
+    html:lang(ar) :is(.masthead-credits--header, .masthead-credits--strip) dt {
+        text-align-last: justify;
+    }
+
+    html:lang(en) :is(.masthead-credits--header, .masthead-credits--strip) dt[data-role='editor'] {
+        margin-inline-end: -0.2363em;
+        letter-spacing: 0.2363em;
+    }
+
     /* Beside the logo (md up): two stacked lines behind a hairline, about as tall as the logo itself. */
     .masthead-credits--header {
         padding-inline-start: 1rem;
