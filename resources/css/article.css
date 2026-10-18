@@ -158,11 +158,20 @@
 
 /* ---------- Tools bar ---------- */
 
-/* Two tidy rows: share, then reading tools. Without JavaScript the second row has nothing to show and goes away. */
+/*
+ * One quiet band under the picture: sharing on the start side, reading tools on the end side, wrapping on narrow
+ * screens. Share is the primary action (crimson pill + network discs); the reading tools stay borderless and small.
+ * Without JavaScript the reading tools have nothing to show and go away.
+ */
 .sn-tools {
-    display: grid;
-    gap: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
     margin-block: 1rem;
+    padding-block-end: 1rem;
+    border-block-end: 1px solid var(--color-line, #d8cfbd);
 }
 
 .sn-tools__group {
@@ -172,43 +181,92 @@
     gap: 0.5rem;
 }
 
-/* Phones: the label, then the six networks as an even 3 x 2 grid instead of a ragged wrap. */
-.sn-tools__share {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+.sn-tools__label {
+    color: var(--color-muted, #55616c);
+    font-size: 0.85rem;
+    font-weight: 700;
 }
 
-.sn-tools__share .sn-tools__label {
-    grid-column: 1 / -1;
+.sn-icon {
+    flex-shrink: 0;
+    width: 1rem;
+    height: 1rem;
 }
 
-.sn-tools__share .sn-tool {
-    min-width: 0;
-    padding-inline: 0.4rem;
+.sn-share-icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
-/* The phone's own share sheet: the one control that reliably hands the story to any app, so it leads,
-   full width on phones, in the brand crimson. */
-.sn-tools__share .sn-tool--native {
-    grid-column: 1 / -1;
-    border-color: var(--color-crimson, #9b2c2c);
-    background: var(--color-crimson, #9b2c2c);
+/* Each network as a white disc with its glyph in the network's colour; hover or keyboard focus floods the disc. */
+.sn-share-icon {
+    --brand: var(--color-ink, #162938);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--color-line, #d8cfbd);
+    border-radius: 50%;
+    background: #fff;
+    color: var(--brand);
+    transition:
+        background-color 150ms ease,
+        border-color 150ms ease,
+        color 150ms ease;
+}
+
+.sn-share-icon .sn-icon {
+    width: 1.125rem;
+    height: 1.125rem;
+}
+
+.sn-share-icon:hover,
+.sn-share-icon:focus-visible {
+    border-color: var(--brand);
+    background: var(--brand);
     color: #fff;
 }
 
-.sn-tools__share .sn-tool--native:hover {
-    border-color: var(--color-ink, #162938);
-    background: var(--color-ink, #162938);
-    color: var(--color-cream, #f7f2e9);
+/* Each brand's own colour, darkened where the official one is too pale to read on white (WhatsApp, Telegram). */
+.sn-share-icon[data-network='whatsapp'] {
+    --brand: #128c7e;
 }
 
-@media (min-width: 40rem) {
+.sn-share-icon[data-network='x'] {
+    --brand: #000;
+}
+
+.sn-share-icon[data-network='facebook'] {
+    --brand: #1877f2;
+}
+
+.sn-share-icon[data-network='linkedin'] {
+    --brand: #0a66c2;
+}
+
+.sn-share-icon[data-network='telegram'] {
+    --brand: #0088cc;
+}
+
+/* Phones: the share sheet button across the full width, the six discs spread evenly beneath it. */
+@media (max-width: 39.99rem) {
     .sn-tools__share {
-        display: flex;
+        width: 100%;
     }
 
-    .sn-tools__share .sn-tool {
-        padding-inline: 0.85rem;
+    .sn-tools__share .sn-tools__label {
+        display: none;
+    }
+
+    .sn-tools__share .sn-tool--native {
+        flex: 1 1 100%;
+    }
+
+    .sn-share-icons {
+        flex: 1 1 100%;
+        justify-content: space-between;
     }
 }
 
@@ -216,41 +274,89 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem 1.5rem;
+    gap: 0.5rem 1.25rem;
 }
 
 .sn-tools__utils:not(:has(> :not([hidden]))) {
     display: none;
 }
 
-.sn-tools__label {
-    color: var(--color-muted, #55616c);
-    font-size: 0.85rem;
-    font-weight: 700;
+/* Phones: text size at one end, copy and print at the other, on a single line. The "Text size" word is hidden
+   (it is aria-hidden already; the buttons carry their own names) so the line fits a 320px screen. */
+@media (max-width: 39.99rem) {
+    .sn-tools__utils {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .sn-tools__utils .sn-tools__label {
+        display: none;
+    }
 }
 
 .sn-tool {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 0.45rem;
     min-width: 2.75rem;
     min-height: 2.75rem;
-    padding-inline: 0.85rem;
-    border: 1px solid var(--color-ink, #162938);
-    background: transparent;
+    padding-inline: 1rem;
+    border: 1px solid var(--color-line, #d8cfbd);
+    border-radius: 999px;
+    background: #fff;
     color: var(--color-ink, #162938);
     font: inherit;
     font-size: 0.875rem;
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.2;
     text-decoration: none;
     cursor: pointer;
+    transition:
+        background-color 150ms ease,
+        border-color 150ms ease,
+        color 150ms ease;
 }
 
 .sn-tool:hover {
+    border-color: var(--color-ink, #162938);
     background: var(--color-ink, #162938);
     color: var(--color-cream, #f7f2e9);
+}
+
+/* The phone's own share sheet: the one control that reliably hands the story to any app, so it leads in crimson. */
+.sn-tool--native {
+    border-color: var(--color-crimson, #9b2c2c);
+    background: var(--color-crimson, #9b2c2c);
+    color: #fff;
+    padding-inline: 1.25rem;
+}
+
+.sn-tool--native:hover {
+    border-color: var(--color-crimson-deep, #7a2020);
+    background: var(--color-crimson-deep, #7a2020);
+    color: #fff;
+}
+
+/* Text size: two small discs. */
+.sn-tool--round {
+    width: 2.75rem;
+    padding-inline: 0;
+    border-radius: 50%;
+}
+
+/* Copy link and print: icon and word only, no frame, so they read as secondary to sharing. */
+.sn-tool--quiet {
+    padding-inline: 0.5rem;
+    border-color: transparent;
+    background: transparent;
+    color: var(--color-ink-soft, #34444f);
+}
+
+.sn-tool--quiet:hover {
+    border-color: transparent;
+    background: transparent;
+    color: var(--color-crimson, #9b2c2c);
 }
 
 .sn-tool:disabled {
@@ -573,6 +679,7 @@
 
 @media (prefers-reduced-motion: reduce) {
     .sn-tool,
+    .sn-share-icon,
     .sn-search button {
         transition: none;
     }

@@ -238,10 +238,39 @@ class ArticlePageTest extends TestCase
         $this->assertMatchesRegularExpression('/\shidden[\s>]/', $button, 'revealed by script only where navigator.share exists');
         $this->assertStringContainsString('data-url="'.$t->shortUrl().'"', $button);
         $this->assertStringContainsString('data-title="'.e($t->title).'"', $button, 'the title is escaped in the attribute');
-        $this->assertStringContainsString('>'.__('article.share_native', [], 'ar').'</button>', $html);
+        $this->assertStringContainsString('<span data-tool-text>'.__('article.share_native', [], 'ar').'</span></button>', $html);
 
         // It comes first in the share group, before the per-network links.
         $this->assertLessThan(strpos($html, 'https://wa.me/'), strpos($html, 'data-article-tool="share"'));
+    }
+
+    public function test_each_network_is_an_icon_button_that_still_has_a_spoken_name(): void
+    {
+        $t = $this->makeStory(Locale::Ar);
+
+        $html = $this->get($t->url())->assertOk()->getContent();
+
+        preg_match_all('#<a class="sn-share-icon" data-network="([a-z]+)"[^>]*>(.*?)</a>#s', $html, $links, PREG_SET_ORDER);
+        $this->assertSame(['whatsapp', 'x', 'facebook', 'linkedin', 'telegram', 'email'], array_column($links, 1));
+
+        foreach ($links as [$tag, $network, $inner]) {
+            $name = __('article.share_on', ['network' => __("article.networks.{$network}", [], 'ar')], 'ar');
+            $this->assertStringContainsString('aria-label="'.$name.'"', $tag, "{$network}: read aloud");
+            $this->assertStringContainsString('title="'.$name.'"', $tag, "{$network}: shown on hover");
+            // The glyph is inline (nothing fetched from a third party) and hidden from screen readers.
+            $this->assertMatchesRegularExpression('#^<svg class="sn-icon" viewBox="0 0 16 16"[^>]*aria-hidden="true"[^>]*><path d="[^"]+"/>(<path d="[^"]+"/>)*</svg>$#', trim($inner), $network);
+        }
+    }
+
+    public function test_copy_and_print_keep_their_words_in_the_span_the_script_rewrites(): void
+    {
+        $t = $this->makeStory(Locale::En);
+
+        $html = $this->get($t->url())->assertOk()->getContent();
+
+        // article-tools.js swaps the text of [data-tool-text] for "Link copied", so the icon beside it survives.
+        $this->assertMatchesRegularExpression('#data-article-tool="copy"[^>]*><svg class="sn-icon"[^>]*>.*?</svg>\s*<span data-tool-text>Copy link</span></button>#s', $html);
+        $this->assertMatchesRegularExpression('#data-article-tool="print"[^>]*><svg class="sn-icon"[^>]*>.*?</svg>\s*<span data-tool-text>Print</span></button>#s', $html);
     }
 
     public function test_a_preview_has_no_native_share_button(): void

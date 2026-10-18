@@ -3,11 +3,11 @@
 /*
  * One-off for the 2026-10-18 update (masthead credits beside the logo and in the footer).
  *
- * Fills in the two names the owner gave, in Arabic only:
- *   رئيس مجلس الإدارة: تغريد رفاعي      (masthead_chairman_ar)
- *   رئيس التحرير: ناجي أبو مغنم          (masthead_editor_ar)
- * The English spellings are not decided yet, so masthead_chairman_en and masthead_editor_en stay empty and English pages
- * show no credits until an admin types them in the panel (Site > Site settings).
+ * Fills in the two names the owner gave, in both languages:
+ *   رئيس مجلس الإدارة: تغريد رفاعي      (masthead_chairman_ar)   Chairman of the Board: Taghreed Refaay   (masthead_chairman_en)
+ *   رئيس التحرير: ناجي أبو مغنم          (masthead_editor_ar)     Editor-in-Chief: Nagy Abu Moghanem       (masthead_editor_en)
+ * The Arabic names were written first; the owner approved the English spellings later the same day, and rerunning the
+ * script then filled only the two English settings (the Arabic ones were already set).
  *
  * Run it AFTER deploying the update: it needs the site_settings table (the deploy's migrate creates it) and
  * App\Services\SiteSettings. It writes to the production database, so run it only with the owner's go-ahead.
@@ -33,22 +33,22 @@ use Illuminate\Support\Facades\Schema;
 
 if (! function_exists('sisi_masthead_names')) {
     /**
-     * The names to fill in, by setting key. English keys are listed with null: reported, never written.
+     * The names to fill in, by setting key.
      *
-     * @return array<string, string|null>
+     * @return array<string, string>
      */
     function sisi_masthead_names(): array
     {
         return [
             'masthead_chairman_ar' => 'تغريد رفاعي',
             'masthead_editor_ar' => 'ناجي أبو مغنم',
-            'masthead_chairman_en' => null,
-            'masthead_editor_en' => null,
+            'masthead_chairman_en' => 'Taghreed Refaay',
+            'masthead_editor_en' => 'Nagy Abu Moghanem',
         ];
     }
 
     /**
-     * Fills every empty Arabic name. With $write false nothing is saved.
+     * Fills every empty name. With $write false nothing is saved.
      *
      * @return array{0: list<string>, 1: bool} the report lines, and whether everything could be done
      */
@@ -68,8 +68,6 @@ if (! function_exists('sisi_masthead_names')) {
 
                 if ($current !== '') {
                     $lines[] = "{$key}: already set to \"{$current}\", left as it is.";
-                } elseif ($name === null) {
-                    $lines[] = "{$key}: empty, left empty (the English spelling is not decided; an admin fills it in the panel).";
                 } elseif ($write) {
                     $settings->set($key, $name);
                     $lines[] = "{$key}: set to \"{$name}\". Saved.";

@@ -81,7 +81,7 @@ class MastheadCreditsTest extends TestCase
 
         // md up: in the logo's group, right after the logo, with the tagline still at the far end of the row. Below md
         // the group must not shrink, or the Live link and the Menu button would slide over the logo on a narrow phone.
-        $this->assertSame(1, preg_match('#<div class="flex shrink-0 items-center gap-4 md:min-w-0 md:shrink lg:gap-5">\s*<a href="[^"]*/ar" class="shrink-0">\s*<img src="[^"]*logo-380\.webp"[^>]*>\s*</a>\s*<dl class="masthead-credits masthead-credits--header hidden md:flex">.*?</dl>\s*</div>\s*<p class="masthead-tagline hidden shrink-0 md:block">مصر في بؤرة الضوء</p>#s', $html));
+        $this->assertSame(1, preg_match('#<div class="flex shrink-0 items-center gap-4 md:min-w-0 md:shrink lg:gap-5">\s*<a href="[^"]*/ar" class="shrink-0">\s*<img src="[^"]*logo-380\.webp"[^>]*>\s*</a>\s*<dl class="masthead-credits masthead-credits--header hidden md:grid">.*?</dl>\s*</div>\s*<p class="masthead-tagline hidden shrink-0 md:block">مصر في بؤرة الضوء</p>#s', $html));
         // Phones: the row keeps only the logo, the Live link and the Menu button; the credits follow it, before the menu.
         $this->assertSame(1, preg_match('#data-nav-toggle.*?</button>\s*</div>\s*</div>\s*<dl class="masthead-credits masthead-credits--strip container-site md:hidden">.*?</dl>\s*<nav id="site-nav"#s', $html));
         // Footer: the imprint line comes before the copyright in the bottom bar.

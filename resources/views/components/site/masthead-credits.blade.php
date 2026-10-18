@@ -2,7 +2,7 @@
 <dl @class([
     'masthead-credits',
     'masthead-credits--'.$variant,
-    'hidden md:flex' => $variant === 'header',
+    'hidden md:grid' => $variant === 'header',
     'container-site md:hidden' => $variant === 'strip',
 ])>
     @foreach ($credits as $credit)

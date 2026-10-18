@@ -18,10 +18,13 @@
          (the app swallows the link), so this is the reliable way; revealed only where the browser supports it. --}}
     <button type="button" class="sn-tool sn-tool--native" data-article-tool="share" data-url="{{ $shareUrl }}"
             data-title="{{ $translation->title }}" data-copied="{{ __('article.link_copied') }}"
-            data-needs-native-share hidden>{{ __('article.share_native') }}</button>
-    @foreach ($shareLinks as $network => $href)
-        @php($networkName = __("article.networks.{$network}"))
-        <a class="sn-tool" href="{{ $href }}" aria-label="{{ __('article.share_on', ['network' => $networkName]) }}"
-           @if ($network !== 'email') target="_blank" rel="noopener noreferrer" @endif>{{ $networkName }}</a>
-    @endforeach
+            data-needs-native-share hidden><x-site.icon name="share" /><span data-tool-text>{{ __('article.share_native') }}</span></button>
+    {{-- Icon-only circles: the name lives in aria-label (read aloud) and title (shown on hover). --}}
+    <div class="sn-share-icons">
+        @foreach ($shareLinks as $network => $href)
+            @php($label = __('article.share_on', ['network' => __("article.networks.{$network}")]))
+            <a class="sn-share-icon" data-network="{{ $network }}" href="{{ $href }}" aria-label="{{ $label }}" title="{{ $label }}"
+               @if ($network !== 'email') target="_blank" rel="noopener noreferrer" @endif><x-site.icon :name="$network" /></a>
+        @endforeach
+    </div>
 </div>

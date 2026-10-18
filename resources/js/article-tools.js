@@ -74,12 +74,14 @@ async function copyText(text) {
 const copyTimers = new WeakMap();
 
 async function copyLink(button) {
-    const original = button.dataset.label ?? button.textContent;
+    // Only the text changes, so the icon beside it stays put.
+    const text = button.querySelector('[data-tool-text]') ?? button;
+    const original = button.dataset.label ?? text.textContent;
     button.dataset.label = original;
 
     try {
         await copyText(button.dataset.url ?? window.location.href);
-        button.textContent = button.dataset.copied ?? original;
+        text.textContent = button.dataset.copied ?? original;
     } catch {
         // The URL stays visible in the address bar; failing quietly beats a broken-looking button.
         return;
@@ -89,7 +91,7 @@ async function copyLink(button) {
     copyTimers.set(
         button,
         window.setTimeout(() => {
-            button.textContent = original;
+            text.textContent = original;
         }, COPIED_MS),
     );
 }
