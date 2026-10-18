@@ -187,8 +187,8 @@ html:lang(en) {
     }
 
     /*
-     * Header and phone strip: a two-column table (roles | names), so both names start on one line whatever the
-     * roles' lengths, with the roles flush against the colon like an imprint box.
+     * Header and phone strip: a two-column table (roles | names). Roles and names each start on one line; the shorter
+     * role's spare room falls between it and its name (the owner's choice over colon-aligned roles).
      */
     .masthead-credits--header,
     .masthead-credits--strip {
@@ -201,11 +201,6 @@ html:lang(en) {
     .masthead-credits--header > div,
     .masthead-credits--strip > div {
         display: contents;
-    }
-
-    .masthead-credits--header dt,
-    .masthead-credits--strip dt {
-        text-align: end;
     }
 
     /* Beside the logo (md up): two stacked lines behind a hairline, about as tall as the logo itself. */
