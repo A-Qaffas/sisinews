@@ -29,6 +29,13 @@ This is the operational truth for the GoDaddy cPanel account `wxr46gn9f7ld@92.20
    `php artisan sisi:create-admin <email> --name="..."` and `php artisan sisi:seed-launch-content --admin=<email>` (`--dry-run` first).
 5. `deploy/remote-cron.sh` appends the backup job to the crontab WITHOUT touching the existing line (it verifies that).
 6. `deploy/go-live.sh` switches https on only after a valid certificate answers (`--check` reports readiness only).
+7. Style-only change (CSS/JS under `resources/`, nothing in PHP, Blade, `lang/` or migrations): a full release takes ~15 min
+   on this connection, so ship only the built files. `npm run build`, then diff the server's `public/build/manifest.json`
+   against the local one: every differing line must be an asset filename. Upload the new `public/build/assets/*` files
+   first, the manifest as `manifest.json.new` second, compare `sha256sum` both sides, then on the server
+   `cp -p manifest.json manifest.json.prev && mv manifest.json.new manifest.json` (the swap is atomic; pages read the
+   manifest per request, and old asset files are left in place so a page rendered a second earlier still loads).
+   The working tree keeps the change, so the next full release carries it. First used 2026-10-18 for the masthead restyle.
 
 ## Hard-won lessons (all happened on 2026-10-12/13)
 
@@ -70,8 +77,23 @@ This is the operational truth for the GoDaddy cPanel account `wxr46gn9f7ld@92.20
 6. Before the first real broadcast, try its link on a local copy, or press Go live only once the stream is really running
    and check that it plays on a phone and on a computer.
 
+## After deploying the masthead-credits update (2026-10-18)
+
+1. Deploy as usual (step 3). Its `migrate` creates the `site_settings` table. In the seconds between the code sync and
+   `migrate`, pages render without the credits (they do not fail) and `storage/logs/laravel.log` may show
+   `Table '...site_settings' doesn't exist` lines. They are expected.
+2. Then, with the owner's go-ahead, fill in the two Arabic names (report first, then write; it never overwrites a name an
+   admin has typed in the panel and changes nothing a second time):
+   `ssh wxr46gn9f7ld@92.205.88.46 'cd ~/sisi.news && DRY_RUN=1 php' < deploy/one-off/2026-10-18-masthead.php`, then the
+   same command without `DRY_RUN=1`. Each line ends in "Saved.", "left as it is." or "left empty (...)"; a "CHECK BY HAND"
+   line means the table is missing (the deploy's `migrate` did not run).
+3. Check: `/ar` shows "رئيس مجلس الإدارة: تغريد رفاعي" and "رئيس التحرير: ناجي أبو مغنم" beside the logo, roles in crimson and
+   names in bold ink (on a phone, two centred lines under the logo row), and in the footer's bottom bar. `/en` shows no credits until an admin types the English spellings
+   in the panel (Site > Site settings, admins only).
+
 ## Rollback
 
 - Code: re-run step 3 with the previous tarball from `~/sisi.news-uploads/`.
+- Style-only change (step 7): `cd ~/sisi.news/public/build && mv manifest.json.prev manifest.json`.
 - https: delete `storage/app/force-https`, set `APP_FORCE_HTTPS=false` and `SESSION_SECURE_COOKIE=false` in `.env`, `php artisan config:cache`.
 - Data: restore from `~/sisi.news-backups/sisi-db-*.sql.gz` and `sisi-files-*.tgz`.

@@ -1,6 +1,7 @@
-// Article page tools: text size, copy link and print. Share buttons are plain links and need no
-// script. Every control that does need JavaScript ships `hidden` and is revealed here, so a
-// reader without JS never sees a button that does nothing.
+// Article page tools: native share, text size, copy link and print. The per-network share buttons are
+// plain links and need no script. Every control that does need JavaScript ships `hidden` and is revealed
+// here (the native share button only where the browser has navigator.share), so a reader never sees a
+// button that does nothing.
 
 const SCALE_KEY = 'sisi.textScale';
 const SCALES = [0.875, 1, 1.125, 1.25, 1.5];
@@ -93,6 +94,15 @@ async function copyLink(button) {
     );
 }
 
+async function nativeShare(button) {
+    try {
+        await navigator.share({ title: button.dataset.title, text: button.dataset.title, url: button.dataset.url });
+    } catch (error) {
+        // Closing the share sheet is not an error. Anything else (blocked, unsupported data) falls back to copying.
+        if (error?.name !== 'AbortError') copyLink(button);
+    }
+}
+
 document.addEventListener('click', (event) => {
     const tool = event.target instanceof Element ? event.target.closest('[data-article-tool]') : null;
     if (!tool) return;
@@ -104,6 +114,9 @@ document.addEventListener('click', (event) => {
         case 'text-larger':
             applyScale(scaleIndex + 1, true);
             break;
+        case 'share':
+            nativeShare(tool);
+            break;
         case 'copy':
             copyLink(tool);
             break;
@@ -114,6 +127,12 @@ document.addEventListener('click', (event) => {
 });
 
 function init() {
+    if (typeof navigator.share === 'function') {
+        document.querySelectorAll('[data-needs-native-share]').forEach((element) => {
+            element.hidden = false;
+        });
+    }
+
     const revealable = document.querySelectorAll('[data-js-only]');
     if (revealable.length === 0) return;
 

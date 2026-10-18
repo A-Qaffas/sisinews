@@ -12,10 +12,14 @@
     </div>
 
     <div class="container-site flex items-center justify-between gap-4 py-4 lg:py-5">
-        <a href="{{ $home }}" class="shrink-0">
-            <img src="{{ asset('brand/logo-380.webp') }}" width="380" height="106" alt="{{ config('site.name.'.$locale->value) }}" class="h-9 w-auto md:h-12 lg:h-14">
-        </a>
-        <p class="masthead-tagline hidden md:block">{{ config('site.tagline.'.$locale->value) }}</p>
+        {{-- Masthead credits beside the logo, as Egyptian papers print them; the tagline keeps its place at the far end. --}}
+        <div class="flex shrink-0 items-center gap-4 md:min-w-0 md:shrink lg:gap-5">
+            <a href="{{ $home }}" class="shrink-0">
+                <img src="{{ asset('brand/logo-380.webp') }}" width="380" height="106" alt="{{ config('site.name.'.$locale->value) }}" class="h-9 w-auto md:h-12 lg:h-14">
+            </a>
+            <x-site.masthead-credits :locale="$locale" :credits="$credits" variant="header" />
+        </div>
+        <p class="masthead-tagline hidden shrink-0 md:block">{{ config('site.tagline.'.$locale->value) }}</p>
         @unless ($minimal)
             {{-- Below md the Live link folds into the menu, so while something is on air a short one waits beside it. --}}
             <div class="flex items-center gap-1 md:hidden">
@@ -31,6 +35,9 @@
     </div>
 
     @unless ($minimal)
+        {{-- Phones: no room beside the logo (the Live link and Menu button sit there), so the credits get a line of their own. --}}
+        <x-site.masthead-credits :locale="$locale" :credits="$credits" variant="strip" />
+
         <nav id="site-nav" class="nav-bar nav-panel" aria-label="{{ __('layout.primary_nav') }}">
             <div class="container-site flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-6">
                 <ul class="nav-list md:flex md:flex-wrap">

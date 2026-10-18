@@ -12,7 +12,8 @@ class Footer extends Component
 {
     private const SOCIAL_LABELS = ['facebook' => 'Facebook', 'x' => 'X', 'instagram' => 'Instagram', 'youtube' => 'YouTube'];
 
-    public function __construct(public Locale $locale, public bool $minimal = false) {}
+    /** @param  list<array{role: string, name: string}>  $credits  masthead credits (App\Support\Masthead::credits()) */
+    public function __construct(public Locale $locale, public bool $minimal = false, public array $credits = []) {}
 
     /** @return list<array{name: string, slug: string}> */
     public function categories(): array

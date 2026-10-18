@@ -60,6 +60,8 @@ return [
         'most_read' => 300,
         // Live-now strip and the nav dot: short so a broadcast that ended stops showing as live within a minute.
         'live' => 30,
+        // Site settings (masthead names): dropped on every save, so this long lifetime is only a safety net.
+        'settings' => 86400,
     ],
 
 ];

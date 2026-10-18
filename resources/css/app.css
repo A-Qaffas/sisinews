@@ -162,6 +162,56 @@ html:lang(en) {
         font-style: italic;
     }
 
+    /*
+     * Masthead credits ("رئيس التحرير: ..."), set the way Egyptian papers print them: the role in the crimson
+     * accent, the name in heavy ink, sized to stand beside the logo. Only 400 and 700 are loaded, so both are 700.
+     * Names can be up to 80 characters, so every variant wraps instead of pushing anything out of the row.
+     */
+    .masthead-credits {
+        display: flex;
+        flex-wrap: wrap;
+        min-width: 0;
+        column-gap: 1.25rem;
+        color: var(--color-crimson);
+        font-weight: 700;
+        line-height: 1.55;
+    }
+
+    .masthead-credits dt,
+    .masthead-credits dd {
+        display: inline;
+    }
+
+    .masthead-credits dd {
+        color: var(--color-ink);
+    }
+
+    /* Beside the logo (md up): two stacked lines behind a hairline, about as tall as the logo itself. */
+    .masthead-credits--header {
+        flex-direction: column;
+        padding-inline-start: 1rem;
+        border-inline-start: 2px solid var(--color-line);
+        font-size: 0.9375rem;
+    }
+
+    @media (min-width: 64rem) {
+        .masthead-credits--header {
+            padding-inline-start: 1.25rem;
+            font-size: 1.125rem;
+        }
+    }
+
+    /* Phones: no room beside the logo, so the two credits get a centred block of their own under it, one per line. */
+    .masthead-credits--strip {
+        flex-direction: column;
+        align-items: center;
+        padding-block: 0.5rem;
+        border-block-start: 1px solid var(--color-line);
+        font-size: 0.9375rem;
+        line-height: 1.6;
+        text-align: center;
+    }
+
     .nav-bar {
         border-block: 2px solid var(--color-ink);
         background: var(--color-cream);
@@ -624,6 +674,17 @@ html:lang(en) {
 
     .footer-base a:hover {
         color: inherit;
+    }
+
+    /* On the navy band crimson would not read, so the footer keeps the quieter small-print form. */
+    .masthead-credits--footer {
+        color: color-mix(in srgb, var(--color-cream) 78%, var(--color-ink));
+        font-weight: 400;
+    }
+
+    .masthead-credits--footer dd {
+        color: var(--color-cream);
+        font-weight: 700;
     }
 
     .footer-heading {

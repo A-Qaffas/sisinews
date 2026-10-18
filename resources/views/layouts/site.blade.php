@@ -17,6 +17,8 @@
     \Carbon\Carbon::setLocale($locale->value);
 
     $minimal ??= false;
+    // Read once for the header and the footer; error pages show none, so they still never touch the database.
+    $mastheadCredits = $minimal ? [] : \App\Support\Masthead::credits($locale);
     $siteName = config('site.name.'.$locale->value);
     $tagline = config('site.tagline.'.$locale->value);
     // @section('x', $value) HTML-escapes $value on the way in; decode so each use below escapes exactly once.
@@ -48,12 +50,12 @@
 <body>
     <a class="skip-link" href="#main">{{ __('layout.skip') }}</a>
 
-    <x-site.header :locale="$locale" :minimal="$minimal" :alternate-url="$alternateUrl" />
+    <x-site.header :locale="$locale" :minimal="$minimal" :alternate-url="$alternateUrl" :credits="$mastheadCredits" />
 
     <main id="main" tabindex="-1" class="container-site pt-6 md:pt-8">
         @yield('content')
     </main>
 
-    <x-site.footer :locale="$locale" :minimal="$minimal" />
+    <x-site.footer :locale="$locale" :minimal="$minimal" :credits="$mastheadCredits" />
 </body>
 </html>

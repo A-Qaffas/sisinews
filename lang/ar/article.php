@@ -7,6 +7,7 @@ return [
     'tools' => 'أدوات الخبر',
     'share' => 'شارك',
     'share_on' => 'شارك عبر :network',
+    'share_native' => 'مشاركة',
     'networks' => [
         'whatsapp' => 'واتساب',
         'x' => 'إكس',

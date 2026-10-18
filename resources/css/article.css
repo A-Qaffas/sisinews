@@ -187,6 +187,21 @@
     padding-inline: 0.4rem;
 }
 
+/* The phone's own share sheet: the one control that reliably hands the story to any app, so it leads,
+   full width on phones, in the brand crimson. */
+.sn-tools__share .sn-tool--native {
+    grid-column: 1 / -1;
+    border-color: var(--color-crimson, #9b2c2c);
+    background: var(--color-crimson, #9b2c2c);
+    color: #fff;
+}
+
+.sn-tools__share .sn-tool--native:hover {
+    border-color: var(--color-ink, #162938);
+    background: var(--color-ink, #162938);
+    color: var(--color-cream, #f7f2e9);
+}
+
 @media (min-width: 40rem) {
     .sn-tools__share {
         display: flex;

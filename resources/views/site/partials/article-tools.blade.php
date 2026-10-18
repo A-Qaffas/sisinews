@@ -17,7 +17,7 @@
 
         <div class="sn-tools__group" data-js-only hidden>
             @unless ($preview)
-                <button type="button" class="sn-tool" data-article-tool="copy" data-url="{{ $translation->url() }}"
+                <button type="button" class="sn-tool" data-article-tool="copy" data-url="{{ $translation->shortUrl() }}"
                         data-copied="{{ __('article.link_copied') }}" aria-live="polite" data-js-only hidden>{{ __('article.copy_link') }}</button>
             @endunless
             <button type="button" class="sn-tool" data-article-tool="print" data-js-only hidden>{{ __('article.print') }}</button>

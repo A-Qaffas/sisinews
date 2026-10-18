@@ -96,6 +96,8 @@
 
     <div class="footer-base on-dark">
         <div class="container-site flex flex-wrap items-center justify-between gap-x-6 gap-y-1 py-4">
+            {{-- The imprint: who is responsible for the paper, then the copyright. --}}
+            <x-site.masthead-credits :locale="$locale" :credits="$credits" variant="footer" />
             <p>{{ __('layout.footer.rights', ['year' => now(config('site.timezone'))->year, 'name' => $siteName]) }}</p>
         </div>
     </div>

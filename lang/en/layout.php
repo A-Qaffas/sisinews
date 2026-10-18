@@ -21,6 +21,11 @@ return [
         'title' => 'Our first stories are on the way',
         'text' => 'We are preparing our first reports. Please check back shortly.',
     ],
+    // Labels of the masthead credits beside the logo and in the footer; the names are set in the panel.
+    'masthead' => [
+        'chairman' => 'Chairman of the Board',
+        'editor' => 'Editor-in-Chief',
+    ],
     'footer' => [
         'about' => 'A news site that keeps Egypt in focus, bringing you the key stories and analysis from Egypt, the region and the world in clear language.',
         'follow' => 'Follow us',

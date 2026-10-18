@@ -13,11 +13,13 @@ class Header extends Component
     /**
      * @param  bool  $minimal  error pages: no navigation, search or ticker, so rendering needs no database
      * @param  string|null  $alternateUrl  the same page in the other language, when the page knows it
+     * @param  list<array{role: string, name: string}>  $credits  masthead credits (App\Support\Masthead::credits())
      */
     public function __construct(
         public Locale $locale,
         public bool $minimal = false,
         public ?string $alternateUrl = null,
+        public array $credits = [],
     ) {}
 
     /** @return list<array{name: string, slug: string}> */

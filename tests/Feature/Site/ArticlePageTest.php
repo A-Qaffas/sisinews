@@ -187,22 +187,70 @@ class ArticlePageTest extends TestCase
     public function test_the_tools_bar_offers_every_share_target_and_the_page_tools(): void
     {
         $t = $this->makeStory(Locale::En, attributes: ['title' => 'Share me']);
-        $encoded = rawurlencode($t->url());
+        $encoded = rawurlencode($t->shortUrl());
 
         $this->get($t->url())
             ->assertOk()
-            ->assertSee('https://wa.me/?text=', false)
+            ->assertSee('https://wa.me/?text='.rawurlencode('Share me '.$t->shortUrl()), false)
             ->assertSee('https://x.com/intent/post?text=Share%20me&amp;url='.$encoded, false)
             ->assertSee('https://www.facebook.com/sharer/sharer.php?u='.$encoded, false)
             ->assertSee('https://www.linkedin.com/sharing/share-offsite/?url='.$encoded, false)
             ->assertSee('https://t.me/share/url?url='.$encoded, false)
             ->assertSee('mailto:?subject=Share%20me', false)
             ->assertSee('data-article-tool="copy"', false)
-            ->assertSee('data-url="'.$t->url().'"', false)
+            ->assertSee('data-url="'.$t->shortUrl().'"', false)
             ->assertSee('data-article-tool="print"', false)
             ->assertSee('data-article-tool="text-smaller"', false)
             ->assertSee('data-article-tool="text-larger"', false)
             ->assertSee('rel="noopener noreferrer"', false);
+    }
+
+    public function test_shared_links_use_the_short_address_even_for_a_long_arabic_headline(): void
+    {
+        $t = $this->makeStory(Locale::Ar, attributes: ['title' => 'خالد فودة: توصيات مؤتمر الهوية الوطنية تخرج للنور الأسبوع المقبل']);
+
+        $this->assertSame(route('article', ['locale' => 'ar', 'idSlug' => (string) $t->article_id]), $t->shortUrl());
+        $this->assertLessThan(60, strlen($t->shortUrl()));
+        // Encoded for a link (as every share target needs it), the full Arabic address runs to hundreds of characters.
+        $this->assertLessThan(strlen(rawurlencode($t->url())) / 3, strlen($t->shortUrl()), 'the short link must be a fraction of the encoded full one');
+
+        $html = $this->get($t->url())->assertOk()->getContent();
+        $this->assertStringNotContainsString(rawurlencode($t->url()), $html, 'no share link may carry the long encoded address');
+        $this->assertStringContainsString('sharer.php?u='.rawurlencode($t->shortUrl()), $html);
+    }
+
+    public function test_the_short_address_sends_readers_and_link_previews_to_the_full_story(): void
+    {
+        $t = $this->makeStory(Locale::Ar);
+
+        $this->get($t->shortUrl())->assertStatus(301)->assertRedirect($t->url());
+    }
+
+    public function test_the_native_share_button_leads_ships_hidden_and_carries_the_short_link_and_title(): void
+    {
+        $t = $this->makeStory(Locale::Ar, attributes: ['title' => 'عنوان "مقتبس" & رمز']);
+
+        $html = $this->get($t->url())->assertOk()->getContent();
+
+        $this->assertSame(1, preg_match('/<button[^>]*data-article-tool="share"[^>]*>/', $html, $m));
+        $button = $m[0];
+        $this->assertStringContainsString('data-needs-native-share', $button);
+        $this->assertMatchesRegularExpression('/\shidden[\s>]/', $button, 'revealed by script only where navigator.share exists');
+        $this->assertStringContainsString('data-url="'.$t->shortUrl().'"', $button);
+        $this->assertStringContainsString('data-title="'.e($t->title).'"', $button, 'the title is escaped in the attribute');
+        $this->assertStringContainsString('>'.__('article.share_native', [], 'ar').'</button>', $html);
+
+        // It comes first in the share group, before the per-network links.
+        $this->assertLessThan(strpos($html, 'https://wa.me/'), strpos($html, 'data-article-tool="share"'));
+    }
+
+    public function test_a_preview_has_no_native_share_button(): void
+    {
+        $editor = User::factory()->editor()->create();
+        $article = Article::factory()->create();
+        $draft = ArticleTranslation::factory()->create(['article_id' => $article->id]);
+
+        $this->actingAs($editor)->get($draft->url())->assertOk()->assertDontSee('data-article-tool="share"', false);
     }
 
     public function test_script_dependent_tools_ship_hidden_so_they_are_not_dead_buttons_without_javascript(): void

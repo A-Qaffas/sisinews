@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Editorial\Transition;
 use App\Enums\Locale;
 use App\Enums\TranslationStatus;
-use App\Editorial\Transition;
 use App\Support\HtmlSanitizer;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
@@ -86,5 +86,14 @@ class ArticleTranslation extends Model
             'locale' => $this->locale->value,
             'idSlug' => $this->slug !== '' ? "{$this->article_id}-{$this->slug}" : (string) $this->article_id,
         ]);
+    }
+
+    /**
+     * The address used when sharing: /{locale}/news/{article_id}, which 301s to url(). An Arabic slug
+     * percent-encodes to hundreds of characters that chat apps truncate or mangle; this stays ~30.
+     */
+    public function shortUrl(): string
+    {
+        return route('article', ['locale' => $this->locale->value, 'idSlug' => (string) $this->article_id]);
     }
 }

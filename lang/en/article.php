@@ -7,6 +7,7 @@ return [
     'tools' => 'Article tools',
     'share' => 'Share',
     'share_on' => 'Share on :network',
+    'share_native' => 'Share',
     'networks' => [
         'whatsapp' => 'WhatsApp',
         'x' => 'X',

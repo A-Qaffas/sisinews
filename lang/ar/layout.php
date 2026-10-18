@@ -21,6 +21,11 @@ return [
         'title' => 'قصصنا الأولى في الطريق',
         'text' => 'نجهّز الآن أولى تقاريرنا. عُد إلينا بعد قليل.',
     ],
+    // Labels of the masthead credits beside the logo and in the footer; the names are set in the panel.
+    'masthead' => [
+        'chairman' => 'رئيس مجلس الإدارة',
+        'editor' => 'رئيس التحرير',
+    ],
     'footer' => [
         'about' => 'موقع إخباري يضع مصر في بؤرة الضوء، ويقدّم لك أهم الأخبار والتحليلات من مصر والمنطقة والعالم بلغة واضحة.',
         'follow' => 'تابعنا',
