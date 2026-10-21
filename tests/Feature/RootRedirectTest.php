@@ -17,9 +17,10 @@ class RootRedirectTest extends TestCase
         $this->get('/', ['Accept-Language' => ''])->assertRedirect('/ar');
     }
 
-    public function test_root_redirects_to_english_when_the_browser_prefers_english(): void
+    public function test_root_opens_arabic_even_when_the_browser_prefers_english(): void
     {
-        $this->get('/', ['Accept-Language' => 'en-US,en;q=0.9,ar;q=0.8'])->assertRedirect('/en');
+        // The owner's choice: sisi.news opens in Arabic for everyone; English is one click away in the top bar.
+        $this->get('/', ['Accept-Language' => 'en-US,en;q=0.9,ar;q=0.8'])->assertStatus(302)->assertRedirect('/ar');
     }
 
     public function test_unknown_locale_segment_is_a_404_not_a_crash(): void
