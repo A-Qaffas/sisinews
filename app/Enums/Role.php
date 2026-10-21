@@ -14,6 +14,26 @@ enum Role: string
         return $this === self::Editor || $this === self::Admin;
     }
 
+    /**
+     * The ready-made bundle this role starts with. An administrator can add or remove single permissions per person
+     * (User::permissions()). These reproduce what each role could do before permissions existed.
+     *
+     * @return list<Permission>
+     */
+    public function permissions(): array
+    {
+        return match ($this) {
+            self::Journalist => [Permission::WriteStories],
+            self::Editor => [
+                Permission::WriteStories, Permission::WriteInAllSections, Permission::EditAllStories,
+                Permission::PublishStories, Permission::DeleteStories, Permission::ManageSections,
+                Permission::ManageTags, Permission::ManagePages, Permission::ManageBroadcasts,
+                Permission::ViewSubscribers,
+            ],
+            self::Admin => Permission::cases(),
+        };
+    }
+
     /** The name staff read in the panel. */
     public function label(): string
     {

@@ -20,7 +20,7 @@ class SluggerTest extends TestCase
 
     public function test_latin_is_lowercased_and_collapsed(): void
     {
-        $this->assertSame('hello-world-2026', Slugger::make("  Hello,   World -- 2026!  "));
+        $this->assertSame('hello-world-2026', Slugger::make('  Hello,   World -- 2026!  '));
     }
 
     public function test_is_truncated_without_a_trailing_dash(): void

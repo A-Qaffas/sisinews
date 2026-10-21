@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Enums\LiveStatus;
+use App\Enums\Permission;
 use App\Models\LiveStream;
 use App\Models\User;
 
@@ -20,37 +21,37 @@ class LiveStreamPolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::ManageBroadcasts);
     }
 
     public function view(User $user, LiveStream $liveStream): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::ManageBroadcasts);
     }
 
     public function create(User $user): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::ManageBroadcasts);
     }
 
     public function update(User $user, LiveStream $liveStream): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::ManageBroadcasts);
     }
 
     public function goLive(User $user, LiveStream $liveStream): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::ManageBroadcasts);
     }
 
     public function end(User $user, LiveStream $liveStream): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::ManageBroadcasts);
     }
 
     public function delete(User $user, LiveStream $liveStream): bool
     {
-        return $user->isReviewer() && $liveStream->status !== LiveStatus::Live;
+        return $user->hasPermission(Permission::ManageBroadcasts) && $liveStream->status !== LiveStatus::Live;
     }
 
     public function deleteAny(User $user): bool

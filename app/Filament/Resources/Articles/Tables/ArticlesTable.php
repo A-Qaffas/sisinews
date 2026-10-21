@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Articles\Tables;
 
 use App\Enums\Locale;
+use App\Enums\Permission;
 use App\Enums\TranslationStatus;
 use App\Filament\Resources\Articles\ArticleResource;
 use App\Filament\Support\PhoneFriendly;
@@ -46,12 +47,12 @@ class ArticlesTable
                     ->label(__('Category'))
                     ->state(fn (Article $record): string => $record->category->nameIn(Locale::current()))
                     ->description(fn (Article $record): ?string => self::notYourSection($record))
-                    ->toggleable(isToggledHiddenByDefault: fn (): bool => auth()->user()->isReviewer())
+                    ->toggleable(isToggledHiddenByDefault: fn (): bool => auth()->user()->hasPermission(Permission::EditAllStories))
                     ->visibleFrom('md'),
                 TextColumn::make('author.name')
                     ->label(__('Author'))
                     ->toggleable()
-                    ->visible(fn (): bool => auth()->user()->isReviewer())
+                    ->visible(fn (): bool => auth()->user()->hasPermission(Permission::EditAllStories))
                     ->visibleFrom('md'),
                 self::versionsColumn(),
                 IconColumn::make('is_breaking')
@@ -79,9 +80,9 @@ class ArticlesTable
                 SelectFilter::make('author_id')
                     ->label(__('Author'))
                     ->options(fn (): array => User::query()->orderBy('name')->pluck('name', 'id')->all())
-                    ->visible(fn (): bool => auth()->user()->isReviewer()),
+                    ->visible(fn (): bool => auth()->user()->hasPermission(Permission::EditAllStories)),
                 TrashedFilter::make()
-                    ->visible(fn (): bool => auth()->user()->isAdmin()),
+                    ->visible(fn (): bool => auth()->user()->hasPermission(Permission::PurgeStories)),
             ])
             ->recordUrl(fn (Article $record): ?string => $record->trashed()
                 ? null
@@ -133,7 +134,7 @@ class ArticlesTable
     {
         $user = auth()->user();
 
-        return $user->isReviewer() || $user->canWriteIn($record->category_id) ? null : __('Not your section');
+        return $user->hasPermission(Permission::EditAllStories) || $user->canWriteIn($record->category_id) ? null : __('Not your section');
     }
 
     private static function titleColumn(Locale $locale): TextColumn

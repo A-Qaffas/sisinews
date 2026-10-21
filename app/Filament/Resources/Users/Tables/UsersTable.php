@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
+use App\Enums\Permission;
 use App\Enums\Role;
 use App\Filament\Resources\Users\Support\AccountActions;
 use App\Filament\Resources\Users\Support\SectionAssignments;
@@ -51,14 +52,16 @@ class UsersTable
                         Role::Admin => 'danger',
                         Role::Editor => 'warning',
                         Role::Journalist => 'info',
-                    }),
+                    })
+                    // The role's bundle was changed for this person (ticked or unticked on the form).
+                    ->description(fn (User $record): ?string => $record->hasCustomPermissions() ? __('Custom permissions') : null),
                 // Journalists only write in the sections listed; the Editor-in-chief and admins need no list.
                 TextColumn::make('sections')
                     ->label(__('Sections'))
                     ->state(fn (User $record): string => SectionAssignments::summary($record))
                     ->color(fn (User $record): string => match (true) {
                         SectionAssignments::hasNone($record) => 'warning',
-                        $record->isReviewer() => 'gray',
+                        $record->hasPermission(Permission::WriteInAllSections) => 'gray',
                         default => 'primary',
                     })
                     ->icon(fn (User $record): ?Heroicon => SectionAssignments::hasNone($record) ? Heroicon::OutlinedExclamationTriangle : null)

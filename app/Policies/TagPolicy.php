@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\Permission;
 use App\Models\Tag;
 use App\Models\User;
 
@@ -28,21 +29,21 @@ class TagPolicy
 
     public function create(User $user): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::ManageTags);
     }
 
     public function update(User $user, Tag $tag): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::ManageTags);
     }
 
     public function delete(User $user, Tag $tag): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::ManageTags);
     }
 
     public function deleteAny(User $user): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::ManageTags);
     }
 }

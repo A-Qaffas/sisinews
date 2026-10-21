@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\Permission;
 use App\Models\Article;
 use App\Models\User;
 
@@ -20,13 +21,14 @@ class ArticlePolicy
 
     public function view(User $user, Article $article): bool
     {
-        return $user->isReviewer() || $article->author_id === $user->getKey();
+        return $user->hasPermission(Permission::EditAllStories) || $article->author_id === $user->getKey();
     }
 
-    /** Reviewers write in every section; a journalist may start a story only once an admin has given them a section. */
+    /** "Write stories", and either "write in every section" or at least one section an admin assigned. */
     public function create(User $user): bool
     {
-        return $user->isReviewer() || $user->allowedCategories()->exists();
+        return $user->hasPermission(Permission::WriteStories)
+            && ($user->hasPermission(Permission::WriteInAllSections) || $user->allowedCategories()->exists());
     }
 
     /**
@@ -38,7 +40,7 @@ class ArticlePolicy
      */
     public function update(User $user, Article $article): bool
     {
-        if ($user->isReviewer()) {
+        if ($user->hasPermission(Permission::EditAllStories)) {
             return true;
         }
         if ($article->author_id !== $user->getKey()) {
@@ -53,16 +55,16 @@ class ArticlePolicy
 
     public function delete(User $user, Article $article): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::DeleteStories);
     }
 
     public function restore(User $user, Article $article): bool
     {
-        return $user->isAdmin();
+        return $user->hasPermission(Permission::PurgeStories);
     }
 
     public function forceDelete(User $user, Article $article): bool
     {
-        return $user->isAdmin();
+        return $user->hasPermission(Permission::PurgeStories);
     }
 }

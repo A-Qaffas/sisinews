@@ -63,7 +63,7 @@ class CreateAdminCommand extends Command
 
             return self::FAILURE;
         }
-        if ($existing !== null && ! $existing->isAdmin()) {
+        if ($existing !== null && $existing->role !== Role::Admin) {
             $this->components->error("{$email} is a {$existing->role->value}, not an admin. This command only manages admin accounts; change roles in the admin panel.");
 
             return self::FAILURE;

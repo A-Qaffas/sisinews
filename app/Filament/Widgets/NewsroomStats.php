@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Enums\Permission;
 use App\Enums\TranslationStatus;
 use App\Filament\Resources\Articles\ArticleResource;
 use App\Filament\Resources\ReviewQueue\ReviewQueueResource;
@@ -20,7 +21,7 @@ class NewsroomStats extends StatsOverviewWidget
     protected function getStats(): array
     {
         $user = auth()->user();
-        $reviewer = $user->isReviewer();
+        $reviewer = $user->hasPermission(Permission::EditAllStories);
 
         // Egypt's working week starts on Saturday.
         $weekStart = now(StatusPresenter::TIMEZONE)->startOfWeek(Carbon::SATURDAY)->utc();

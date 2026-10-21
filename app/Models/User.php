@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Locale;
+use App\Enums\Permission;
 use App\Enums\Role;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
@@ -33,6 +34,8 @@ class User extends Authenticatable implements FilamentUser
             'role' => Role::class,
             'is_active' => 'boolean',
             'locale' => Locale::class,
+            'permissions_granted' => 'array',
+            'permissions_revoked' => 'array',
         ];
     }
 
@@ -60,15 +63,15 @@ class User extends Authenticatable implements FilamentUser
     }
 
     /**
-     * May this person start or change a story in $category? Reviewers (editors, admins) work in every section;
-     * a journalist only in the sections an admin assigned; an inactive account in none.
+     * May this person start or change a story in $category? With "write in every section", anywhere; otherwise only
+     * in the sections an admin assigned; never without "write stories", and an inactive account nowhere.
      */
     public function canWriteIn(Category|int|null $category): bool
     {
-        if (! $this->is_active || $category === null) {
+        if (! $this->is_active || $category === null || ! $this->hasPermission(Permission::WriteStories)) {
             return false;
         }
-        if ($this->isReviewer()) {
+        if ($this->hasPermission(Permission::WriteInAllSections)) {
             return true;
         }
 
@@ -77,14 +80,81 @@ class User extends Authenticatable implements FilamentUser
         return $this->allowedCategories()->whereKey($id)->exists();
     }
 
-    public function isReviewer(): bool
+    /**
+     * What this person may do: their role's bundle, plus what an admin ticked for them, minus what was unticked.
+     * Unknown values (a permission since removed from the code) are ignored. An inactive account has none.
+     *
+     * @return list<Permission>
+     */
+    public function permissions(): array
     {
-        return $this->role->isReviewer();
+        return $this->is_active ? $this->configuredPermissions() : [];
     }
 
-    public function isAdmin(): bool
+    /**
+     * The permissions set for this account whether or not it is active (the Team form shows them on a deactivated
+     * account too, so switching it back on restores exactly what it had).
+     *
+     * @return list<Permission>
+     */
+    public function configuredPermissions(): array
     {
-        return $this->role === Role::Admin;
+        $granted = self::permissionList($this->permissions_granted);
+        $revoked = self::permissionList($this->permissions_revoked);
+
+        return array_values(array_filter(
+            Permission::cases(),
+            fn (Permission $p): bool => (in_array($p, $this->role->permissions(), true) || in_array($p, $granted, true))
+                && ! in_array($p, $revoked, true),
+        ));
+    }
+
+    public function hasPermission(Permission $permission): bool
+    {
+        return in_array($permission, $this->permissions(), true);
+    }
+
+    /** True when an admin changed this person's bundle (shown as "custom" in the Team list). */
+    public function hasCustomPermissions(): bool
+    {
+        return self::permissionList($this->permissions_granted) !== [] || self::permissionList($this->permissions_revoked) !== [];
+    }
+
+    /**
+     * Stores exactly $chosen as this person's permissions, as the difference from their role's bundle, so a later
+     * change to the bundle still reaches them for everything nobody changed by hand. Not saved; the caller saves.
+     *
+     * @param  iterable<Permission|string>  $chosen
+     */
+    public function choosePermissions(iterable $chosen): void
+    {
+        $chosen = self::permissionList($chosen);
+        $bundle = $this->role->permissions();
+
+        $granted = array_values(array_filter($chosen, fn (Permission $p): bool => ! in_array($p, $bundle, true)));
+        $revoked = array_values(array_filter($bundle, fn (Permission $p): bool => ! in_array($p, $chosen, true)));
+
+        $this->forceFill([
+            'permissions_granted' => $granted === [] ? null : array_map(fn (Permission $p): string => $p->value, $granted),
+            'permissions_revoked' => $revoked === [] ? null : array_map(fn (Permission $p): string => $p->value, $revoked),
+        ]);
+    }
+
+    /**
+     * @param  iterable<Permission|string>|null  $values
+     * @return list<Permission>
+     */
+    private static function permissionList(?iterable $values): array
+    {
+        $list = [];
+        foreach ($values ?? [] as $value) {
+            $permission = $value instanceof Permission ? $value : Permission::tryFrom((string) $value);
+            if ($permission !== null && ! in_array($permission, $list, true)) {
+                $list[] = $permission;
+            }
+        }
+
+        return $list;
     }
 
     /** Byline name in the reader's language, falling back to the Latin name. */

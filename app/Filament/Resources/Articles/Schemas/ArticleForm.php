@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Articles\Schemas;
 
 use App\Editorial\Transition;
 use App\Enums\Locale;
+use App\Enums\Permission;
 use App\Enums\TranslationStatus;
 use App\Filament\Resources\Articles\Support\ArticleAccess;
 use App\Filament\Support\StatusPresenter;
@@ -119,7 +120,7 @@ class ArticleForm
 
         foreach (Locale::cases() as $index => $locale) {
             $status = $record->translation($locale)?->status;
-            $waiting = $user->isReviewer()
+            $waiting = $user->hasPermission(Permission::PublishStories)
                 ? $status === TranslationStatus::InReview
                 : $status?->isAuthorEditable() === true && ArticleAccess::canEditTranslation($user, $record, $locale);
 
@@ -274,7 +275,7 @@ class ArticleForm
                 ->default(fn (): int => self::user()->getKey())
                 ->required()
                 ->searchable()
-                ->visible(fn (): bool => self::user()->isReviewer())
+                ->visible(fn (): bool => self::user()->hasPermission(Permission::EditAllStories))
                 ->disabled(fn (?Article $record): bool => ! ArticleAccess::canEditShell(self::user(), $record)),
             Toggle::make('is_featured')
                 ->label(__('Featured on the front page')),

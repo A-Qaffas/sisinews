@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Users\Support;
 
 use App\Enums\Locale;
+use App\Enums\Permission;
 use App\Enums\Role;
 use App\Models\Category;
 use App\Models\User;
@@ -46,7 +47,7 @@ final class SectionAssignments
     /** "Egypt, Politics +2 more", "None yet", or "All sections" for those who need no assignment. Needs allowedCategories.translations loaded. */
     public static function summary(User $account): string
     {
-        if ($account->isReviewer()) {
+        if ($account->hasPermission(Permission::WriteInAllSections)) {
             return __('All sections');
         }
 
@@ -67,6 +68,8 @@ final class SectionAssignments
 
     public static function hasNone(User $account): bool
     {
-        return ! $account->isReviewer() && $account->allowedCategories->isEmpty();
+        return $account->hasPermission(Permission::WriteStories)
+            && ! $account->hasPermission(Permission::WriteInAllSections)
+            && $account->allowedCategories->isEmpty();
     }
 }

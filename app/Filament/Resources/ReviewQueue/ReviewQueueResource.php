@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ReviewQueue;
 
+use App\Enums\Permission;
 use App\Enums\TranslationStatus;
 use App\Filament\Resources\ReviewQueue\Pages\ListReviewQueue;
 use App\Filament\Resources\ReviewQueue\Tables\ReviewQueueTable;
@@ -43,7 +44,7 @@ class ReviewQueueResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return auth()->user()?->isReviewer() ?? false;
+        return auth()->user()?->hasPermission(Permission::PublishStories) ?? false;
     }
 
     public static function getNavigationBadge(): ?string

@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\Permission;
 use App\Models\ArticleTranslation;
 use App\Models\User;
 
@@ -24,7 +25,7 @@ class ArticleTranslationPolicy
 
     public function view(User $user, ArticleTranslation $t): bool
     {
-        return $user->isReviewer() || $this->owns($user, $t);
+        return $user->hasPermission(Permission::EditAllStories) || $this->owns($user, $t);
     }
 
     public function create(User $user): bool
@@ -34,7 +35,7 @@ class ArticleTranslationPolicy
 
     public function update(User $user, ArticleTranslation $t): bool
     {
-        if ($user->isReviewer()) {
+        if ($user->hasPermission(Permission::EditAllStories)) {
             return true;
         }
 
@@ -43,32 +44,32 @@ class ArticleTranslationPolicy
 
     public function submit(User $user, ArticleTranslation $t): bool
     {
-        return $user->isReviewer() || ($this->owns($user, $t) && $this->mayWriteInSection($user, $t));
+        return $user->hasPermission(Permission::EditAllStories) || ($this->owns($user, $t) && $this->mayWriteInSection($user, $t));
     }
 
     public function approve(User $user, ArticleTranslation $t): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::PublishStories);
     }
 
     public function requestChanges(User $user, ArticleTranslation $t): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::PublishStories);
     }
 
     public function archive(User $user, ArticleTranslation $t): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::PublishStories);
     }
 
     public function reopen(User $user, ArticleTranslation $t): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::PublishStories);
     }
 
     public function delete(User $user, ArticleTranslation $t): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::DeleteStories);
     }
 
     private function owns(User $user, ArticleTranslation $t): bool

@@ -3,7 +3,9 @@
 namespace App\Filament\Resources\Users\Schemas;
 
 use App\Enums\Locale;
+use App\Enums\Permission;
 use App\Enums\Role;
+use App\Filament\Resources\Users\Support\PermissionFields;
 use App\Filament\Resources\Users\Support\SectionAssignments;
 use App\Filament\Resources\Users\Support\TeamGuard;
 use App\Filament\Support\PasswordRule;
@@ -15,6 +17,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 
 class UserForm
@@ -73,8 +76,9 @@ class UserForm
                             ->required()
                             ->selectablePlaceholder(false)
                             ->helperText(__('Journalists write in their own sections and cannot publish; the Editor-in-chief also approves and publishes; admins also manage staff.'))
-                            // Live, so the section picker below appears for journalists only.
+                            // Choosing a role ticks its ready-made permissions below; the admin can then change single ones.
                             ->live()
+                            ->afterStateUpdated(fn (Set $set, mixed $state) => PermissionFields::resetTo($set, $state))
                             ->disabled(fn (?User $record): bool => self::isCurrentUser($record)),
                         Toggle::make('is_active')
                             ->label(__('Active'))
@@ -92,8 +96,8 @@ class UserForm
                             ->selectablePlaceholder(false)
                             ->required()
                             ->helperText(__('What this person sees in the dashboard. They can also switch it from their own menu.')),
-                        // Hidden (so not submitted either) for the Editor-in-chief and admins, who write in every section.
-                        // What was ticked before stays stored while hidden, so changing the role back loses nothing.
+                        // Hidden (so not submitted either) for anyone who may write in every section, or not write at all.
+                        // What was ticked before stays stored while hidden, so ticking the permission back loses nothing.
                         Select::make(SectionAssignments::STATE)
                             ->label(__('Sections this journalist may write in'))
                             ->multiple()
@@ -106,8 +110,10 @@ class UserForm
                                 ? __('Until at least one section is chosen, this journalist cannot start a story.')
                                 : __('The journalist can start and edit stories only in these sections.'))
                             ->columnSpanFull()
-                            ->visible(fn (Get $get): bool => SectionAssignments::applies($get('role'))),
+                            ->visible(fn (Get $get): bool => PermissionFields::ticked($get, Permission::WriteStories)
+                                && ! PermissionFields::ticked($get, Permission::WriteInAllSections)),
                     ]),
+                PermissionFields::section(),
             ]);
     }
 

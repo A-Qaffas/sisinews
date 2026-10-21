@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Articles\Support;
 
 use App\Enums\Locale;
+use App\Enums\Permission;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Tag;
@@ -134,7 +135,7 @@ final class ArticleWriter
      */
     private function chosenAuthorId(array $data, User $by): ?int
     {
-        if (! $by->isReviewer() || blank($data['author_id'] ?? null)) {
+        if (! $by->hasPermission(Permission::EditAllStories) || blank($data['author_id'] ?? null)) {
             return null;
         }
 

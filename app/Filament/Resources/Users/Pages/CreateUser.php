@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\Users\Pages;
 
+use App\Filament\Resources\Users\Support\PermissionFields;
 use App\Filament\Resources\Users\Support\SectionAssignments;
 use App\Filament\Resources\Users\UserResource;
+use App\Models\User;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
@@ -24,8 +26,14 @@ class CreateUser extends CreateRecord
     protected function handleRecordCreation(array $data): Model
     {
         $sections = Arr::pull($data, SectionAssignments::STATE);
+        $permissions = PermissionFields::pull($data);
 
         $record = parent::handleRecordCreation($data);
+
+        if ($permissions !== null && $record instanceof User) {
+            $record->choosePermissions($permissions);
+            $record->save();
+        }
 
         if (is_array($sections)) {
             SectionAssignments::sync($record, $sections, auth()->user());

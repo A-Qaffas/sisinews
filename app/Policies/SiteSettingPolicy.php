@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\Permission;
 use App\Models\User;
 
 /** The site settings (masthead names...) are changed by active administrators only. */
@@ -14,6 +15,6 @@ class SiteSettingPolicy
 
     public function manage(User $user): bool
     {
-        return $user->isAdmin();
+        return $user->hasPermission(Permission::ManageSettings);
     }
 }

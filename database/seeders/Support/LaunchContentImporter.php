@@ -59,7 +59,7 @@ final class LaunchContentImporter
         if ($user === null) {
             return "There is no account for {$email}. Create the admin first with `php artisan sisi:create-admin`.";
         }
-        if (! $user->isAdmin()) {
+        if ($user->role !== Role::Admin) {
             return "{$email} is a {$user->role->value}, not an admin. Only an admin publishes the launch content.";
         }
         if (! $user->is_active) {

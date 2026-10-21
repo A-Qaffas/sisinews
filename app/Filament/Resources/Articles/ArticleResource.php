@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Articles;
 
 use App\Editorial\EditorialWorkflow;
+use App\Enums\Permission;
 use App\Enums\TranslationStatus;
 use App\Filament\Resources\Articles\Pages\CreateArticle;
 use App\Filament\Resources\Articles\Pages\EditArticle;
@@ -62,7 +63,7 @@ class ArticleResource extends Resource
         $query = parent::getEloquentQuery()->with(['translations', 'category.translations', 'author']);
         $user = auth()->user();
 
-        return $user->isReviewer() ? $query : $query->where('author_id', $user->getKey());
+        return $user->hasPermission(Permission::EditAllStories) ? $query : $query->where('author_id', $user->getKey());
     }
 
     /**

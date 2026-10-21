@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\Permission;
 use App\Models\NewsletterSubscriber;
 use App\Models\User;
 
@@ -15,12 +16,12 @@ class NewsletterSubscriberPolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::ViewSubscribers);
     }
 
     public function view(User $user, NewsletterSubscriber $subscriber): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::ViewSubscribers);
     }
 
     public function create(User $user): bool
@@ -35,11 +36,11 @@ class NewsletterSubscriberPolicy
 
     public function delete(User $user, NewsletterSubscriber $subscriber): bool
     {
-        return $user->isAdmin();
+        return $user->hasPermission(Permission::DeleteSubscribers);
     }
 
     public function deleteAny(User $user): bool
     {
-        return $user->isAdmin();
+        return $user->hasPermission(Permission::DeleteSubscribers);
     }
 }

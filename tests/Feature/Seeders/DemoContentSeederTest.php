@@ -3,6 +3,7 @@
 namespace Tests\Feature\Seeders;
 
 use App\Enums\Locale;
+use App\Enums\Permission;
 use App\Enums\Role;
 use App\Enums\TranslationStatus;
 use App\Models\Article;
@@ -209,7 +210,7 @@ class DemoContentSeederTest extends TestCase
 
         $editor = User::where('email', 'editor@sisi.test')->sole();
         foreach (ArticleStatusChange::with(['user', 'translation.article.author'])->where('transition', 'approve')->get() as $approval) {
-            $this->assertTrue($approval->user->isReviewer(), 'only reviewers approve');
+            $this->assertTrue($approval->user->hasPermission(Permission::PublishStories), 'only publishers approve');
             if ($approval->translation->article->author->role === Role::Journalist) {
                 $this->assertSame($editor->id, $approval->user_id, 'a journalist\'s story is approved by the editor');
             }

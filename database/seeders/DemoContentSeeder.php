@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Editorial\EditorialWorkflow;
 use App\Enums\Locale;
+use App\Enums\Permission;
 use App\Enums\Role;
 use App\Models\Article;
 use App\Models\ArticleStatusChange;
@@ -249,12 +250,12 @@ class DemoContentSeeder extends Seeder
         $this->backdate($translation, $at->isFuture() ? now()->subHours(20) : $at);
     }
 
-    /** Reviewers publish their own text in one step; journalists need an editor's approval. */
+    /** Whoever may publish puts their own text out in one step; the others need an editor's approval. */
     private function publish(ArticleTranslation $translation, User $author, User $editor): ArticleTranslation
     {
         $workflow = app(EditorialWorkflow::class);
 
-        if ($author->isReviewer()) {
+        if ($author->hasPermission(Permission::PublishStories)) {
             return $workflow->publishNow($translation, $author);
         }
 

@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\Permission;
 use App\Models\Page;
 use App\Models\User;
 
@@ -20,27 +21,27 @@ class PagePolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::ManagePages);
     }
 
     public function view(User $user, Page $page): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::ManagePages);
     }
 
     public function create(User $user): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::ManagePages);
     }
 
     public function update(User $user, Page $page): bool
     {
-        return $user->isReviewer();
+        return $user->hasPermission(Permission::ManagePages);
     }
 
     public function delete(User $user, Page $page): bool
     {
-        return $user->isAdmin() && ! $page->isCore();
+        return $user->hasPermission(Permission::DeletePages) && ! $page->isCore();
     }
 
     public function deleteAny(User $user): bool

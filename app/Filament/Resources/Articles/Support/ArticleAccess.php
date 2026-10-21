@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Articles\Support;
 
 use App\Enums\Locale;
+use App\Enums\Permission;
 use App\Filament\Support\TaxonomyLabels;
 use App\Models\Article;
 use App\Models\ArticleTranslation;
@@ -31,9 +32,9 @@ final class ArticleAccess
             return $user->can('update', $translation);
         }
 
-        // No version in this language yet: reviewers and the story's own author may add one, the author
-        // only while the story's section is still one of theirs (the same rule as editing a version).
-        return $user->isReviewer()
+        // No version in this language yet: whoever may edit everyone's stories, and the story's own author, may add
+        // one; the author only while the story's section is still one of theirs (the same rule as editing a version).
+        return $user->hasPermission(Permission::EditAllStories)
             || ($article->author_id === $user->getKey() && $user->canWriteIn($article->category_id));
     }
 
@@ -49,7 +50,7 @@ final class ArticleAccess
      */
     public static function lostSectionName(User $user, ?Article $article): ?string
     {
-        if ($article === null || $user->isReviewer() || $article->author_id !== $user->getKey() || $user->canWriteIn($article->category_id)) {
+        if ($article === null || $user->hasPermission(Permission::EditAllStories) || $article->author_id !== $user->getKey() || $user->canWriteIn($article->category_id)) {
             return null;
         }
 
@@ -76,7 +77,7 @@ final class ArticleAccess
     {
         $options = TaxonomyLabels::categoryOptions();
 
-        if ($user->isReviewer()) {
+        if ($user->hasPermission(Permission::WriteInAllSections)) {
             return $options;
         }
 
