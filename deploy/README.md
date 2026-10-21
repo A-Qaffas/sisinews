@@ -62,6 +62,11 @@ This is the operational truth for the GoDaddy cPanel account `wxr46gn9f7ld@92.20
 - **The preview subdomain `newspreview.silka-group.com` has no DNS and is meant to be removed** (cPanel Domains > Manage > Remove
   Domain; cPanel states it does not delete the document root, which is the real site's `public/` folder).
 - **A `.env` backup beside a live Laravel app is a leak** unless the web server blocks it by name pattern. Keep backups out of the web folder.
+- **Filament's assets are generated, not in git** (`public/css|js|fonts/filament`). On 2026-10-21 two releases built from a
+  clean `git worktree` lacked them and the install's `rsync --delete` removed them: the panel lost all styling and scripts
+  for about 30 minutes. `remote-install.sh` now runs `php artisan filament:assets` on every install. After any deploy,
+  check one panel asset answers 200 (`curl --resolve sisi.news:443:92.205.88.46 -o /dev/null -w '%{http_code}'
+  https://sisi.news/css/filament/filament/app.css`).
 - The admin password is generated on the server and shown once; to reset it: `php artisan sisi:create-admin <email> --reset-password`.
 
 ## After deploying the sections + live-broadcasts update (2026-10-13)

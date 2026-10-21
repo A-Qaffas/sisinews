@@ -58,6 +58,10 @@ php artisan package:discover --ansi
 php artisan migrate --force --no-interaction
 php artisan db:seed --force --no-interaction
 [ -L public/storage ] || php artisan storage:link
+# Filament's CSS/JS/fonts (public/css|js|fonts/filament) are generated, not in git; the rsync --delete above removes
+# them whenever the tarball lacks them (2026-10-21: a release built from a clean git worktree took the panel's styling
+# away). Publishing them here from the installed vendor/ makes every install whole, whatever the tarball held.
+php artisan filament:assets --no-interaction
 php artisan optimize:clear
 php artisan optimize
 php artisan filament:optimize 2>/dev/null || true
