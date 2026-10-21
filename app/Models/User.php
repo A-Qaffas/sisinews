@@ -18,7 +18,7 @@ use Illuminate\Notifications\Notifiable;
 // Staff only. v1 has no public/reader accounts, so there is no registration flow:
 // an admin creates every account. `role` and `is_active` are mass-assignable ONLY
 // because the admin-only user resource needs them; never expose a public form.
-#[Fillable(['name', 'name_ar', 'email', 'password', 'role', 'is_active'])]
+#[Fillable(['name', 'name_ar', 'email', 'password', 'role', 'is_active', 'locale'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements FilamentUser
 {
@@ -32,7 +32,14 @@ class User extends Authenticatable implements FilamentUser
             'password' => 'hashed',
             'role' => Role::class,
             'is_active' => 'boolean',
+            'locale' => Locale::class,
         ];
+    }
+
+    /** The language this person works in on /admin: their own choice, else the panel default (Arabic). */
+    public function adminLocale(): Locale
+    {
+        return $this->locale ?? Locale::tryFrom((string) config('site.admin_locale')) ?? Locale::default();
     }
 
     /** Every account is staff; the only gate is the admin's "active" switch. */

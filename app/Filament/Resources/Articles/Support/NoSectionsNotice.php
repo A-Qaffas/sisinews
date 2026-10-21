@@ -17,6 +17,18 @@ final class NoSectionsNotice
 
     public const BODY = 'An admin has not chosen the sections you may write in. Ask an admin to assign at least one section, then come back and start your story. Stories you already wrote stay readable.';
 
+    /** HEADING in the staff member's language (the constants are the English text and the translation keys). */
+    public static function heading(): string
+    {
+        return __(self::HEADING);
+    }
+
+    /** BODY in the staff member's language. */
+    public static function body(): string
+    {
+        return __(self::BODY);
+    }
+
     public static function applies(?User $user): bool
     {
         return $user !== null

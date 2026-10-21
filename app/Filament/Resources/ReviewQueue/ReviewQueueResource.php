@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ReviewQueue;
 use App\Enums\TranslationStatus;
 use App\Filament\Resources\ReviewQueue\Pages\ListReviewQueue;
 use App\Filament\Resources\ReviewQueue\Tables\ReviewQueueTable;
+use App\Filament\Support\AdminNavigationGroup;
 use App\Models\ArticleTranslation;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -19,17 +20,26 @@ class ReviewQueueResource extends Resource
 
     protected static ?string $slug = 'review-queue';
 
-    protected static ?string $navigationLabel = 'Review queue';
-
-    protected static ?string $modelLabel = 'version awaiting review';
-
-    protected static ?string $pluralModelLabel = 'review queue';
-
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentCheck;
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Newsroom';
+    protected static string|\UnitEnum|null $navigationGroup = AdminNavigationGroup::Newsroom;
 
     protected static ?int $navigationSort = 2;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Review queue');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('version awaiting review');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('review queue');
+    }
 
     public static function canViewAny(): bool
     {

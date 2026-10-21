@@ -124,7 +124,7 @@ class LiveStream extends Model
                 'started_at' => $current->startedAtIfLiveNow(),
                 'ended_at' => null,
             ],
-            fn (): string => 'This broadcast is already live.',
+            fn (): string => __('This broadcast is already live.'),
         );
     }
 
@@ -135,8 +135,8 @@ class LiveStream extends Model
             fn (self $current): bool => $current->canEnd(),
             fn (): array => ['status' => LiveStatus::Ended, 'ended_at' => now()],
             fn (self $current): string => $current->status === LiveStatus::Ended
-                ? 'This broadcast has already ended.'
-                : 'This broadcast has not started yet, so it cannot be ended.',
+                ? __('This broadcast has already ended.')
+                : __('This broadcast has not started yet, so it cannot be ended.'),
         );
     }
 
@@ -151,14 +151,14 @@ class LiveStream extends Model
     private function transition(Closure $allowed, Closure $changes, Closure $refusal): static
     {
         if (! $this->exists) {
-            throw new DomainException('Save the broadcast before changing its status.');
+            throw new DomainException(__('Save the broadcast before changing its status.'));
         }
 
         DB::transaction(function () use ($allowed, $changes, $refusal): void {
             $current = static::query()->lockForUpdate()->find($this->getKey());
 
             if ($current === null) {
-                throw new DomainException('This broadcast no longer exists.');
+                throw new DomainException(__('This broadcast no longer exists.'));
             }
             if (! $allowed($current)) {
                 throw new DomainException($refusal($current));

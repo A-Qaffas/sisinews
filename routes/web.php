@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\StaffLanguageController;
 use App\Http\Controllers\Site\ArticleController;
 use App\Http\Controllers\Site\CategoryController;
 use App\Http\Controllers\Site\FeedController;
@@ -16,6 +17,11 @@ use Illuminate\Support\Facades\Route;
 // Public site. No reader accounts in v1: the only login is the staff panel at /admin.
 // Every public page lives under /ar or /en; "/" just picks one.
 Route::get('/', RootRedirectController::class)->name('root');
+// Staff panel language (user menu and login page); the panel itself is Filament's, under /admin.
+Route::get('/admin/language/{locale}', StaffLanguageController::class)
+    ->where('locale', 'ar|en')
+    ->middleware('throttle:30,1')
+    ->name('admin.language');
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 Route::post('/newsletter', [NewsletterController::class, 'subscribe'])
     ->middleware('throttle:newsletter')

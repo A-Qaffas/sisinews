@@ -7,6 +7,7 @@ use App\Filament\Resources\Pages\Pages\EditPage;
 use App\Filament\Resources\Pages\Pages\ListPages;
 use App\Filament\Resources\Pages\Schemas\PageForm;
 use App\Filament\Resources\Pages\Tables\PagesTable;
+use App\Filament\Support\AdminNavigationGroup;
 use App\Models\Page;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -25,13 +26,22 @@ class PageResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Site';
+    protected static string|\UnitEnum|null $navigationGroup = AdminNavigationGroup::Site;
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $modelLabel = 'page';
-
     protected static ?string $recordTitleAttribute = 'slug';
+
+    public static function getModelLabel(): string
+    {
+        return __('page');
+    }
+
+    /** Spelled out: Filament only pluralises the singular label itself in languages it knows the plural rules of. */
+    public static function getPluralModelLabel(): string
+    {
+        return __('pages');
+    }
 
     public static function form(Schema $schema): Schema
     {

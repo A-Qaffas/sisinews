@@ -34,7 +34,7 @@ class PageForm
             ->columns(1)
             ->components([
                 Grid::make(['default' => 1, 'xl' => 3])->schema([
-                    Tabs::make('Languages')
+                    Tabs::make(__('Languages'))
                         ->tabs([self::languageTab(Locale::Ar), self::languageTab(Locale::En)])
                         ->columnSpan(['xl' => 2]),
                     self::detailsSection()->columnSpan(['xl' => 1]),
@@ -46,8 +46,8 @@ class PageForm
     {
         return Tab::make(StatusPresenter::language($locale))
             ->badge(fn (?Page $record): ?string => match ($record?->translate($locale)?->is_published) {
-                true => 'Published',
-                false => 'Hidden',
+                true => __('Published'),
+                false => __('Hidden'),
                 null => null,
             })
             ->badgeColor(fn (?Page $record): string => $record?->translate($locale)?->is_published === true ? 'success' : 'gray')
@@ -60,14 +60,14 @@ class PageForm
 
         return Group::make([
             TextInput::make('title')
-                ->label('Title')
+                ->label(__('Title'))
                 ->maxLength(255)
                 ->required(fn (Get $get, ?Page $record): bool => self::languageIsInUse($locale, $get, $record)
                     || ($locale === Locale::Ar && ! self::languageIsInUse(Locale::En, $get, $record, '../en.')))
                 ->extraInputAttributes($direction),
             RichEditor::make('body')
-                ->label('Text')
-                ->helperText('Write '.PageBody::CONTACT_TOKEN.' where readers should be pointed to the contact address; the site fills it in.')
+                ->label(__('Text'))
+                ->helperText(__('Write :token where readers should be pointed to the contact address; the site fills it in.', ['token' => PageBody::CONTACT_TOKEN]))
                 ->toolbarButtons([
                     ['bold', 'italic', 'underline', 'link'],
                     ['h2', 'h3'],
@@ -79,28 +79,28 @@ class PageForm
                 ->extraInputAttributes($direction)
                 ->rules([fn (Get $get, ?Page $record): Closure => function (string $attribute, mixed $value, Closure $fail) use ($locale, $get, $record): void {
                     if (self::languageIsInUse($locale, $get, $record) && ! self::hasText($value)) {
-                        $fail('The text cannot be empty.');
+                        $fail(__('The text cannot be empty.'));
                     }
                 }]),
             Textarea::make('meta_description')
-                ->label('Search engine description')
-                ->helperText('One or two sentences shown under the title in search results. Left blank, the start of the text is used.')
+                ->label(__('Search engine description'))
+                ->helperText(__('One or two sentences shown under the title in search results. Left blank, the start of the text is used.'))
                 ->rows(2)
                 ->maxLength(300)
                 ->extraInputAttributes($direction),
             Toggle::make('is_published')
-                ->label('Published in this language')
-                ->helperText('Turn off to take this language off the site; its address then shows "page not found". The text is kept.')
+                ->label(__('Published in this language'))
+                ->helperText(__('Turn off to take this language off the site; its address then shows "page not found". The text is kept.'))
                 ->default(true),
         ])->statePath($locale->value);
     }
 
     private static function detailsSection(): Section
     {
-        return Section::make('Page details')->schema([
+        return Section::make(__('Page details'))->schema([
             TextInput::make('slug')
-                ->label('Address')
-                ->helperText('Lowercase letters, numbers and hyphens, for example "ownership". The page is then reachable at /ar/page/ownership and /en/page/ownership. It cannot be changed after the page is created.')
+                ->label(__('Address'))
+                ->helperText(__('Lowercase letters, numbers and hyphens, for example "ownership". The page is then reachable at /ar/page/ownership and /en/page/ownership. It cannot be changed after the page is created.'))
                 ->required()
                 ->maxLength(80)
                 ->regex('/^'.Page::SLUG_PATTERN.'$/')
@@ -112,8 +112,8 @@ class PageForm
                 ->dehydrated(fn (?Page $record): bool => $record === null)
                 ->extraInputAttributes(['dir' => 'ltr']),
             TextInput::make('sort_order')
-                ->label('Position')
-                ->helperText('Lower numbers come first in the footer.')
+                ->label(__('Position'))
+                ->helperText(__('Lower numbers come first in the footer.'))
                 ->numeric()
                 ->integer()
                 ->minValue(0)
@@ -121,8 +121,8 @@ class PageForm
                 ->default(0)
                 ->required(),
             Toggle::make('show_in_footer')
-                ->label('Link from the footer')
-                ->helperText('Shown only in languages where the page is published.')
+                ->label(__('Link from the footer'))
+                ->helperText(__('Shown only in languages where the page is published.'))
                 ->default(true),
         ]);
     }

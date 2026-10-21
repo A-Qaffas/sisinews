@@ -17,26 +17,26 @@ class TagsTable
         return $table
             ->columns([
                 TextColumn::make('name_ar')
-                    ->label('Arabic name')
+                    ->label(__('Arabic name'))
                     ->state(fn (Tag $record): ?string => $record->translations->firstWhere('locale', Locale::Ar)?->name)
                     ->placeholder('-')
                     ->extraAttributes(['dir' => 'rtl'])
                     ->extraHeaderAttributes(['class' => 'fi-align-end'])
                     ->searchable(query: fn (Builder $query, string $search): Builder => self::searchNames($query, $search)),
                 TextColumn::make('name_en')
-                    ->label('English name')
+                    ->label(__('English name'))
                     ->state(fn (Tag $record): ?string => $record->translations->firstWhere('locale', Locale::En)?->name)
                     ->placeholder('-')
                     ->searchable(query: fn (Builder $query, string $search): Builder => self::searchNames($query, $search)),
                 TextColumn::make('articles_count')
-                    ->label('Articles')
+                    ->label(__('Articles'))
                     ->sortable(),
             ])
             ->defaultSort('id', 'desc')
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make()
-                    ->modalDescription('The tag is removed from every article that uses it.'),
+                    ->modalDescription(__('The tag is removed from every article that uses it.')),
             ]);
     }
 

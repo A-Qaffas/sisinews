@@ -20,6 +20,6 @@ class CreateArticle extends CreateRecord
 
     protected function getCreatedNotificationTitle(): ?string
     {
-        return 'Article created as a draft';
+        return __('Article created as a draft');
     }
 }

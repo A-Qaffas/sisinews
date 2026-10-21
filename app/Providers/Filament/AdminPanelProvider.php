@@ -2,11 +2,13 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Http\Middleware\UseEnglishInterface;
+use App\Filament\Http\Middleware\UseStaffLanguage;
 use App\Filament\Pages\Auth\EditProfile;
 use App\Filament\Pages\Auth\Login;
+use App\Filament\Support\AdminNavigationGroup;
 use App\Filament\Support\InitialsAvatarProvider;
 use App\Filament\Support\StatusPresenter;
+use Filament\Actions\Action;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -81,12 +83,13 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             // The default 20rem leaves a 1366px laptop too little room for the story tables.
             ->sidebarWidth('15rem')
-            ->navigationGroups([
-                NavigationGroup::make('Newsroom'),
-                NavigationGroup::make('Taxonomy'),
-                NavigationGroup::make('Audience'),
-                NavigationGroup::make('Site'),
-            ])
+            // Keyed by case name (how Filament matches a resource's enum group). The label is a closure: passing the enum
+            // class would translate it once at boot, before UseStaffLanguage has picked the person's language.
+            ->navigationGroups(collect(AdminNavigationGroup::cases())
+                ->mapWithKeys(fn (AdminNavigationGroup $group): array => [
+                    $group->name => NavigationGroup::make()->label(fn (): string => $group->getLabel()),
+                ])
+                ->all())
             ->renderHook(PanelsRenderHook::STYLES_AFTER, fn (): string => view('filament.hooks.admin-styles')->render())
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
@@ -94,7 +97,6 @@ class AdminPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
-            ->middleware([UseEnglishInterface::class], isPersistent: true)
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -106,6 +108,16 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+            // After StartSession (it reads the signed-in person) and persistent, so Livewire requests speak it too.
+            ->middleware([UseStaffLanguage::class], isPersistent: true)
+            ->userMenuItems([
+                // Offers the other language, written in that language, so it is readable whichever one is on screen.
+                'language' => fn (): Action => Action::make('language')
+                    ->label(app()->getLocale() === 'ar' ? 'English' : 'العربية')
+                    ->icon('heroicon-o-language')
+                    ->url(route('admin.language', ['locale' => app()->getLocale() === 'ar' ? 'en' : 'ar'])),
+            ])
+            ->renderHook(PanelsRenderHook::AUTH_LOGIN_FORM_AFTER, fn (): string => view('filament.hooks.login-language')->render())
             ->authMiddleware([
                 Authenticate::class,
             ]);

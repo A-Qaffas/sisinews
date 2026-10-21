@@ -30,7 +30,7 @@ final class ArticleWriter
         $versions = $this->versionsToWrite($data);
 
         if ($versions === []) {
-            throw ValidationException::withMessages(['data.ar.title' => 'Write a title in at least one language.']);
+            throw ValidationException::withMessages(['data.ar.title' => __('Write a title in at least one language.')]);
         }
 
         $sectionId = $this->checkedSection($data, $by, null);
@@ -107,10 +107,10 @@ final class ArticleWriter
             return $id;
         }
         if ($id === false || ! Category::query()->whereKey($id)->exists()) {
-            throw ValidationException::withMessages(['data.category_id' => 'Choose a section from the list.']);
+            throw ValidationException::withMessages(['data.category_id' => __('Choose a section from the list.')]);
         }
         if (! $by->canWriteIn($id)) {
-            throw ValidationException::withMessages(['data.category_id' => 'You cannot write in that section. An admin chooses the sections each journalist may use.']);
+            throw ValidationException::withMessages(['data.category_id' => __('You cannot write in that section. An admin chooses the sections each journalist may use.')]);
         }
 
         return $id;

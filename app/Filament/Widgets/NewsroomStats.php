@@ -32,22 +32,22 @@ class NewsroomStats extends StatsOverviewWidget
         $articles = ArticleResource::getUrl('index');
 
         return [
-            Stat::make('My drafts', $mine(ArticleTranslation::query())
+            Stat::make(__('My drafts'), $mine(ArticleTranslation::query())
                 ->whereIn('status', [TranslationStatus::Draft->value, TranslationStatus::ChangesRequested->value])
                 ->count())
-                ->description('Drafts, and versions sent back to you')
+                ->description(__('Drafts, and versions sent back to you'))
                 ->url($articles),
             // The same rows as the review queue: versions of a deleted story are not waiting for anyone.
-            Stat::make($reviewer ? 'Awaiting review' : 'My versions in review', ReviewQueueResource::awaitingReview($scope(ArticleTranslation::query()))
+            Stat::make($reviewer ? __('Awaiting review') : __('My versions in review'), ReviewQueueResource::awaitingReview($scope(ArticleTranslation::query()))
                 ->count())
-                ->description($reviewer ? 'Language versions in the review queue' : 'Waiting for the Editor-in-chief')
+                ->description($reviewer ? __('Language versions in the review queue') : __('Waiting for the Editor-in-chief'))
                 ->url($reviewer ? ReviewQueueResource::getUrl('index') : $articles),
-            Stat::make('Published this week', $scope(ArticleTranslation::query())
+            Stat::make(__('Published this week'), $scope(ArticleTranslation::query())
                 ->where('status', TranslationStatus::Published->value)
                 ->where('published_at', '>=', $weekStart)
                 ->where('published_at', '<=', now())
                 ->count())
-                ->description($reviewer ? 'Live language versions since Saturday' : 'Your live versions since Saturday')
+                ->description($reviewer ? __('Live language versions since Saturday') : __('Your live versions since Saturday'))
                 ->url($articles),
         ];
     }

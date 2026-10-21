@@ -12,6 +12,12 @@ enum Locale: string
         return self::Ar;
     }
 
+    /** The language the current request is shown in (public page or staff panel). */
+    public static function current(): self
+    {
+        return self::tryFrom(app()->getLocale()) ?? self::default();
+    }
+
     public static function values(): array
     {
         return array_map(fn (self $l) => $l->value, self::cases());

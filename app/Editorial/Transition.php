@@ -58,11 +58,11 @@ enum Transition: string
     public function label(): string
     {
         return match ($this) {
-            self::Submit => 'Submit for review',
-            self::Approve => 'Approve & publish',
-            self::RequestChanges => 'Request changes',
-            self::Archive => 'Unpublish',
-            self::Reopen => 'Reopen as draft',
+            self::Submit => __('Submit for review'),
+            self::Approve => __('Approve & publish'),
+            self::RequestChanges => __('Request changes'),
+            self::Archive => __('Unpublish'),
+            self::Reopen => __('Reopen as draft'),
         };
     }
 }

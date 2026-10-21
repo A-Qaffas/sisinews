@@ -53,7 +53,7 @@ final class ArticleAccess
             return null;
         }
 
-        return $article->category?->nameIn(Locale::En);
+        return $article->category?->nameIn(Locale::current());
     }
 
     /** The loaded translation with its article attached, which the policy reads (saves a query per check). */

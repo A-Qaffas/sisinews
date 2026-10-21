@@ -24,23 +24,23 @@ final class NameFields
 
         return Group::make([
             TextInput::make('name')
-                ->label("Name ({$language})")
+                ->label(__('Name (:language)', ['language' => $language]))
                 ->required($required)
                 ->requiredWithout($alternative === null ? [] : "../{$alternative->value}.name")
                 ->maxLength(120)
                 ->regex('/[\p{L}\p{N}]/u')
-                ->validationMessages(['regex' => 'The name must contain at least one letter or number.'])
+                ->validationMessages(['regex' => __('The name must contain at least one letter or number.')])
                 ->extraInputAttributes($direction),
             TextInput::make('slug')
-                ->label("URL slug ({$language})")
-                ->helperText('Leave blank to build it from the name. Changing it changes the public address.')
+                ->label(__('URL slug (:language)', ['language' => $language]))
+                ->helperText(__('Leave blank to build it from the name. Changing it changes the public address.'))
                 ->maxLength(120)
                 ->rules([
                     fn (?Model $record): Closure => function (string $attribute, mixed $value, Closure $fail) use ($translationClass, $locale, $record): void {
                         $slug = Slugger::make((string) $value);
 
                         if ($slug !== '' && self::slugIsTaken($translationClass, $locale, $slug, $record)) {
-                            $fail('Another entry already uses this slug in this language.');
+                            $fail(__('Another entry already uses this slug in this language.'));
                         }
                     },
                 ])

@@ -34,27 +34,32 @@ final class LiveStreamActions
     public static function goLive(?Closure $saveFirst = null, ?Closure $onScreen = null): Action
     {
         return Action::make('goLive')
-            ->label(fn (LiveStream $record): string => $record->status === LiveStatus::Ended ? 'Resume' : 'Go live')
+            ->label(fn (LiveStream $record): string => $record->status === LiveStatus::Ended ? __('Resume') : __('Go live'))
             ->icon(Heroicon::OutlinedSignal)
             ->color('success')
             ->authorize('goLive')
             ->visible(fn (LiveStream $record): bool => $record->canGoLive())
             ->requiresConfirmation()
-            ->modalHeading(fn (LiveStream $record): Htmlable => self::heading($record->status === LiveStatus::Ended ? 'Resume' : 'Go live with', $record))
+            ->modalHeading(fn (LiveStream $record): Htmlable => $record->status === LiveStatus::Ended
+                ? self::heading($record, __('Resume “:title”?'), __('Resume this broadcast?'))
+                : self::heading($record, __('Go live with “:title”?'), __('Go live with this broadcast?')))
             ->modalDescription(function (LiveStream $record) use ($saveFirst, $onScreen): string {
                 [$where, $video] = self::onAir($record, $onScreen === null ? null : $onScreen());
 
                 $resume = match (true) {
-                    $record->status !== LiveStatus::Ended => '',
-                    $record->resumesSameSession() => ' It ended less than '.LiveStream::SAME_SESSION_HOURS.' hours ago, so it keeps its first start time.',
-                    default => ' It ended more than '.LiveStream::SAME_SESSION_HOURS.' hours ago, so it counts as a new start.',
+                    $record->status !== LiveStatus::Ended => null,
+                    $record->resumesSameSession() => __('It ended less than :hours hours ago, so it keeps its first start time.', ['hours' => LiveStream::SAME_SESSION_HOURS]),
+                    default => __('It ended more than :hours hours ago, so it counts as a new start.', ['hours' => LiveStream::SAME_SESSION_HOURS]),
                 };
 
-                return "{$where}. {$video}. Readers will see the video on the Live page straight away. Check that the stream is already running on YouTube or Vimeo."
-                    .$resume
-                    .($saveFirst === null ? '' : ' Your changes on this page are saved first.');
+                // Whole sentences, each translated on its own, joined by a space.
+                return implode(' ', array_filter([
+                    __(':where. :video. Readers will see the video on the Live page straight away. Check that the stream is already running on YouTube or Vimeo.', ['where' => $where, 'video' => $video]),
+                    $resume,
+                    $saveFirst === null ? null : __('Your changes on this page are saved first.'),
+                ]));
             })
-            ->modalSubmitActionLabel('Go live now')
+            ->modalSubmitActionLabel(__('Go live now'))
             ->action(function (LiveStream $record, Action $action, ?Component $livewire = null) use ($saveFirst): void {
                 if ($saveFirst !== null && ! $saveFirst()) {
                     $action->cancel();
@@ -62,34 +67,40 @@ final class LiveStreamActions
                     return;
                 }
 
-                self::run(fn () => $record->goLive(), 'The broadcast is live.', $livewire);
+                self::run(fn () => $record->goLive(), __('The broadcast is live.'), $livewire);
             });
     }
 
     public static function end(): Action
     {
         return Action::make('end')
-            ->label('End broadcast')
+            ->label(__('End broadcast'))
             ->icon(Heroicon::OutlinedStopCircle)
             ->color('danger')
             ->authorize('end')
             ->visible(fn (LiveStream $record): bool => $record->canEnd())
             ->requiresConfirmation()
             ->modalIcon(Heroicon::OutlinedStopCircle)
-            ->modalHeading(fn (LiveStream $record): Htmlable => self::heading('End', $record))
-            ->modalDescription(fn (LiveStream $record): string => self::onAir($record)[0].'. It leaves the live section of the Live page. You can resume it later if the stream comes back.')
-            ->modalSubmitActionLabel('End broadcast')
-            ->action(fn (LiveStream $record, ?Component $livewire = null) => self::run(fn () => $record->end(), 'The broadcast has ended.', $livewire));
+            ->modalHeading(fn (LiveStream $record): Htmlable => self::heading($record, __('End “:title”?'), __('End this broadcast?')))
+            ->modalDescription(fn (LiveStream $record): string => __(':where. It leaves the live section of the Live page. You can resume it later if the stream comes back.', ['where' => self::onAir($record)[0]]))
+            ->modalSubmitActionLabel(__('End broadcast'))
+            ->action(fn (LiveStream $record, ?Component $livewire = null) => self::run(fn () => $record->end(), __('The broadcast has ended.'), $livewire));
     }
 
-    /** "End “<title>”?" with the title isolated, so an Arabic title cannot reorder the English words around it. */
-    private static function heading(string $verb, LiveStream $record): Htmlable
+    /**
+     * "End “<title>”?" with the title isolated, so an Arabic title cannot reorder the words around it. The sentence is
+     * escaped first and the title (escaped on its own) then takes the place of ":title".
+     *
+     * @param  string  $withTitle  translated sentence holding ":title"
+     * @param  string  $withoutTitle  translated sentence for a broadcast with no title
+     */
+    private static function heading(LiveStream $record, string $withTitle, string $withoutTitle): Htmlable
     {
         $title = ($record->translation(Locale::Ar) ?? $record->translation(Locale::En))?->title;
 
         return new HtmlString($title === null
-            ? e("{$verb} this broadcast?")
-            : e($verb).' “<bdi>'.e(Str::limit($title, 60)).'</bdi>”?');
+            ? e($withoutTitle)
+            : str_replace(':title', '<bdi>'.e(Str::limit($title, 60)).'</bdi>', e($withTitle)));
     }
 
     /**
@@ -112,8 +123,8 @@ final class LiveStreamActions
         [$provider, $id] = $video;
 
         return [
-            $governorate === null ? 'Egypt-wide' : "{$governorate->name_en} ({$governorate->name_ar})",
-            "{$provider->label()} video {$id}",
+            $governorate === null ? __('Egypt-wide') : "{$governorate->name_en} ({$governorate->name_ar})",
+            __(':provider video :id', ['provider' => $provider->label(), 'id' => $id]),
         ];
     }
 

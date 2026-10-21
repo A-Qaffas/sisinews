@@ -263,6 +263,67 @@ html:lang(en) {
         border-block-end-color: var(--color-crimson);
     }
 
+    /* "More" (المزيد): the sections beyond the bar, in a dropdown under the last item. */
+    .nav-more {
+        position: relative;
+    }
+
+    .nav-more__toggle {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        cursor: pointer;
+        list-style: none;
+    }
+
+    .nav-more__toggle::-webkit-details-marker {
+        display: none;
+    }
+
+    .nav-more__toggle.is-current,
+    .nav-more [open] > .nav-more__toggle {
+        color: var(--color-crimson);
+    }
+
+    .nav-more__toggle.is-current {
+        border-block-end-color: var(--color-crimson);
+    }
+
+    .nav-more [open] > .nav-more__toggle svg {
+        transform: rotate(180deg);
+    }
+
+    .nav-more__menu {
+        position: absolute;
+        inset-block-start: calc(100% + 2px);
+        inset-inline-start: 0;
+        z-index: 40;
+        min-width: 13rem;
+        max-height: 70vh;
+        overflow-y: auto;
+        padding-block: 0.35rem;
+        border: 2px solid var(--color-ink);
+        background: var(--color-cream);
+        box-shadow: 0 10px 24px rgb(22 41 56 / 0.18);
+    }
+
+    .nav-more__link {
+        display: block;
+        padding: 0.55rem 1rem;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .nav-more__link:hover,
+    .nav-more__link:focus-visible {
+        background: var(--color-cream-deep);
+        color: var(--color-crimson);
+    }
+
+    .nav-more__link[aria-current='page'] {
+        color: var(--color-crimson);
+    }
+
     .menu-toggle {
         display: none;
         align-items: center;

@@ -59,6 +59,7 @@ final class LiveStreamWriter
     /**
      * Why a pasted link was refused, in words an editor can act on: a specific reason for a channel page, a Vimeo
      * event or a private Vimeo link, the general one for everything else. Only ever called for a refused link.
+     * The constants are the English texts and the translation keys; this returns the text in the panel's language.
      */
     public static function refusal(string $pasted): string
     {
@@ -66,19 +67,19 @@ final class LiveStreamWriter
         $parts = strlen($clean) <= self::LINK_MAX_LENGTH && preg_match('/\s/', $clean) !== 1 ? parse_url($clean) : false;
 
         if (! is_array($parts) || ($parts['scheme'] ?? '') !== 'https' || ! isset($parts['host'])) {
-            return self::LINK_ERROR;
+            return __(self::LINK_ERROR);
         }
 
         $host = strtolower((string) preg_replace('/^www\./i', '', $parts['host']));
         $path = $parts['path'] ?? '';
 
-        return match (true) {
+        return __(match (true) {
             $host === 'vimeo.com' && preg_match('~^/event/\d+~', $path) === 1 => self::VIMEO_EVENT_ERROR,
             $host === 'vimeo.com' && preg_match('~^/\d{6,12}/[0-9a-f]+/?$~i', $path) === 1 => self::VIMEO_PRIVATE_ERROR,
             in_array($host, ['youtube.com', 'm.youtube.com'], true)
                 && preg_match('~^/(?:@[^/]+|channel/[^/]+|c/[^/]+|user/[^/]+)(?:/(?:live|streams|featured))?/?$~', $path) === 1 => self::YOUTUBE_CHANNEL_ERROR,
             default => self::LINK_ERROR,
-        };
+        });
     }
 
     /**
@@ -189,7 +190,7 @@ final class LiveStreamWriter
 
         if ($written === 0) {
             // The form's own rule normally catches this first; a hand-made request must not leave a title-less broadcast.
-            throw ValidationException::withMessages(['data.ar.title' => 'Give the broadcast a title in at least one language.']);
+            throw ValidationException::withMessages(['data.ar.title' => __('Give the broadcast a title in at least one language.')]);
         }
     }
 }

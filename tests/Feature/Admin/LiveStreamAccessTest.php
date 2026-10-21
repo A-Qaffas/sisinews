@@ -6,6 +6,7 @@ use App\Filament\Resources\LiveStreams\LiveStreamResource;
 use App\Filament\Resources\LiveStreams\Pages\CreateLiveStream;
 use App\Filament\Resources\LiveStreams\Pages\EditLiveStream;
 use App\Filament\Resources\LiveStreams\Pages\ListLiveStreams;
+use App\Filament\Support\AdminNavigationGroup;
 use App\Models\LiveStream;
 use App\Models\User;
 use App\Policies\LiveStreamPolicy;
@@ -73,7 +74,7 @@ class LiveStreamAccessTest extends AdminTestCase
     {
         $this->actingAs(User::factory()->editor()->create());
 
-        $this->assertSame('Newsroom', LiveStreamResource::getNavigationGroup());
+        $this->assertSame(AdminNavigationGroup::Newsroom, LiveStreamResource::getNavigationGroup());
         $this->assertSame('Broadcasts', LiveStreamResource::getNavigationLabel());
 
         $group = collect(Filament::getNavigation())->first(fn ($group) => $group->getLabel() === 'Newsroom');

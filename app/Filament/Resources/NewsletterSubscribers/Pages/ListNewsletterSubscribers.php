@@ -17,7 +17,7 @@ class ListNewsletterSubscribers extends ListRecords
     {
         return [
             Action::make('export')
-                ->label('Export CSV')
+                ->label(__('Export CSV'))
                 ->icon(Heroicon::OutlinedArrowDownTray)
                 ->color('gray')
                 ->authorize('viewAny')

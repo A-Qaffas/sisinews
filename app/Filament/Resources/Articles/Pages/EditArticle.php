@@ -21,7 +21,7 @@ class EditArticle extends EditRecord
     /** A story the person may only read (in review, published, or in a section no longer theirs) does not say "Edit". */
     public function getTitle(): string
     {
-        return ArticleAccess::canEditAnything(auth()->user(), $this->record) ? parent::getTitle() : 'View article';
+        return ArticleAccess::canEditAnything(auth()->user(), $this->record) ? parent::getTitle() : __('View article');
     }
 
     protected function getHeaderActions(): array
@@ -68,6 +68,6 @@ class EditArticle extends EditRecord
 
     protected function getSavedNotificationTitle(): ?string
     {
-        return 'Article saved';
+        return __('Article saved');
     }
 }

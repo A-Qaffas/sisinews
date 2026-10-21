@@ -3,6 +3,8 @@
 return [
     'skip' => 'Skip to content',
     'menu' => 'Menu',
+    'more' => 'More',
+    'more_sections' => 'More sections',
     'home' => 'Home',
     'sections' => 'Sections',
     'primary_nav' => 'Primary',

@@ -40,10 +40,20 @@
 
         <nav id="site-nav" class="nav-bar nav-panel" aria-label="{{ __('layout.primary_nav') }}">
             <div class="container-site flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-6">
+                @php
+                    $sections = $categories();
+                    $inBar = array_slice($sections, 0, (int) config('site.nav_sections_in_bar'));
+                    $overflow = array_slice($sections, count($inBar));
+                    $overflowIsCurrent = in_array($activeSlug, array_column($overflow, 'slug'), true);
+                @endphp
                 <ul class="nav-list md:flex md:flex-wrap">
                     <li><a class="nav-link" href="{{ $home }}" @if ($onHome()) aria-current="page" @endif>{{ __('layout.home') }}</a></li>
-                    @foreach ($categories() as $category)
+                    @foreach ($inBar as $category)
                         <li><a class="nav-link" href="{{ route('category', ['locale' => $locale->value, 'slug' => $category['slug']]) }}" @if ($activeSlug === $category['slug']) aria-current="page" @endif>{{ $category['name'] }}</a></li>
+                    @endforeach
+                    {{-- Phones list every section in the menu panel; from md up these wait under "More" at the end. --}}
+                    @foreach ($overflow as $category)
+                        <li class="md:hidden"><a class="nav-link" href="{{ route('category', ['locale' => $locale->value, 'slug' => $category['slug']]) }}" @if ($activeSlug === $category['slug']) aria-current="page" @endif>{{ $category['name'] }}</a></li>
                     @endforeach
                     <li>
                         <a class="nav-link nav-link--live" href="{{ route('live', ['locale' => $locale->value]) }}" @if ($onLive()) aria-current="page" @endif>
@@ -51,6 +61,21 @@
                             @if ($liveNow())<span class="live-dot live-dot--pulse" aria-hidden="true"></span><span class="sr-only">({{ __('live.now_streaming') }})</span>@endif
                         </a>
                     </li>
+                    @if ($overflow !== [])
+                        <li class="nav-more hidden md:block">
+                            <details data-nav-more>
+                                <summary @class(['nav-link', 'nav-more__toggle', 'is-current' => $overflowIsCurrent])>
+                                    {{ __('layout.more') }}
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul class="nav-more__menu" aria-label="{{ __('layout.more_sections') }}">
+                                    @foreach ($overflow as $category)
+                                        <li><a class="nav-more__link" href="{{ route('category', ['locale' => $locale->value, 'slug' => $category['slug']]) }}" @if ($activeSlug === $category['slug']) aria-current="page" @endif>{{ $category['name'] }}</a></li>
+                                    @endforeach
+                                </ul>
+                            </details>
+                        </li>
+                    @endif
                 </ul>
 
                 <form class="search-form order-first my-3 md:max-w-sm lg:order-last lg:my-0 lg:w-64" role="search" method="get" action="{{ route('search', ['locale' => $locale->value]) }}">

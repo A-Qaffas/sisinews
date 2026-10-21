@@ -38,10 +38,12 @@ class LiveStreamsTable
                 self::titleColumn(Locale::En)->visibleFrom('xl'),
                 // English name with the Arabic one beneath it: narrower than both on one line, which a 1280 px laptop needs.
                 TextColumn::make('governorate')
-                    ->state(fn (LiveStream $record): string => $record->governorate?->name_en ?? 'Egypt-wide')
+                    ->label(__('Governorate'))
+                    ->state(fn (LiveStream $record): string => $record->governorate?->name_en ?? __('Egypt-wide'))
                     ->description(fn (LiveStream $record): ?string => $record->governorate?->name_ar)
                     ->visibleFrom('xl'),
                 TextColumn::make('provider')
+                    ->label(__('Provider'))
                     ->badge()
                     ->formatStateUsing(fn (LiveProvider $state): string => $state->label())
                     ->color('gray')
@@ -50,7 +52,7 @@ class LiveStreamsTable
                     ->visibleFrom('md'),
                 self::statusColumn(),
                 TextColumn::make('when')
-                    ->label('When')
+                    ->label(__('When'))
                     ->state(fn (LiveStream $record): ?string => self::when($record))
                     ->placeholder('-')
                     ->visibleFrom('md'),
@@ -67,11 +69,11 @@ class LiveStreamsTable
                 ->orderByDesc('id'))
             ->filters([
                 SelectFilter::make('status')
-                    ->label('Status')
+                    ->label(__('Status'))
                     ->options(collect(LiveStatus::cases())->mapWithKeys(fn (LiveStatus $status): array => [$status->value => $status->label()])->all()),
                 SelectFilter::make('governorate_id')
-                    ->label('Governorate')
-                    ->options(fn (): array => [self::EGYPT_WIDE => 'Egypt-wide', ...LiveStreamForm::governorateOptions()])
+                    ->label(__('Governorate'))
+                    ->options(fn (): array => [self::EGYPT_WIDE => __('Egypt-wide'), ...LiveStreamForm::governorateOptions()])
                     ->query(fn (Builder $query, array $data): Builder => match (true) {
                         blank($data['value'] ?? null) => $query,
                         $data['value'] === self::EGYPT_WIDE => $query->whereNull('governorate_id'),
@@ -88,11 +90,11 @@ class LiveStreamsTable
                 // The rare, destructive move sits behind one icon. Hidden by the policy while a broadcast is live.
                 ActionGroup::make([
                     DeleteAction::make()
-                        ->modalDescription('The broadcast and its titles are removed from the dashboard and the site. The video itself stays on YouTube or Vimeo.'),
+                        ->modalDescription(__('The broadcast and its titles are removed from the dashboard and the site. The video itself stays on YouTube or Vimeo.')),
                 ]),
             ])
-            ->emptyStateHeading('No broadcasts yet')
-            ->emptyStateDescription('Register a YouTube or Vimeo broadcast, then press Go live when it starts.')
+            ->emptyStateHeading(__('No broadcasts yet'))
+            ->emptyStateDescription(__('Register a YouTube or Vimeo broadcast, then press Go live when it starts.'))
             ->emptyStateIcon(Heroicon::OutlinedSignal);
     }
 
@@ -100,9 +102,9 @@ class LiveStreamsTable
     private static function phoneTitleColumn(): TextColumn
     {
         return TextColumn::make('headline')
-            ->label('Title')
+            ->label(__('Title'))
             ->state(fn (LiveStream $record): ?string => ($record->translation(Locale::Ar) ?? $record->translation(Locale::En))?->title)
-            ->description(fn (LiveStream $record): string => $record->governorate?->name_ar ?? 'Egypt-wide')
+            ->description(fn (LiveStream $record): string => $record->governorate?->name_ar ?? __('Egypt-wide'))
             ->placeholder('-')
             ->weight('bold')
             ->wrap()
@@ -114,10 +116,8 @@ class LiveStreamsTable
 
     private static function titleColumn(Locale $locale): TextColumn
     {
-        $language = StatusPresenter::language($locale);
-
         return TextColumn::make("{$locale->value}_title")
-            ->label("{$language} title")
+            ->label($locale === Locale::Ar ? __('Arabic title') : __('English title'))
             ->state(fn (LiveStream $record): ?string => $record->translation($locale)?->title)
             ->placeholder('-')
             ->wrap()
@@ -135,6 +135,7 @@ class LiveStreamsTable
     private static function statusColumn(): TextColumn
     {
         return TextColumn::make('status')
+            ->label(__('Status'))
             ->badge()
             ->weight(FontWeight::Bold)
             ->extraAttributes(['class' => 'sisi-live-status'])
@@ -150,9 +151,9 @@ class LiveStreamsTable
     private static function when(LiveStream $record): ?string
     {
         return match ($record->status) {
-            LiveStatus::Live => $record->started_at === null ? null : 'Since '.StatusPresenter::when($record->started_at),
-            LiveStatus::Ended => $record->ended_at === null ? null : 'Ended '.StatusPresenter::when($record->ended_at),
-            LiveStatus::Scheduled => $record->scheduled_at === null ? null : 'Due '.StatusPresenter::when($record->scheduled_at),
+            LiveStatus::Live => $record->started_at === null ? null : __('Since :time', ['time' => StatusPresenter::when($record->started_at)]),
+            LiveStatus::Ended => $record->ended_at === null ? null : __('Ended :time', ['time' => StatusPresenter::when($record->ended_at)]),
+            LiveStatus::Scheduled => $record->scheduled_at === null ? null : __('Due :time', ['time' => StatusPresenter::when($record->scheduled_at)]),
         };
     }
 }

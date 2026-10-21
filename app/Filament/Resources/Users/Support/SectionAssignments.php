@@ -47,20 +47,22 @@ final class SectionAssignments
     public static function summary(User $account): string
     {
         if ($account->isReviewer()) {
-            return 'All sections';
+            return __('All sections');
         }
 
         $names = $account->allowedCategories
             ->sortBy([['sort_order', 'asc'], ['id', 'asc']])
-            ->map(fn (Category $category): string => $category->nameIn(Locale::En));
+            // Section names in the language the panel is shown in.
+            ->map(fn (Category $category): string => $category->nameIn(Locale::current()));
 
         if ($names->isEmpty()) {
-            return 'None yet';
+            return __('None yet');
         }
 
         $more = $names->count() - self::LISTED;
+        $listed = $names->take(self::LISTED)->implode(app()->getLocale() === Locale::Ar->value ? '، ' : ', ');
 
-        return $names->take(self::LISTED)->implode(', ').($more > 0 ? " +{$more} more" : '');
+        return $more > 0 ? __(':names +:count more', ['names' => $listed, 'count' => $more]) : $listed;
     }
 
     public static function hasNone(User $account): bool

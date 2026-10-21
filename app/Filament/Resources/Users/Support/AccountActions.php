@@ -25,28 +25,28 @@ final class AccountActions
     public static function resetPassword(): Action
     {
         return Action::make('resetPassword')
-            ->label('Reset password')
+            ->label(__('Reset password'))
             ->icon(Heroicon::OutlinedKey)
             ->color('gray')
             ->authorize('update')
             ->visible(fn (User $record): bool => ! self::isCurrentUser($record))
-            ->modalHeading(fn (User $record): string => "Reset password for {$record->name}")
-            ->modalDescription('The site sends no email: tell the person the new password yourself. Their other sign-ins end.')
-            ->modalSubmitActionLabel('Set new password')
+            ->modalHeading(fn (User $record): string => __('Reset password for :name', ['name' => $record->name]))
+            ->modalDescription(__('The site sends no email: tell the person the new password yourself. Their other sign-ins end.'))
+            ->modalSubmitActionLabel(__('Set new password'))
             ->modalWidth('md')
             ->schema([
                 TextInput::make('password')
-                    ->label('New password')
-                    ->helperText('At least 10 characters, with letters and numbers.')
+                    ->label(__('New password'))
+                    ->helperText(__('At least 10 characters, with letters and numbers.'))
                     ->password()
                     ->revealable()
                     ->autocomplete('new-password')
                     ->required()
                     ->rule(PasswordRule::make())
                     ->same('passwordConfirmation')
-                    ->validationMessages(['same' => 'The two passwords do not match.']),
+                    ->validationMessages(['same' => __('The two passwords do not match.')]),
                 TextInput::make('passwordConfirmation')
-                    ->label('Confirm new password')
+                    ->label(__('Confirm new password'))
                     ->password()
                     ->revealable()
                     ->autocomplete('new-password')
@@ -54,7 +54,7 @@ final class AccountActions
                     ->dehydrated(false),
             ])
             ->action(function (User $record, array $data): void {
-                if (self::refuseOwnAccount($record, 'Use "Profile" in the user menu to change your own password.')) {
+                if (self::refuseOwnAccount($record, __('Use "Profile" in the user menu to change your own password.'))) {
                     return;
                 }
 
@@ -62,8 +62,8 @@ final class AccountActions
                 $record->update(['password' => $data['password']]);
 
                 Notification::make()->success()
-                    ->title('Password changed')
-                    ->body("Give {$record->name} the new password yourself.")
+                    ->title(__('Password changed'))
+                    ->body(__('Give :name the new password yourself.', ['name' => $record->name]))
                     ->send();
             });
     }
@@ -71,17 +71,17 @@ final class AccountActions
     public static function deactivate(): Action
     {
         return Action::make('deactivate')
-            ->label('Deactivate')
+            ->label(__('Deactivate'))
             ->icon(Heroicon::OutlinedNoSymbol)
             ->color('danger')
             ->authorize('update')
             ->visible(fn (User $record): bool => $record->is_active && ! self::isCurrentUser($record))
             ->requiresConfirmation()
-            ->modalHeading(fn (User $record): string => "Deactivate {$record->name}?")
-            ->modalDescription('They can no longer sign in and are locked out at once. Their stories stay as they are. You can activate the account again at any time.')
-            ->modalSubmitActionLabel('Deactivate')
+            ->modalHeading(fn (User $record): string => __('Deactivate :name?', ['name' => $record->name]))
+            ->modalDescription(__('They can no longer sign in and are locked out at once. Their stories stay as they are. You can activate the account again at any time.'))
+            ->modalSubmitActionLabel(__('Deactivate'))
             ->action(function (User $record): void {
-                if (self::refuseOwnAccount($record, 'You cannot deactivate your own account.')) {
+                if (self::refuseOwnAccount($record, __('You cannot deactivate your own account.'))) {
                     return;
                 }
 
@@ -91,39 +91,39 @@ final class AccountActions
                     return;
                 }
 
-                Notification::make()->success()->title("{$record->name} was deactivated.")->send();
+                Notification::make()->success()->title(__(':name was deactivated.', ['name' => $record->name]))->send();
             });
     }
 
     public static function activate(): Action
     {
         return Action::make('activate')
-            ->label('Activate')
+            ->label(__('Activate'))
             ->icon(Heroicon::OutlinedCheckCircle)
             ->color('success')
             ->authorize('update')
             ->visible(fn (User $record): bool => ! $record->is_active)
             ->requiresConfirmation()
-            ->modalHeading(fn (User $record): string => "Activate {$record->name}?")
-            ->modalDescription('They can sign in again with their current password.')
-            ->modalSubmitActionLabel('Activate')
+            ->modalHeading(fn (User $record): string => __('Activate :name?', ['name' => $record->name]))
+            ->modalDescription(__('They can sign in again with their current password.'))
+            ->modalSubmitActionLabel(__('Activate'))
             ->action(function (User $record): void {
                 $record->update(['is_active' => true]);
 
-                Notification::make()->success()->title("{$record->name} was activated.")->send();
+                Notification::make()->success()->title(__(':name was activated.', ['name' => $record->name]))->send();
             });
     }
 
     public static function deactivateSelected(): BulkAction
     {
         return BulkAction::make('deactivateSelected')
-            ->label('Deactivate selected')
+            ->label(__('Deactivate selected'))
             ->icon(Heroicon::OutlinedNoSymbol)
             ->color('danger')
             ->authorizeIndividualRecords('update')
             ->requiresConfirmation()
-            ->modalHeading('Deactivate the selected accounts?')
-            ->modalDescription('They can no longer sign in. Your own account is never touched, even when it is selected.')
+            ->modalHeading(__('Deactivate the selected accounts?'))
+            ->modalDescription(__('They can no longer sign in. Your own account is never touched, even when it is selected.'))
             ->deselectRecordsAfterCompletion()
             ->action(fn (Collection $records) => self::setActive($records, false));
     }
@@ -131,12 +131,12 @@ final class AccountActions
     public static function activateSelected(): BulkAction
     {
         return BulkAction::make('activateSelected')
-            ->label('Activate selected')
+            ->label(__('Activate selected'))
             ->icon(Heroicon::OutlinedCheckCircle)
             ->color('success')
             ->authorizeIndividualRecords('update')
             ->requiresConfirmation()
-            ->modalHeading('Activate the selected accounts?')
+            ->modalHeading(__('Activate the selected accounts?'))
             ->deselectRecordsAfterCompletion()
             ->action(fn (Collection $records) => self::setActive($records, true));
     }
@@ -148,7 +148,7 @@ final class AccountActions
         $skipped = $records->count() - $others->count();
 
         if ($others->isEmpty()) {
-            Notification::make()->danger()->title('Nothing was changed')->body('Your own account cannot be changed this way.')->send();
+            Notification::make()->danger()->title(__('Nothing was changed'))->body(__('Your own account cannot be changed this way.'))->send();
 
             return;
         }
@@ -166,11 +166,12 @@ final class AccountActions
         }
 
         $changed = $others->count();
-        $what = $active ? 'activated' : 'deactivated';
 
         Notification::make()->success()
-            ->title($changed === 1 ? "1 account {$what}." : "{$changed} accounts {$what}.")
-            ->body($skipped > 0 ? 'Your own account was left as it is.' : null)
+            ->title($active
+                ? trans_choice(':count account activated.|:count accounts activated.', $changed)
+                : trans_choice(':count account deactivated.|:count accounts deactivated.', $changed))
+            ->body($skipped > 0 ? __('Your own account was left as it is.') : null)
             ->send();
     }
 
@@ -185,7 +186,7 @@ final class AccountActions
             return false;
         }
 
-        Notification::make()->danger()->title('Nothing was changed')->body($message)->send();
+        Notification::make()->danger()->title(__('Nothing was changed'))->body($message)->send();
 
         return true;
     }

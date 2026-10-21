@@ -20,7 +20,7 @@ class EditTag extends EditRecord
     {
         return [
             DeleteAction::make()
-                ->modalDescription('The tag is removed from every article that uses it.'),
+                ->modalDescription(__('The tag is removed from every article that uses it.')),
         ];
     }
 

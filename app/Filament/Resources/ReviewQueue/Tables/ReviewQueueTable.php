@@ -23,6 +23,7 @@ class ReviewQueueTable
         return $table
             ->columns([
                 TextColumn::make('title')
+                    ->label(__('Title'))
                     ->weight('bold')
                     ->wrap()
                     ->lineClamp(2)
@@ -31,19 +32,20 @@ class ReviewQueueTable
                     ->searchable(),
                 // Phones keep the headline and the language; everything else is one tap away on the story.
                 TextColumn::make('locale')
-                    ->label('Language')
+                    ->label(__('Language'))
                     ->badge()
                     ->formatStateUsing(fn (Locale $state): string => StatusPresenter::language($state)),
                 TextColumn::make('article.author.name')
-                    ->label('Author')
+                    ->label(__('Author'))
                     ->visibleFrom('md'),
                 TextColumn::make('category')
+                    ->label(__('Category'))
                     // The query leaves out deleted stories; null-safe anyway, so one odd row can never take the whole queue down.
-                    ->state(fn (ArticleTranslation $record): string => $record->article?->category?->nameIn(Locale::En) ?? '-')
+                    ->state(fn (ArticleTranslation $record): string => $record->article?->category?->nameIn(Locale::current()) ?? '-')
                     ->visibleFrom('2xl'),
                 TextColumn::make('submitted_at')
-                    ->label('Waiting since')
-                    ->dateTime('j M, H:i', StatusPresenter::TIMEZONE)
+                    ->label(__('Waiting since'))
+                    ->dateTime(fn (): string => StatusPresenter::dateFormat(), StatusPresenter::TIMEZONE)
                     ->sortable()
                     ->visibleFrom('md'),
             ])
@@ -52,40 +54,40 @@ class ReviewQueueTable
             ->recordActions([
                 // Below md the buttons shrink to their icon (PhoneFriendly), so both stay on screen next to the headline.
                 PhoneFriendly::iconOnPhone(Action::make('approve')
-                    ->label('Approve & publish')
+                    ->label(__('Approve & publish'))
                     ->icon(Heroicon::OutlinedCheckCircle)
                     ->color('success')
                     ->visible(fn (ArticleTranslation $record): bool => auth()->user()->can('approve', $record))
                     ->requiresConfirmation()
-                    ->modalDescription('The text goes live on the site now, or at the time you pick below.')
+                    ->modalDescription(__('The text goes live on the site now, or at the time you pick below.'))
                     ->schema([PublishAtField::make()])
                     ->action(function (ArticleTranslation $record, array $data): void {
                         $publishAt = PublishAtField::parse($data[PublishAtField::NAME] ?? null);
 
                         WorkflowOutcome::run(
                             fn () => app(EditorialWorkflow::class)->approve($record, auth()->user(), $publishAt),
-                            PublishAtField::successTitle('Version', $publishAt),
+                            PublishAtField::successTitle(__('Version'), $publishAt),
                         );
                     })),
                 PhoneFriendly::iconOnPhone(Action::make('requestChanges')
-                    ->label('Request changes')
+                    ->label(__('Request changes'))
                     ->icon(Heroicon::OutlinedArrowUturnLeft)
                     ->color('warning')
                     ->visible(fn (ArticleTranslation $record): bool => auth()->user()->can('requestChanges', $record))
-                    ->modalHeading('Request changes')
-                    ->modalDescription('The author sees this note on the article and can edit and resubmit.')
-                    ->modalSubmitActionLabel('Send back to the author')
+                    ->modalHeading(__('Request changes'))
+                    ->modalDescription(__('The author sees this note on the article and can edit and resubmit.'))
+                    ->modalSubmitActionLabel(__('Send back to the author'))
                     ->modalSubmitAction(fn (Action $action) => $action->color('primary'))
                     ->schema([
                         Textarea::make('note')
-                            ->label('What needs to change?')
+                            ->label(__('What needs to change?'))
                             ->required()
                             ->maxLength(2000)
                             ->rows(5),
                     ])
                     ->action(fn (ArticleTranslation $record, array $data) => WorkflowOutcome::run(
                         fn () => app(EditorialWorkflow::class)->requestChanges($record, auth()->user(), (string) $data['note']),
-                        'Changes requested. The author will see your note on the article.',
+                        __('Changes requested. The author will see your note on the article.'),
                     ))),
             ]);
     }

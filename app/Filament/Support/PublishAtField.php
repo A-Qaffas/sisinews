@@ -18,8 +18,8 @@ final class PublishAtField
     public static function make(): DateTimePicker
     {
         return DateTimePicker::make(self::NAME)
-            ->label('Publish at (leave empty to publish now)')
-            ->helperText('Cairo time. Pick a moment in the future and the story goes live by itself then.')
+            ->label(__('Publish at (leave empty to publish now)'))
+            ->helperText(__('Cairo time. Pick a moment in the future and the story goes live by itself then.'))
             ->timezone(StatusPresenter::TIMEZONE)
             ->seconds(false)
             // The picker and its validation both read the typed time as Cairo wall-clock time, so the
@@ -37,11 +37,15 @@ final class PublishAtField
             : null;
     }
 
-    /** What to tell the editor: "<subject> published." or "<subject> scheduled for <date>.". */
+    /**
+     * What to tell the editor: "<subject> published." or "<subject> scheduled for <date>.".
+     *
+     * @param  string  $subject  already translated ("Arabic version", "Version")
+     */
     public static function successTitle(string $subject, ?CarbonInterface $publishAt): string
     {
         return $publishAt !== null && $publishAt->isFuture()
-            ? "{$subject} scheduled for ".StatusPresenter::when($publishAt).'.'
-            : "{$subject} published.";
+            ? __(':subject scheduled for :date.', ['subject' => $subject, 'date' => StatusPresenter::when($publishAt)])
+            : __(':subject published.', ['subject' => $subject]);
     }
 }

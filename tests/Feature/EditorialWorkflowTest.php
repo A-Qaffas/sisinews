@@ -24,6 +24,8 @@ class EditorialWorkflowTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        // Refusals are panel messages, and the suite runs the panel in English.
+        app()->setLocale('en');
         $this->workflow = app(EditorialWorkflow::class);
     }
 

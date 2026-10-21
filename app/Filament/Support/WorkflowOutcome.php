@@ -12,6 +12,7 @@ final class WorkflowOutcome
 {
     /**
      * @param  Closure(): mixed  $move  a call into EditorialWorkflow
+     * @param  string  $successTitle  already translated
      * @return bool whether the move happened
      */
     public static function run(Closure $move, string $successTitle): bool
@@ -19,7 +20,7 @@ final class WorkflowOutcome
         try {
             $move();
         } catch (AuthorizationException) {
-            self::refuse('You are not allowed to do that.');
+            self::refuse(__('You are not allowed to do that.'));
 
             return false;
         } catch (InvalidTransition $exception) {
@@ -33,8 +34,9 @@ final class WorkflowOutcome
         return true;
     }
 
+    /** @param  string  $message  already translated */
     public static function refuse(string $message): void
     {
-        Notification::make()->danger()->title('Nothing was changed')->body($message)->send();
+        Notification::make()->danger()->title(__('Nothing was changed'))->body($message)->send();
     }
 }

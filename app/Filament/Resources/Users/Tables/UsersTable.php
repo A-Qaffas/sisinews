@@ -31,18 +31,20 @@ class UsersTable
             ->columns([
                 // One cell for who they are: the e-mail sits under the name, so a phone needs no second column.
                 TextColumn::make('name')
+                    ->label(__('Name'))
                     ->searchable(['name', 'name_ar', 'email'])
                     ->sortable()
                     ->weight('bold')
                     ->description(fn (User $record): string => $record->email)
                     ->extraAttributes(['class' => 'sisi-person']),
                 TextColumn::make('name_ar')
-                    ->label('Arabic name')
+                    ->label(__('Arabic name'))
                     ->placeholder('-')
                     ->extraAttributes(['dir' => 'rtl'])
                     ->extraHeaderAttributes(['class' => 'fi-align-end'])
                     ->visibleFrom('lg'),
                 TextColumn::make('role')
+                    ->label(__('Role'))
                     ->badge()
                     ->formatStateUsing(fn (Role $state): string => $state->label())
                     ->color(fn (Role $state): string => match ($state) {
@@ -52,6 +54,7 @@ class UsersTable
                     }),
                 // Journalists only write in the sections listed; the Editor-in-chief and admins need no list.
                 TextColumn::make('sections')
+                    ->label(__('Sections'))
                     ->state(fn (User $record): string => SectionAssignments::summary($record))
                     ->color(fn (User $record): string => match (true) {
                         SectionAssignments::hasNone($record) => 'warning',
@@ -62,28 +65,29 @@ class UsersTable
                     ->wrap()
                     ->visibleFrom('md'),
                 IconColumn::make('is_active')
-                    ->label('Active')
+                    ->label(__('Active'))
                     ->boolean(),
             ])
             ->defaultSort('name')
             ->recordUrl(fn (User $record): string => UserResource::getUrl('edit', ['record' => $record]))
             ->filters([
                 SelectFilter::make('role')
+                    ->label(__('Role'))
                     ->options(collect(Role::cases())->mapWithKeys(fn (Role $role): array => [$role->value => $role->label()])->all()),
                 SelectFilter::make('section')
-                    ->label('Section')
+                    ->label(__('Section'))
                     ->options(fn (): array => TaxonomyLabels::categoryOptions())
                     ->query(fn (Builder $query, array $data): Builder => filled($data['value'] ?? null)
                         ? $query->where('role', Role::Journalist->value)
                             ->whereHas('allowedCategories', fn (Builder $categories) => $categories->whereKey($data['value']))
                         : $query),
                 Filter::make('no_sections')
-                    ->label('Journalists with no section yet')
+                    ->label(__('Journalists with no section yet'))
                     ->query(fn (Builder $query): Builder => $query->where('role', Role::Journalist->value)->whereDoesntHave('allowedCategories')),
                 TernaryFilter::make('is_active')
-                    ->label('Active')
-                    ->trueLabel('Active accounts')
-                    ->falseLabel('Deactivated accounts'),
+                    ->label(__('Active'))
+                    ->trueLabel(__('Active accounts'))
+                    ->falseLabel(__('Deactivated accounts')),
             ])
             ->recordActions([
                 // On a phone the row itself opens the account (recordUrl), so only the menu keeps a button there.
@@ -93,7 +97,7 @@ class UsersTable
                     AccountActions::resetPassword(),
                     AccountActions::deactivate(),
                     AccountActions::activate(),
-                ])->tooltip('Reset password, activate or deactivate'),
+                ])->tooltip(__('Reset password, activate or deactivate')),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

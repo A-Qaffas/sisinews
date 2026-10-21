@@ -6,6 +6,7 @@ use App\Filament\Resources\Pages\PageResource;
 use App\Filament\Resources\Pages\Pages\CreatePage;
 use App\Filament\Resources\Pages\Pages\EditPage;
 use App\Filament\Resources\Pages\Pages\ListPages;
+use App\Filament\Support\AdminNavigationGroup;
 use App\Filament\Support\PhoneFriendly;
 use App\Models\Page;
 use App\Models\PageTranslation;
@@ -72,7 +73,7 @@ class PageAdminTest extends AdminTestCase
         $this->get('/admin/pages/create')->assertOk();
         $this->get("/admin/pages/{$page->id}/edit")->assertOk();
         $this->assertContains('Pages', $this->sidebar());
-        $this->assertSame('Site', PageResource::getNavigationGroup());
+        $this->assertSame(AdminNavigationGroup::Site, PageResource::getNavigationGroup());
     }
 
     public static function reviewerRoles(): array

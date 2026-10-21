@@ -20,6 +20,8 @@ class LiveStreamStateTest extends TestCase
     {
         parent::setUp();
 
+        // The refusals are panel messages, and the suite runs the panel in English.
+        app()->setLocale('en');
         $this->travelTo(now()->startOfSecond());
     }
 

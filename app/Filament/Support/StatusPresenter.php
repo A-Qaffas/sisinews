@@ -29,7 +29,7 @@ final class StatusPresenter
 
     public static function label(?TranslationStatus $status): string
     {
-        return $status?->label() ?? 'No version';
+        return $status?->label() ?? __('No version');
     }
 
     /**
@@ -42,10 +42,18 @@ final class StatusPresenter
             && $translation->published_at?->isFuture() === true;
     }
 
-    /** Compact date for badges and tables, in newsroom (Cairo) time. */
-    public static function when(CarbonInterface $date, string $format = 'j M, H:i'): string
+    /** Compact date for badges and tables, in newsroom (Cairo) time; month names follow the staff language, as in Filament's own date columns. */
+    public static function when(CarbonInterface $date, ?string $format = null): string
     {
-        return $date->copy()->timezone(self::TIMEZONE)->format($format);
+        return $date->copy()->timezone(self::TIMEZONE)->translatedFormat($format ?? self::dateFormat());
+    }
+
+    /** "12 Oct, 11:28" / "12 أكتوبر، 11:28": the Arabic panel takes the Arabic comma. */
+    public static function dateFormat(bool $withYear = false): string
+    {
+        $date = $withYear ? 'j M Y' : 'j M';
+
+        return $date.(app()->getLocale() === 'ar' ? '، ' : ', ').'H:i';
     }
 
     /** Short badge text for a tab or panel (the date, when there is one, sits next to it); null when there is no version. */
@@ -53,7 +61,7 @@ final class StatusPresenter
     {
         return match (true) {
             $translation === null => null,
-            self::isScheduled($translation) => 'Scheduled',
+            self::isScheduled($translation) => __('Scheduled'),
             default => $translation->status->label(),
         };
     }
@@ -62,7 +70,7 @@ final class StatusPresenter
     public static function stateLabel(?ArticleTranslation $translation): string
     {
         return self::isScheduled($translation)
-            ? 'Scheduled for '.self::when($translation->published_at)
+            ? __('Scheduled for :date', ['date' => self::when($translation->published_at)])
             : self::label($translation?->status);
     }
 
@@ -71,10 +79,10 @@ final class StatusPresenter
         return self::isScheduled($translation) ? self::SCHEDULED_COLOR : self::color($translation?->status);
     }
 
-    /** English name for the UI (the native name would drag RTL text into English labels). */
+    /** The language's name in the staff member's own language (a native name would drag RTL text into English labels). */
     public static function language(Locale $locale): string
     {
-        return $locale === Locale::Ar ? 'Arabic' : 'English';
+        return $locale === Locale::Ar ? __('Arabic') : __('English');
     }
 
     public static function transitionColor(Transition $transition): string

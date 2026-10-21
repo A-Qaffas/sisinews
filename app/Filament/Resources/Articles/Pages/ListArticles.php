@@ -20,15 +20,15 @@ class ListArticles extends ListRecords
     {
         return [
             // Hidden by the policy for a journalist who has no section yet; the notice below says why.
-            CreateAction::make()->label('New article'),
+            CreateAction::make()->label(__('New article')),
         ];
     }
 
     public function content(Schema $schema): Schema
     {
         return $schema->components([
-            Callout::make(NoSectionsNotice::HEADING)
-                ->description(NoSectionsNotice::BODY)
+            Callout::make(NoSectionsNotice::heading())
+                ->description(NoSectionsNotice::body())
                 ->warning()
                 ->visible(fn (): bool => NoSectionsNotice::applies(auth()->user())),
             $this->getTabsContentComponent(),

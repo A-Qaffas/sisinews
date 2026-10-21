@@ -42,9 +42,10 @@ trait HasWorkflowActions
     private function transitionAction(Locale $locale, Transition $transition): Action
     {
         $language = StatusPresenter::language($locale);
+        $heading = __(':action (:language)', ['action' => $transition->label(), 'language' => $language]);
 
         $action = Action::make("{$locale->value}_{$transition->value}")
-            ->label("{$transition->label()} ({$language})")
+            ->label($heading)
             ->color(StatusPresenter::transitionColor($transition))
             ->visible(fn (): bool => in_array($transition, $this->availableTransitions($locale), true))
             ->action(function (array $data, Action $action) use ($locale, $transition, $language): void {
@@ -55,11 +56,11 @@ trait HasWorkflowActions
                     saveFirst: $transition === Transition::Submit || $transition === Transition::Approve,
                     move: fn (ArticleTranslation $t) => $this->performTransition($transition, $t, (string) ($data['note'] ?? ''), $publishAt),
                     success: match ($transition) {
-                        Transition::Submit => "{$language} version submitted for review.",
-                        Transition::Approve => PublishAtField::successTitle("{$language} version", $publishAt),
-                        Transition::RequestChanges => 'Changes requested. The author will see your note on the article.',
-                        Transition::Archive => "{$language} version unpublished.",
-                        Transition::Reopen => "{$language} version reopened as a draft.",
+                        Transition::Submit => __(':language version submitted for review.', ['language' => $language]),
+                        Transition::Approve => PublishAtField::successTitle(__(':language version', ['language' => $language]), $publishAt),
+                        Transition::RequestChanges => __('Changes requested. The author will see your note on the article.'),
+                        Transition::Archive => __(':language version unpublished.', ['language' => $language]),
+                        Transition::Reopen => __(':language version reopened as a draft.', ['language' => $language]),
                     },
                 );
 
@@ -70,13 +71,13 @@ trait HasWorkflowActions
 
         if ($transition === Transition::RequestChanges) {
             return $action
-                ->modalHeading("Request changes ({$language})")
-                ->modalDescription('The author sees this note on the article and can edit and resubmit.')
-                ->modalSubmitActionLabel('Send back to the author')
+                ->modalHeading(__('Request changes (:language)', ['language' => $language]))
+                ->modalDescription(__('The author sees this note on the article and can edit and resubmit.'))
+                ->modalSubmitActionLabel(__('Send back to the author'))
                 ->modalSubmitAction(fn (Action $action) => $action->color('primary'))
                 ->schema([
                     Textarea::make('note')
-                        ->label('What needs to change?')
+                        ->label(__('What needs to change?'))
                         ->required()
                         ->maxLength(2000)
                         ->rows(5),
@@ -85,12 +86,12 @@ trait HasWorkflowActions
 
         $action
             ->requiresConfirmation()
-            ->modalHeading("{$transition->label()} ({$language})")
+            ->modalHeading($heading)
             ->modalDescription(match ($transition) {
-                Transition::Submit => 'The text is saved and sent to the Editor-in-chief. You cannot edit it while it is in review.',
-                Transition::Approve => 'The text goes live on the site now, or at the time you pick below.',
-                Transition::Archive => 'The text disappears from the site (or is no longer scheduled). It can be reopened as a draft later.',
-                Transition::Reopen => 'The text becomes an editable draft again.',
+                Transition::Submit => __('The text is saved and sent to the Editor-in-chief. You cannot edit it while it is in review.'),
+                Transition::Approve => __('The text goes live on the site now, or at the time you pick below.'),
+                Transition::Archive => __('The text disappears from the site (or is no longer scheduled). It can be reopened as a draft later.'),
+                Transition::Reopen => __('The text becomes an editable draft again.'),
             });
 
         return $transition === Transition::Approve ? $action->schema([PublishAtField::make()]) : $action;
@@ -100,14 +101,15 @@ trait HasWorkflowActions
     private function publishNowAction(Locale $locale): Action
     {
         $language = StatusPresenter::language($locale);
+        $heading = __('Publish now (:language)', ['language' => $language]);
 
         return Action::make("{$locale->value}_publish_now")
-            ->label("Publish now ({$language})")
+            ->label($heading)
             ->color('success')
             ->visible(fn (): bool => $this->canPublishNow($locale))
             ->requiresConfirmation()
-            ->modalHeading("Publish now ({$language})")
-            ->modalDescription('The text is saved and goes live now, or at the time you pick below. The history records both the submission and the approval.')
+            ->modalHeading($heading)
+            ->modalDescription(__('The text is saved and goes live now, or at the time you pick below. The history records both the submission and the approval.'))
             ->schema([PublishAtField::make()])
             ->action(function (array $data, Action $action) use ($locale, $language): void {
                 $publishAt = PublishAtField::parse($data[PublishAtField::NAME] ?? null);
@@ -116,7 +118,7 @@ trait HasWorkflowActions
                     $locale,
                     saveFirst: true,
                     move: fn (ArticleTranslation $t) => $this->workflow()->publishNow($t, auth()->user(), $publishAt),
-                    success: PublishAtField::successTitle("{$language} version", $publishAt),
+                    success: PublishAtField::successTitle(__(':language version', ['language' => $language]), $publishAt),
                 );
 
                 if (! $moved) {
@@ -161,7 +163,7 @@ trait HasWorkflowActions
             }
         } catch (ValidationException $exception) {
             $this->setErrorBag($exception->validator->errors());
-            WorkflowOutcome::refuse('Fix the highlighted fields first.');
+            WorkflowOutcome::refuse(__('Fix the highlighted fields first.'));
 
             return false;
         }
@@ -170,7 +172,7 @@ trait HasWorkflowActions
         $translation = ArticleAccess::translation($this->getRecord(), $locale);
 
         if ($translation === null) {
-            WorkflowOutcome::refuse("There is no {$language} version yet. Write a headline for it first.");
+            WorkflowOutcome::refuse(__('There is no :language version yet. Write a headline for it first.', ['language' => $language]));
 
             return false;
         }

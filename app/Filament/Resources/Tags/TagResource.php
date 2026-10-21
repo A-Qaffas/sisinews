@@ -7,6 +7,7 @@ use App\Filament\Resources\Tags\Pages\EditTag;
 use App\Filament\Resources\Tags\Pages\ListTags;
 use App\Filament\Resources\Tags\Schemas\TagForm;
 use App\Filament\Resources\Tags\Tables\TagsTable;
+use App\Filament\Support\AdminNavigationGroup;
 use App\Models\Tag;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -21,9 +22,19 @@ class TagResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTag;
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Taxonomy';
+    protected static string|\UnitEnum|null $navigationGroup = AdminNavigationGroup::Taxonomy;
 
     protected static ?int $navigationSort = 2;
+
+    public static function getModelLabel(): string
+    {
+        return __('tag');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('tags');
+    }
 
     public static function form(Schema $schema): Schema
     {

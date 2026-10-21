@@ -5,8 +5,8 @@
 
 <x-filament-widgets::widget>
     <x-filament::section :icon="Heroicon::OutlinedExclamationTriangle" icon-color="warning">
-        <x-slot name="heading">{{ NoSectionsNotice::HEADING }}</x-slot>
+        <x-slot name="heading">{{ NoSectionsNotice::heading() }}</x-slot>
 
-        <p>{{ NoSectionsNotice::BODY }}</p>
+        <p>{{ NoSectionsNotice::body() }}</p>
     </x-filament::section>
 </x-filament-widgets::widget>

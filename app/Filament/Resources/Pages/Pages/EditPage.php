@@ -5,7 +5,6 @@ namespace App\Filament\Resources\Pages\Pages;
 use App\Enums\Locale;
 use App\Filament\Resources\Pages\PageResource;
 use App\Filament\Resources\Pages\Support\PageWriter;
-use App\Filament\Support\StatusPresenter;
 use App\Models\Page;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
@@ -21,7 +20,7 @@ class EditPage extends EditRecord
     public function getSubheading(): ?string
     {
         return $this->record->isCore()
-            ? 'A core page: it cannot be deleted. Turn off a language to take it off the site.'
+            ? __('A core page: it cannot be deleted. Turn off a language to take it off the site.')
             : null;
     }
 
@@ -30,7 +29,7 @@ class EditPage extends EditRecord
         return [
             ...array_map(fn (Locale $locale): Action => $this->viewOnSiteAction($locale), Locale::cases()),
             DeleteAction::make()
-                ->modalDescription('The page disappears from the site in both languages, and its links stop working. Turn a language off instead to keep the text.'),
+                ->modalDescription(__('The page disappears from the site in both languages, and its links stop working. Turn a language off instead to keep the text.')),
         ];
     }
 
@@ -38,7 +37,7 @@ class EditPage extends EditRecord
     private function viewOnSiteAction(Locale $locale): Action
     {
         return Action::make("view_{$locale->value}")
-            ->label('View '.StatusPresenter::language($locale))
+            ->label($locale === Locale::Ar ? __('View Arabic') : __('View English'))
             ->icon(Heroicon::ArrowTopRightOnSquare)
             ->color('gray')
             ->url(fn (): string => $this->record->url($locale), shouldOpenInNewTab: true)

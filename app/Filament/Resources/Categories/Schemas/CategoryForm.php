@@ -17,18 +17,18 @@ class CategoryForm
         return $schema
             ->columns(1)
             ->components([
-                Section::make('Names')
-                    ->description('Both languages are required: the navigation shows whichever the reader chose.')
+                Section::make(__('Names'))
+                    ->description(__('Both languages are required: the navigation shows whichever the reader chose.'))
                     ->schema([
                         NameFields::make(Locale::Ar, CategoryTranslation::class, required: true),
                         NameFields::make(Locale::En, CategoryTranslation::class, required: true),
                     ]),
-                Section::make('Navigation')
+                Section::make(__('Navigation'))
                     ->columns(2)
                     ->schema([
                         TextInput::make('sort_order')
-                            ->label('Position')
-                            ->helperText('Lower numbers come first. You can also drag rows on the list.')
+                            ->label(__('Position'))
+                            ->helperText(__('Lower numbers come first. You can also drag rows on the list.'))
                             ->numeric()
                             ->integer()
                             ->minValue(0)
@@ -36,7 +36,7 @@ class CategoryForm
                             ->default(0)
                             ->required(),
                         Toggle::make('show_in_nav')
-                            ->label('Show in the site navigation')
+                            ->label(__('Show in the site navigation'))
                             ->default(true),
                     ]),
             ]);

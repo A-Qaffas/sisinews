@@ -4,6 +4,7 @@ namespace App\Filament\Resources\NewsletterSubscribers;
 
 use App\Filament\Resources\NewsletterSubscribers\Pages\ListNewsletterSubscribers;
 use App\Filament\Resources\NewsletterSubscribers\Tables\NewsletterSubscribersTable;
+use App\Filament\Support\AdminNavigationGroup;
 use App\Models\NewsletterSubscriber;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -17,9 +18,17 @@ class NewsletterSubscriberResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEnvelope;
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Audience';
+    protected static string|\UnitEnum|null $navigationGroup = AdminNavigationGroup::Audience;
 
-    protected static ?string $modelLabel = 'subscriber';
+    public static function getModelLabel(): string
+    {
+        return __('subscriber');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('subscribers');
+    }
 
     public static function table(Table $table): Table
     {

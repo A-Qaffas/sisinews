@@ -17,20 +17,20 @@ class CategoriesTable
         return $table
             ->columns([
                 TextColumn::make('name_ar')
-                    ->label('Arabic name')
+                    ->label(__('Arabic name'))
                     ->state(fn (Category $record): ?string => $record->translate(Locale::Ar)?->name)
                     ->extraAttributes(['dir' => 'rtl'])
                     ->extraHeaderAttributes(['class' => 'fi-align-end']),
                 TextColumn::make('name_en')
-                    ->label('English name')
+                    ->label(__('English name'))
                     ->state(fn (Category $record): ?string => $record->translate(Locale::En)?->name),
                 TextColumn::make('sort_order')
-                    ->label('Position'),
+                    ->label(__('Position')),
                 IconColumn::make('show_in_nav')
-                    ->label('In navigation')
+                    ->label(__('In navigation'))
                     ->boolean(),
                 TextColumn::make('articles_count')
-                    ->label('Articles'),
+                    ->label(__('Articles')),
             ])
             ->defaultSort('sort_order')
             ->reorderable('sort_order')

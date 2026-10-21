@@ -28,8 +28,6 @@ class UserResource extends Resource
 
     protected static ?string $slug = 'users';
 
-    protected static ?string $navigationLabel = 'Team';
-
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
 
     protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::UserGroup;
@@ -37,11 +35,22 @@ class UserResource extends Resource
     // A top-level item (no group) sits right under the Dashboard, above the newsroom groups.
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $modelLabel = 'team member';
-
-    protected static ?string $pluralModelLabel = 'team';
-
     protected static ?string $recordTitleAttribute = 'name';
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Team');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('team member');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('team');
+    }
 
     /** @return Builder<User> */
     public static function getEloquentQuery(): Builder

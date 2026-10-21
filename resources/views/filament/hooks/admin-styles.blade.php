@@ -171,4 +171,19 @@
     .sisi-live-status .fi-badge.fi-color-danger .fi-icon {
         color: inherit;
     }
+
+    /* The other language under the sign-in form (filament.hooks.login-language). */
+    .sn-login-language {
+        margin-block-start: 1rem;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .sn-login-language a {
+        display: inline-block;
+        padding: 0.6rem 0.75rem;
+        color: var(--primary-600);
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
+    }
 </style>

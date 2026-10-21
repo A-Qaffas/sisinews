@@ -3,7 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Enums\Locale;
-use App\Filament\Support\StatusPresenter;
+use App\Filament\Support\AdminNavigationGroup;
 use App\Models\SiteSetting;
 use App\Services\SiteSettings;
 use App\Support\Masthead;
@@ -20,6 +20,7 @@ use Filament\Schemas\Components\Form;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Gate;
 use UnitEnum;
 
@@ -36,13 +37,11 @@ class ManageSiteSettings extends Page
 
     protected static ?string $slug = 'site-settings';
 
-    protected static ?string $title = 'Site settings';
-
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCog6Tooth;
 
     protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::Cog6Tooth;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Site';
+    protected static string|UnitEnum|null $navigationGroup = AdminNavigationGroup::Site;
 
     protected static ?int $navigationSort = 2;
 
@@ -54,6 +53,17 @@ class ManageSiteSettings extends Page
         return Gate::allows('manage', SiteSetting::class);
     }
 
+    public function getTitle(): string|Htmlable
+    {
+        return __('Site settings');
+    }
+
+    // Filament reads the menu label from the static $title, which a translated string cannot be.
+    public static function getNavigationLabel(): string
+    {
+        return __('Site settings');
+    }
+
     public function mount(): void
     {
         $this->fillForm();
@@ -63,14 +73,14 @@ class ManageSiteSettings extends Page
     {
         return $schema
             ->components([
-                Section::make('Masthead')
-                    ->description('Printed beside the logo and at the bottom of every page, as in a newspaper. Leave a name empty to hide that line. English pages show only the English names, so until they are filled in English pages show no credits.')
+                Section::make(__('Masthead'))
+                    ->description(__('Printed beside the logo and at the bottom of every page, as in a newspaper. Leave a name empty to hide that line. English pages show only the English names, so until they are filled in English pages show no credits.'))
                     ->columns(['default' => 1, 'md' => 2])
                     ->schema([
-                        self::nameInput('chairman', Locale::Ar, 'Chairman of the Board'),
-                        self::nameInput('chairman', Locale::En, 'Chairman of the Board'),
-                        self::nameInput('editor', Locale::Ar, 'Editor-in-Chief'),
-                        self::nameInput('editor', Locale::En, 'Editor-in-Chief'),
+                        self::nameInput('chairman', Locale::Ar, __('Chairman of the Board (Arabic)')),
+                        self::nameInput('chairman', Locale::En, __('Chairman of the Board (English)')),
+                        self::nameInput('editor', Locale::Ar, __('Editor-in-Chief (Arabic)')),
+                        self::nameInput('editor', Locale::En, __('Editor-in-Chief (English)')),
                     ]),
             ])
             ->statePath('data');
@@ -84,7 +94,7 @@ class ManageSiteSettings extends Page
                 ->livewireSubmitHandler('save')
                 ->footer([
                     Actions::make([
-                        Action::make('save')->label('Save')->submit('save')->keyBindings(['mod+s']),
+                        Action::make('save')->label(__('Save'))->submit('save')->keyBindings(['mod+s']),
                     ])->key('form-actions'),
                 ]),
         ]);
@@ -109,7 +119,7 @@ class ManageSiteSettings extends Page
         $this->fillForm();
         $this->rememberData();
 
-        Notification::make()->success()->title('Site settings saved')->send();
+        Notification::make()->success()->title(__('Site settings saved'))->send();
     }
 
     private function fillForm(): void
@@ -119,10 +129,11 @@ class ManageSiteSettings extends Page
         $this->form->fill(collect(Masthead::keys())->mapWithKeys(fn (string $key): array => [$key => $settings->get($key)])->all());
     }
 
+    /** @param  string  $label  translated, naming the role and the language */
     private static function nameInput(string $role, Locale $locale, string $label): TextInput
     {
         return TextInput::make(Masthead::key($role, $locale))
-            ->label($label.' ('.StatusPresenter::language($locale).')')
+            ->label($label)
             ->rule('string')
             ->trim()
             ->maxLength(Masthead::MAX_LENGTH)

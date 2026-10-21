@@ -43,40 +43,41 @@ class ArticlesTable
                 self::titleColumn(Locale::En)->visibleFrom('md'),
                 // Journalists see it by default: a story in a section that is no longer theirs says so here.
                 TextColumn::make('category')
-                    ->state(fn (Article $record): string => $record->category->nameIn(Locale::En))
+                    ->label(__('Category'))
+                    ->state(fn (Article $record): string => $record->category->nameIn(Locale::current()))
                     ->description(fn (Article $record): ?string => self::notYourSection($record))
                     ->toggleable(isToggledHiddenByDefault: fn (): bool => auth()->user()->isReviewer())
                     ->visibleFrom('md'),
                 TextColumn::make('author.name')
-                    ->label('Author')
+                    ->label(__('Author'))
                     ->toggleable()
                     ->visible(fn (): bool => auth()->user()->isReviewer())
                     ->visibleFrom('md'),
                 self::versionsColumn(),
                 IconColumn::make('is_breaking')
-                    ->label('Breaking')
+                    ->label(__('Breaking'))
                     ->boolean()
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->visibleFrom('md'),
                 TextColumn::make('updated_at')
-                    ->label('Updated')
-                    ->dateTime('j M, H:i', StatusPresenter::TIMEZONE)
+                    ->label(__('Updated'))
+                    ->dateTime(fn (): string => StatusPresenter::dateFormat(), StatusPresenter::TIMEZONE)
                     ->sortable()
                     ->visibleFrom('md'),
             ])
             ->defaultSort('updated_at', 'desc')
             ->filters([
                 SelectFilter::make('status')
-                    ->label('Status (any language)')
+                    ->label(__('Status (any language)'))
                     ->options(collect(TranslationStatus::cases())->mapWithKeys(fn (TranslationStatus $s): array => [$s->value => $s->label()])->all())
                     ->query(fn (Builder $query, array $data): Builder => filled($data['value'] ?? null)
                         ? $query->whereHas('translations', fn (Builder $t) => $t->where('status', $data['value']))
                         : $query),
                 SelectFilter::make('category_id')
-                    ->label('Category')
+                    ->label(__('Category'))
                     ->options(fn (): array => TaxonomyLabels::categoryOptions()),
                 SelectFilter::make('author_id')
-                    ->label('Author')
+                    ->label(__('Author'))
                     ->options(fn (): array => User::query()->orderBy('name')->pluck('name', 'id')->all())
                     ->visible(fn (): bool => auth()->user()->isReviewer()),
                 TrashedFilter::make()
@@ -88,13 +89,13 @@ class ArticlesTable
             ->recordActions([
                 // Icon only on phones: the whole row is a link too, this just keeps a visible button.
                 PhoneFriendly::iconOnPhone(EditAction::make()
-                    ->label(fn (Article $record): string => auth()->user()->can('update', $record) ? 'Edit' : 'Open')
+                    ->label(fn (Article $record): string => auth()->user()->can('update', $record) ? __('Edit') : __('Open'))
                     ->icon(fn (Article $record): Heroicon => auth()->user()->can('update', $record) ? Heroicon::PencilSquare : Heroicon::Eye)
                     // On a phone only the icon shows, so say what the eye means.
                     ->tooltip(fn (Article $record): string => match (true) {
-                        auth()->user()->can('update', $record) => 'Edit this story',
-                        self::notYourSection($record) !== null => "Read only: this story's section is not one of yours",
-                        default => 'Read only: it is with the Editor-in-chief, or published',
+                        auth()->user()->can('update', $record) => __('Edit this story'),
+                        self::notYourSection($record) !== null => __("Read only: this story's section is not one of yours"),
+                        default => __('Read only: it is with the Editor-in-chief, or published'),
                     })),
                 // Rare, destructive moves live behind one icon so the row never outgrows a laptop screen.
                 ActionGroup::make([
@@ -111,7 +112,7 @@ class ArticlesTable
     private static function phoneHeadlineColumn(): TextColumn
     {
         return TextColumn::make('headline')
-            ->label('Headline')
+            ->label(__('Headline'))
             ->state(fn (Article $record): ?string => ($record->translation(Locale::Ar) ?? $record->translation(Locale::En))?->title)
             ->placeholder('-')
             ->description(fn (Article $record): ?string => self::notYourSection($record))
@@ -132,7 +133,7 @@ class ArticlesTable
     {
         $user = auth()->user();
 
-        return $user->isReviewer() || $user->canWriteIn($record->category_id) ? null : 'Not your section';
+        return $user->isReviewer() || $user->canWriteIn($record->category_id) ? null : __('Not your section');
     }
 
     private static function titleColumn(Locale $locale): TextColumn
@@ -140,7 +141,7 @@ class ArticlesTable
         $language = StatusPresenter::language($locale);
 
         return TextColumn::make("{$locale->value}_title")
-            ->label("{$language} title")
+            ->label(__(':language title', ['language' => $language]))
             ->state(fn (Article $record): ?string => $record->translation($locale)?->title)
             ->placeholder('-')
             // Two lines instead of a 36-character cut keeps the column narrow without hiding the headline.
@@ -164,7 +165,7 @@ class ArticlesTable
     private static function versionsColumn(): TextColumn
     {
         return TextColumn::make('versions')
-            ->label('Status')
+            ->label(__('Status'))
             ->badge()
             // On a phone the widest badge ("AR · Scheduled for 15 Oct, 09:30") breaks onto two lines: see admin-styles.
             ->listWithLineBreaks()
@@ -181,7 +182,7 @@ class ArticlesTable
                 [$locale, $status, $scheduledAt] = explode(':', $state, 3);
 
                 return strtoupper($locale).' · '.($scheduledAt !== ''
-                    ? 'Scheduled for '.StatusPresenter::when(CarbonImmutable::createFromTimestamp((int) $scheduledAt))
+                    ? __('Scheduled for :date', ['date' => StatusPresenter::when(CarbonImmutable::createFromTimestamp((int) $scheduledAt))])
                     : StatusPresenter::label(TranslationStatus::tryFrom($status)));
             })
             ->color(function (string $state): string {

@@ -21,6 +21,18 @@ return [
 
     'theme_color' => '#162938',
 
+    /**
+     * Sections shown in the header bar (computers and tablets), in the panel's order; the rest wait under "More", as
+     * Egyptian news sites do. Phones list every section in the menu panel.
+     */
+    'nav_sections_in_bar' => 6,
+
+    /**
+     * The staff panel's language for anyone who has not picked one (the user menu and the profile page switch it).
+     * Arabic: most of the newsroom does not read English. The test suite runs the panel in English (phpunit.xml).
+     */
+    'admin_locale' => env('ADMIN_LOCALE', 'ar'),
+
     /** Default share image (the current logo on the cream field) for pages without a hero image. */
     'og_image' => 'brand/og-default.png',
 

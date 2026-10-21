@@ -31,7 +31,7 @@ class LiveStreamForm
             ->columns(1)
             ->components([
                 Grid::make(['default' => 1, 'xl' => 3])->schema([
-                    Tabs::make('Languages')
+                    Tabs::make(__('Languages'))
                         ->tabs([self::languageTab(Locale::Ar), self::languageTab(Locale::En)])
                         ->columnSpan(['xl' => 2]),
                     self::detailsSection()->columnSpan(['xl' => 1]),
@@ -57,22 +57,22 @@ class LiveStreamForm
     private static function translationFields(Locale $locale): Group
     {
         $direction = ['dir' => $locale->dir(), 'lang' => $locale->value];
-        $language = StatusPresenter::language($locale);
+        $arabic = $locale === Locale::Ar;
         $other = $locale->other()->value;
 
         return Group::make([
             TextInput::make('title')
-                ->label('Title')
-                ->validationAttribute("{$language} title")
+                ->label(__('Title'))
+                ->validationAttribute($arabic ? __('Arabic title') : __('English title'))
                 ->trim()
                 ->maxLength(160)
                 // A broadcast needs a title in at least one language; once a language has a description it needs one too.
                 ->required(fn (Get $get): bool => blank(trim((string) $get("../{$other}.title"))) || filled(trim((string) $get('description'))))
                 ->extraInputAttributes($direction),
             Textarea::make('description')
-                ->label('Description')
-                ->validationAttribute("{$language} description")
-                ->helperText('Optional. Plain text: a line or two about what viewers are watching.')
+                ->label(__('Description'))
+                ->validationAttribute($arabic ? __('Arabic description') : __('English description'))
+                ->helperText(__('Optional. Plain text: a line or two about what viewers are watching.'))
                 ->rows(3)
                 ->maxLength(1000)
                 ->extraInputAttributes($direction),
@@ -81,15 +81,15 @@ class LiveStreamForm
 
     private static function detailsSection(): Section
     {
-        return Section::make('Broadcast details')->schema([
+        return Section::make(__('Broadcast details'))->schema([
             Select::make('governorate_id')
-                ->label('Governorate')
+                ->label(__('Governorate'))
                 ->options(fn (): array => self::governorateOptions())
-                ->placeholder('Egypt-wide')
-                ->helperText('Leave on "Egypt-wide" for a broadcast that is not about one governorate.')
+                ->placeholder(__('Egypt-wide'))
+                ->helperText(__('Leave on "Egypt-wide" for a broadcast that is not about one governorate.'))
                 ->searchable(),
             TextInput::make('video_link')
-                ->label('Video link or ID')
+                ->label(__('Video link or ID'))
                 ->required()
                 ->trim()
                 ->maxLength(300)
@@ -98,15 +98,15 @@ class LiveStreamForm
                 ->live(onBlur: true)
                 ->rules([fn (): Closure => function (string $attribute, mixed $value, Closure $fail): void {
                     if (! is_string($value)) {
-                        $fail(LiveStreamWriter::LINK_ERROR);
+                        $fail(__(LiveStreamWriter::LINK_ERROR));
                     } elseif (LiveStreamWriter::parseLink($value) === null) {
                         $fail(LiveStreamWriter::refusal($value));
                     }
                 }])
                 ->extraInputAttributes(['dir' => 'ltr']),
             DateTimePicker::make('scheduled_at')
-                ->label('Scheduled for')
-                ->helperText('Optional, Cairo time. Only announces when you expect to start: the broadcast goes live when you press Go live.')
+                ->label(__('Scheduled for'))
+                ->helperText(__('Optional, Cairo time. Only announces when you expect to start: the broadcast goes live when you press Go live.'))
                 ->timezone(StatusPresenter::TIMEZONE)
                 ->seconds(false)
                 ->maxDate(fn (): string => now(StatusPresenter::TIMEZONE)->addYear()->format('Y-m-d H:i:s')),
@@ -117,19 +117,19 @@ class LiveStreamForm
     private static function detected(mixed $input): string
     {
         if (! is_string($input) || trim($input) === '') {
-            return "Paste a YouTube or Vimeo link to the broadcast itself, or just the video ID. A channel's live page or a Vimeo event link will not work.";
+            return __("Paste a YouTube or Vimeo link to the broadcast itself, or just the video ID. A channel's live page or a Vimeo event link will not work.");
         }
 
         $parsed = LiveStreamWriter::parseLink($input);
 
         if ($parsed !== null) {
-            return "Recognised: {$parsed[0]->label()} video {$parsed[1]}.";
+            return __('Recognised: :provider video :id.', ['provider' => $parsed[0]->label(), 'id' => $parsed[1]]);
         }
 
         $reason = LiveStreamWriter::refusal($input);
 
-        return $reason === LiveStreamWriter::LINK_ERROR
-            ? 'Not recognised: only YouTube and Vimeo video links (https) or IDs work.'
-            : "Not recognised. {$reason}";
+        return $reason === __(LiveStreamWriter::LINK_ERROR)
+            ? __('Not recognised: only YouTube and Vimeo video links (https) or IDs work.')
+            : __('Not recognised. :reason', ['reason' => $reason]);
     }
 }

@@ -25,22 +25,22 @@ class PagesTable
                 self::titleColumn(Locale::Ar)->visibleFrom('md'),
                 self::titleColumn(Locale::En)->visibleFrom('md'),
                 TextColumn::make('slug')
-                    ->label('Address')
+                    ->label(__('Address'))
                     ->searchable()
                     ->extraAttributes(['dir' => 'ltr'])
                     ->visibleFrom('md'),
                 self::versionsColumn(),
                 IconColumn::make('show_in_footer')
-                    ->label('In footer')
+                    ->label(__('In footer'))
                     ->boolean()
                     ->visibleFrom('md'),
                 TextColumn::make('sort_order')
-                    ->label('Position')
+                    ->label(__('Position'))
                     ->sortable()
                     ->visibleFrom('md'),
                 TextColumn::make('updated_at')
-                    ->label('Updated')
-                    ->dateTime('j M, H:i', StatusPresenter::TIMEZONE)
+                    ->label(__('Updated'))
+                    ->dateTime(fn (): string => StatusPresenter::dateFormat(), StatusPresenter::TIMEZONE)
                     ->sortable()
                     ->visibleFrom('md'),
             ])
@@ -51,7 +51,7 @@ class PagesTable
                 PhoneFriendly::hideOnPhone(EditAction::make()),
                 // Hidden by PagePolicy for editors and for the five core pages.
                 DeleteAction::make()
-                    ->modalDescription('The page disappears from the site in both languages, and its links stop working. Turn a language off instead to keep the text.'),
+                    ->modalDescription(__('The page disappears from the site in both languages, and its links stop working. Turn a language off instead to keep the text.')),
             ]);
     }
 
@@ -59,7 +59,7 @@ class PagesTable
     private static function phoneTitleColumn(): TextColumn
     {
         return TextColumn::make('headline')
-            ->label('Title')
+            ->label(__('Title'))
             ->state(fn (Page $record): ?string => ($record->translate(Locale::Ar) ?? $record->translate(Locale::En))?->title)
             ->placeholder('-')
             ->weight('bold')
@@ -72,10 +72,8 @@ class PagesTable
 
     private static function titleColumn(Locale $locale): TextColumn
     {
-        $language = StatusPresenter::language($locale);
-
         return TextColumn::make("{$locale->value}_title")
-            ->label("{$language} title")
+            ->label($locale === Locale::Ar ? __('Arabic title') : __('English title'))
             ->state(fn (Page $record): ?string => $record->translate($locale)?->title)
             ->placeholder('-')
             ->wrap()
@@ -96,7 +94,7 @@ class PagesTable
     private static function versionsColumn(): TextColumn
     {
         return TextColumn::make('versions')
-            ->label('Status')
+            ->label(__('Status'))
             ->badge()
             ->listWithLineBreaks()
             ->state(fn (Page $record): array => array_map(function (Locale $locale) use ($record): string {
@@ -112,9 +110,9 @@ class PagesTable
                 [$locale, $status] = explode(':', $state, 2);
 
                 return strtoupper($locale).' · '.match ($status) {
-                    'published' => 'Published',
-                    'hidden' => 'Hidden',
-                    default => 'No version',
+                    'published' => __('Published'),
+                    'hidden' => __('Hidden'),
+                    default => __('No version'),
                 };
             })
             ->color(fn (string $state): string => str_ends_with($state, ':published') ? 'success' : 'gray');

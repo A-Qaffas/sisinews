@@ -92,8 +92,8 @@ final class TeamGuard
     public static function refuseLastAdministrator(): void
     {
         Notification::make()->danger()
-            ->title('Nothing was changed')
-            ->body('At least one active administrator must remain. Make another account an active administrator first.')
+            ->title(__('Nothing was changed'))
+            ->body(__('At least one active administrator must remain. Make another account an active administrator first.'))
             ->send();
     }
 }

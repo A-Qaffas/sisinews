@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin;
 
 use App\Filament\Pages\ManageSiteSettings;
+use App\Filament\Support\AdminNavigationGroup;
 use App\Models\SiteSetting;
 use App\Models\User;
 use App\Services\SiteSettings;
@@ -50,7 +51,7 @@ class SiteSettingsPageTest extends AdminTestCase
             ->assertSee('Chairman of the Board (Arabic)')
             ->assertSee('Editor-in-Chief (English)');
         $this->assertContains('Site settings', $this->sidebar());
-        $this->assertSame('Site', ManageSiteSettings::getNavigationGroup());
+        $this->assertSame(AdminNavigationGroup::Site, ManageSiteSettings::getNavigationGroup());
         $this->assertSame(Heroicon::OutlinedCog6Tooth, ManageSiteSettings::getNavigationIcon());
 
         $group = collect(Filament::getNavigation())->first(fn ($group) => $group->getLabel() === 'Site');

@@ -7,6 +7,7 @@ use App\Filament\Resources\Categories\Pages\EditCategory;
 use App\Filament\Resources\Categories\Pages\ListCategories;
 use App\Filament\Resources\Categories\Schemas\CategoryForm;
 use App\Filament\Resources\Categories\Tables\CategoriesTable;
+use App\Filament\Support\AdminNavigationGroup;
 use App\Models\Category;
 use BackedEnum;
 use Filament\Actions\DeleteAction;
@@ -23,9 +24,19 @@ class CategoryResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Taxonomy';
+    protected static string|\UnitEnum|null $navigationGroup = AdminNavigationGroup::Taxonomy;
 
     protected static ?int $navigationSort = 1;
+
+    public static function getModelLabel(): string
+    {
+        return __('category');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('categories');
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -59,8 +70,8 @@ class CategoryResource extends Resource
                 if ($record->articles()->withTrashed()->exists()) {
                     Notification::make()
                         ->danger()
-                        ->title('This category still has articles')
-                        ->body('Move its articles to another category first.')
+                        ->title(__('This category still has articles'))
+                        ->body(__('Move its articles to another category first.'))
                         ->send();
 
                     $action->cancel();

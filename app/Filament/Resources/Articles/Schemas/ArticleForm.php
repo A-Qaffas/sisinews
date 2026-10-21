@@ -53,7 +53,7 @@ class ArticleForm
                 self::changesRequestedCallout(Locale::Ar),
                 self::changesRequestedCallout(Locale::En),
                 Grid::make(['default' => 1, 'xl' => 3])->schema([
-                    Tabs::make('Languages')
+                    Tabs::make(__('Languages'))
                         ->tabs([self::languageTab(Locale::Ar), self::languageTab(Locale::En)])
                         ->activeTab(fn (?Article $record): int => self::tabWaitingOnUser($record))
                         ->columnSpan(['xl' => 2]),
@@ -68,7 +68,7 @@ class ArticleForm
     {
         $language = StatusPresenter::language($locale);
 
-        return Callout::make("Changes requested on the {$language} version")
+        return Callout::make(__('Changes requested on the :language version', ['language' => $language]))
             ->danger()
             ->description(function (?Article $record) use ($locale): ?HtmlString {
                 $change = $record?->translation($locale)?->loadMissing('statusChanges.user')
@@ -77,11 +77,12 @@ class ArticleForm
                     return null;
                 }
 
-                $by = e($change->user?->name ?? 'A reviewer');
-                $at = e($change->created_at->timezone(StatusPresenter::TIMEZONE)->format('j M Y, H:i'));
+                $by = e($change->user?->name ?? __('A reviewer'));
+                $at = e(StatusPresenter::when($change->created_at, StatusPresenter::dateFormat(withYear: true)));
+                $line = __(':name on :date:', ['name' => "<strong>{$by}</strong>", 'date' => $at]);
 
-                // The note is free text in either language inside an English page: dir=auto lets an Arabic note read right-to-left.
-                return new HtmlString("<strong>{$by}</strong> on {$at}:<div dir=\"auto\">".nl2br(e((string) $change->note)).'</div>');
+                // The note is free text in either language, whatever the page's language: dir=auto lets each note read its own way.
+                return new HtmlString($line.'<div dir="auto">'.nl2br(e((string) $change->note)).'</div>');
             })
             ->visible(fn (?Article $record): bool => $record?->translation($locale)?->status === TranslationStatus::ChangesRequested);
     }
@@ -137,7 +138,7 @@ class ArticleForm
 
         return Group::make([
             TextInput::make('title')
-                ->label('Headline')
+                ->label(__('Headline'))
                 ->maxLength(255)
                 ->required(fn (Get $get, ?Article $record): bool => self::languageIsInUse($locale, $get, $record)
                     || ($locale === Locale::Ar && ! self::languageIsInUse(Locale::En, $get, $record, '../en.')))
@@ -150,18 +151,18 @@ class ArticleForm
                 })
                 ->extraInputAttributes($direction),
             TextInput::make('slug')
-                ->label('URL slug')
-                ->helperText('Built from the headline when left blank. It only decorates the address; the story is found by its number.')
+                ->label(__('URL slug'))
+                ->helperText(__('Built from the headline when left blank. It only decorates the address; the story is found by its number.'))
                 ->maxLength(255)
                 ->extraInputAttributes($direction),
             Textarea::make('excerpt')
-                ->label('Summary')
-                ->helperText("Shown on cards and in search results ({$language}).")
+                ->label(__('Summary'))
+                ->helperText(__('Shown on cards and in search results (:language).', ['language' => $language]))
                 ->rows(3)
                 ->maxLength(500)
                 ->extraInputAttributes($direction),
             RichEditor::make('body')
-                ->label('Story')
+                ->label(__('Story'))
                 ->toolbarButtons([
                     ['bold', 'italic', 'underline', 'link'],
                     ['h2', 'h3'],
@@ -182,11 +183,11 @@ class ArticleForm
                 ->minHeight('20rem')
                 ->extraInputAttributes($direction),
             TextInput::make('hero_caption')
-                ->label('Image caption')
+                ->label(__('Image caption'))
                 ->maxLength(255)
                 ->extraInputAttributes($direction),
             Textarea::make('meta_description')
-                ->label('Search engine description')
+                ->label(__('Search engine description'))
                 ->rows(2)
                 ->maxLength(300)
                 ->extraInputAttributes($direction),
@@ -220,9 +221,9 @@ class ArticleForm
 
     private static function detailsSection(): Section
     {
-        return Section::make('Story details')->schema([
+        return Section::make(__('Story details'))->schema([
             Select::make('category_id')
-                ->label('Category')
+                ->label(__('Category'))
                 // A journalist is offered only the sections an admin assigned; Filament also rejects any other id on save.
                 ->options(fn (?Article $record): array => ArticleAccess::categoryOptions(self::user(), $record))
                 // A journalist with exactly one section has nothing to choose: start the new story there.
@@ -234,7 +235,7 @@ class ArticleForm
                 ->required()
                 ->searchable(),
             Select::make('tags')
-                ->label('Tags')
+                ->label(__('Tags'))
                 ->multiple()
                 ->searchable()
                 ->getSearchResultsUsing(fn (string $search): array => TaxonomyLabels::tagOptions(
@@ -249,18 +250,18 @@ class ArticleForm
                 ))
                 // The default "Create" heading and button label do not say what is being created.
                 ->createOptionAction(fn (Action $action): Action => $action
-                    ->label('New tag')
-                    ->tooltip('Add a new tag')
-                    ->modalHeading('New tag')
-                    ->modalDescription('Write the name in at least one language.'))
+                    ->label(__('New tag'))
+                    ->tooltip(__('Add a new tag'))
+                    ->modalHeading(__('New tag'))
+                    ->modalDescription(__('Write the name in at least one language.')))
                 ->createOptionForm([
                     TextInput::make('name_ar')
-                        ->label('Name (Arabic)')
+                        ->label(__('Name (Arabic)'))
                         ->maxLength(120)
                         ->requiredWithout('name_en')
                         ->extraInputAttributes(['dir' => 'rtl', 'lang' => 'ar']),
                     TextInput::make('name_en')
-                        ->label('Name (English)')
+                        ->label(__('Name (English)'))
                         ->maxLength(120)
                         ->requiredWithout('name_ar'),
                 ])
@@ -268,7 +269,7 @@ class ArticleForm
                     ->findOrCreate($data['name_en'] ?? null, $data['name_ar'] ?? null)
                     ->getKey()),
             Select::make('author_id')
-                ->label('Author')
+                ->label(__('Author'))
                 ->options(fn (?Article $record): array => self::authorOptions($record))
                 ->default(fn (): int => self::user()->getKey())
                 ->required()
@@ -276,13 +277,13 @@ class ArticleForm
                 ->visible(fn (): bool => self::user()->isReviewer())
                 ->disabled(fn (?Article $record): bool => ! ArticleAccess::canEditShell(self::user(), $record)),
             Toggle::make('is_featured')
-                ->label('Featured on the front page'),
+                ->label(__('Featured on the front page')),
             Toggle::make('is_breaking')
-                ->label('Breaking news')
+                ->label(__('Breaking news'))
                 ->live(),
             DateTimePicker::make('breaking_until')
-                ->label('Breaking until')
-                ->helperText('Cairo time. Leave empty to keep it breaking until someone clears the flag.')
+                ->label(__('Breaking until'))
+                ->helperText(__('Cairo time. Leave empty to keep it breaking until someone clears the flag.'))
                 ->timezone(StatusPresenter::TIMEZONE)
                 ->seconds(false)
                 ->visible(fn (Get $get): bool => (bool) $get('is_breaking')),
@@ -291,10 +292,10 @@ class ArticleForm
 
     private static function imageSection(): Section
     {
-        return Section::make('Hero image')->schema([
+        return Section::make(__('Hero image'))->schema([
             FileUpload::make('hero_image')
-                ->label('Image')
-                ->helperText('JPG, PNG or WebP, up to 5 MB.')
+                ->label(__('Image'))
+                ->helperText(__('JPG, PNG or WebP, up to 5 MB.'))
                 ->disk('public')
                 ->directory('articles')
                 ->visibility('public')
@@ -330,7 +331,7 @@ class ArticleForm
                 ->when($record?->author_id, fn ($query, int $authorId) => $query->orWhere('id', $authorId)))
             ->orderBy('name')
             ->get(['id', 'name', 'is_active'])
-            ->mapWithKeys(fn (User $user): array => [$user->getKey() => $user->is_active ? $user->name : "{$user->name} (inactive)"])
+            ->mapWithKeys(fn (User $user): array => [$user->getKey() => $user->is_active ? $user->name : __(':name (inactive)', ['name' => $user->name])])
             ->all();
     }
 

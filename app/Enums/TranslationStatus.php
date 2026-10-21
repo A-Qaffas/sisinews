@@ -13,12 +13,12 @@ enum TranslationStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::Draft => 'Draft',
-            self::InReview => 'In review',
-            self::ChangesRequested => 'Changes requested',
-            self::Published => 'Published',
+            self::Draft => __('Draft'),
+            self::InReview => __('In review'),
+            self::ChangesRequested => __('Changes requested'),
+            self::Published => __('Published'),
             // The stored value stays `archived`; "Unpublished" is simply what staff call it.
-            self::Archived => 'Unpublished',
+            self::Archived => __('Unpublished'),
         };
     }
 

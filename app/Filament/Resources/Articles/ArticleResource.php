@@ -9,6 +9,7 @@ use App\Filament\Resources\Articles\Pages\EditArticle;
 use App\Filament\Resources\Articles\Pages\ListArticles;
 use App\Filament\Resources\Articles\Schemas\ArticleForm;
 use App\Filament\Resources\Articles\Tables\ArticlesTable;
+use App\Filament\Support\AdminNavigationGroup;
 use App\Models\Article;
 use BackedEnum;
 use Filament\Actions\DeleteAction;
@@ -27,11 +28,23 @@ class ArticleResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedNewspaper;
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Newsroom';
+    protected static string|\UnitEnum|null $navigationGroup = AdminNavigationGroup::Newsroom;
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $modelLabel = 'article';
+    public static function getModelLabel(): string
+    {
+        // A language with no JSON line for 'article' (English has none) makes Laravel fall back to the public
+        // site's lang/{locale}/article.php group and return that whole array, hence the plain word as fallback.
+        $label = __('article');
+
+        return is_string($label) ? $label : 'article';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('articles');
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -83,7 +96,7 @@ class ArticleResource extends Resource
     public static function deleteAction(): DeleteAction
     {
         return DeleteAction::make()
-            ->modalDescription('Live versions are taken off the site first. An administrator can restore the article later.')
+            ->modalDescription(__('Live versions are taken off the site first. An administrator can restore the article later.'))
             ->before(function (Article $record): void {
                 $workflow = app(EditorialWorkflow::class);
 
