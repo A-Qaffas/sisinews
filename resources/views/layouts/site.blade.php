@@ -27,6 +27,10 @@
     $fontAliases = $locale === Locale::En ? ['ibm-plex-sans', 'playfair-display'] : ['ibm-plex-sans-arabic', 'ibm-plex-sans-arabic-latin'];
     // A missing build must not turn every page, error pages included, into a Vite exception.
     $hasAssets = is_file(public_path('build/manifest.json')) || is_file(public_path('hot'));
+    // A page that states its own robots rule (search, previews, unsubscribe: all noindex) keeps exactly that rule.
+    // Every other page lets Google show a large image preview, which Discover needs to feature a story.
+    $headStack = $__env->yieldPushContent('head');
+    $ownRobots = str_contains($headStack, 'name="robots"');
 @endphp
 <!DOCTYPE html>
 <html lang="{{ $locale->value }}" dir="{{ $locale->dir() }}">
@@ -45,7 +49,10 @@
         @fonts($fontAliases)
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
-    @stack('head')
+    @unless ($minimal || $ownRobots)
+        <meta name="robots" content="max-image-preview:large">
+    @endunless
+    {!! $headStack !!}
 </head>
 <body>
     <a class="skip-link" href="#main">{{ __('layout.skip') }}</a>

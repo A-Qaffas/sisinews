@@ -21,6 +21,8 @@
     <meta property="og:image" content="{{ asset(config('site.og_image')) }}">
     <meta property="og:locale" content="{{ $locale === \App\Enums\Locale::Ar ? 'ar_EG' : 'en_US' }}">
     <meta name="twitter:card" content="summary_large_image">
+    {{-- Who publishes the site, for Google. The HEX flags keep any text from closing the script element. --}}
+    <script type="application/ld+json">{!! json_encode(\App\Support\SiteSeo::homeJsonLd($locale), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}</script>
 @endpush
 
 @section('content')

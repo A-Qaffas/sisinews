@@ -7,6 +7,7 @@ use App\Http\Controllers\Site\FeedController;
 use App\Http\Controllers\Site\HomeController;
 use App\Http\Controllers\Site\LiveController;
 use App\Http\Controllers\Site\NewsletterController;
+use App\Http\Controllers\Site\NewsSitemapController;
 use App\Http\Controllers\Site\PageController;
 use App\Http\Controllers\Site\RootRedirectController;
 use App\Http\Controllers\Site\SearchController;
@@ -23,6 +24,8 @@ Route::get('/admin/language/{locale}', StaffLanguageController::class)
     ->middleware('throttle:30,1')
     ->name('admin.language');
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
+// Google News: the last two days' stories only (the main sitemap above lists all of them).
+Route::get('/news-sitemap.xml', NewsSitemapController::class)->name('news-sitemap');
 Route::post('/newsletter', [NewsletterController::class, 'subscribe'])
     ->middleware('throttle:newsletter')
     ->name('newsletter.subscribe');

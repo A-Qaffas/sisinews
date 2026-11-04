@@ -4,3 +4,4 @@ Disallow: /admin
 Disallow: /newsletter
 
 Sitemap: https://sisi.news/sitemap.xml
+Sitemap: https://sisi.news/news-sitemap.xml
