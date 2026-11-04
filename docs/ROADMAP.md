@@ -58,7 +58,7 @@ Effort is in **developer-days for one experienced Laravel developer** (rough). E
 | Uptime and error alerts to phones (free tiers exist) | Know the site is down before readers tell you | Half a day |
 | Production check: debug off, HTTPS forced, caches built; registrar lock and two-step login on the GoDaddy account | Stops leaking internals and prevents domain hijacking | Half a day |
 | Google Search Console and Bing Webmaster Tools; submit the sitemap | Free; shows how search engines see the site | Half a day |
-| Add the `max-image-preview:large` robots tag | Large images in Google Discover need it; your 1280 px hero images meet the size guideline when the upload is big enough **[check current Google docs]** | 1 hour |
+| **Done 2026-11-04:** the `max-image-preview:large` robots tag on every indexable page | Large images in Google Discover need it; your 1280 px hero images meet the size guideline when the upload is big enough **[check current Google docs]** | 1 hour |
 | `contact@` and `corrections@` mailboxes; reserve social handles in both languages | Readers need a way to reach you | Admin time |
 | Recommended: Cloudflare (free plan) in front of the site | Shields the server, caches images and styles, absorbs attacks. Needs DNS moved to Cloudflare | Half a day |
 
@@ -69,7 +69,7 @@ Effort is in **developer-days for one experienced Laravel developer** (rough). E
 | Author pages: bio, photo, role, Arabic and English names; every byline links to one | Readers and Google both ask "who wrote this, and why trust them?" | 2 to 3 days |
 | Corrections: a correction note on the story, an "Updated" time, a public corrections log | The strongest trust signal you can ship | 2 to 3 days |
 | Revision history: every saved version of the text, who changed what | Today only status changes are recorded, not edits to the words. Needed for disputes | 2 to 3 days |
-| Google News sitemap (stories from the last two days) and a Publisher Center profile | Helps Google find news fast. Google decides inclusion; there is no application **[check current process]** | 1 to 2 days |
+| Google News sitemap (**done 2026-11-04**: `/news-sitemap.xml`, in robots.txt) and a Publisher Center profile (still to do) | Helps Google find news fast. Google decides inclusion; there is no application **[check current process]** | 1 to 2 days |
 | Newsletter that sends: an email service, double opt-in, a daily brief per language | Email is the audience you own. *Double opt-in*: the subscriber clicks a confirmation link, which protects consent and delivery. Ask existing addresses to confirm | 4 to 6 days |
 | Background job runner (a "queue") driven by cron on the current host | Email, image resizing and social posting must not slow pages. Is every-minute cron allowed? **[check]** | 1 day |
 | Privacy-friendly analytics (cookie-less tools such as Plausible, Fathom, Matomo or Cloudflare Web Analytics) | You cannot manage what you do not measure; cookie-less usually means no consent banner **[check with lawyer]** | 1 day |
@@ -189,7 +189,7 @@ Then send `Cache-Control: public, s-maxage=60, stale-while-revalidate` on public
 3. **Author pages and richer bylines** (bio, photo, role, author link in the structured data): credibility is personal.
 4. **Corrections, "Updated" stamps and text revision history**: visible accountability, and an internal record for disputes.
 5. **Required image credit, source and licence fields**: cheap now, expensive claims later.
-6. **Google News sitemap plus the Discover image tag**: the largest free distribution channel for news.
+6. **Google News sitemap plus the Discover image tag** (both shipped 2026-11-04; Publisher Center and Search Console remain): the largest free distribution channel for news.
 7. **Cookie-less public pages with cache headers**: unlocks CDN caching, the biggest single scaling lever.
 8. **Queue, scheduler and email-service integration with double opt-in daily briefs**: builds the audience you own.
 9. **Privacy-friendly analytics and an editorial dashboard**: so editors decide with data.
