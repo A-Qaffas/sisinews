@@ -53,6 +53,7 @@
         <meta name="robots" content="max-image-preview:large">
     @endunless
     {!! $headStack !!}
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6879600053373131" crossorigin="anonymous"></script>
 </head>
 <body>
     <a class="skip-link" href="#main">{{ __('layout.skip') }}</a>

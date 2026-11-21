@@ -39,6 +39,7 @@ final class MostRead
             ->where('t.locale', $locale->value)
             ->where('t.status', TranslationStatus::Published->value)
             ->where('t.published_at', '<=', now())
+            ->where('t.published_at', '>=', now()->subDay()) // only stories published in the last 24 hours
             ->whereNull('a.deleted_at')
             ->groupBy('v.article_translation_id')
             ->orderByRaw('SUM(v.views) DESC')

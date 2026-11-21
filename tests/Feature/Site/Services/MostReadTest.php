@@ -86,12 +86,22 @@ class MostReadTest extends TestCase
 
     public function test_a_tie_is_broken_by_the_newer_story(): void
     {
-        $older = $this->story(['title' => 'Older', 'published_at' => now()->subDays(3)]);
-        $newer = $this->story(['title' => 'Newer', 'published_at' => now()->subDay()]);
+        $older = $this->story(['title' => 'Older', 'published_at' => now()->subHours(20)]);
+        $newer = $this->story(['title' => 'Newer', 'published_at' => now()->subHours(2)]);
         $this->addViews($older, 5);
         $this->addViews($newer, 5);
 
         $this->assertSame(['Newer', 'Older'], app(MostRead::class)->forLocale(Locale::Ar)->pluck('title')->all());
+    }
+
+    public function test_only_stories_published_in_the_last_24_hours_count(): void
+    {
+        $old = $this->story(['title' => 'Old', 'published_at' => now()->subHours(25)]);
+        $fresh = $this->story(['title' => 'Fresh', 'published_at' => now()->subHours(23)]);
+        $this->addViews($old, 50);
+        $this->addViews($fresh, 1);
+
+        $this->assertSame(['Fresh'], app(MostRead::class)->forLocale(Locale::Ar)->pluck('title')->all());
     }
 
     public function test_nothing_viewed_yet_gives_an_empty_list(): void

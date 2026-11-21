@@ -19,7 +19,7 @@ final class LatestStories
         $ids = Cache::remember(
             "site:latest:{$locale->value}:{$limit}",
             (int) config('site.cache.home'),
-            fn () => StoryQuery::newestFirst(StoryQuery::visible($locale))
+            fn () => StoryQuery::liveFirst(StoryQuery::visible($locale))
                 ->limit($limit)
                 ->pluck('id')
                 ->map(fn ($id) => (int) $id)

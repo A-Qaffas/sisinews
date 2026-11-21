@@ -66,7 +66,7 @@ class HomeController extends Controller
         $lead = $newest(StoryQuery::visible($locale, fn ($article) => $article->where('is_featured', true)))->value('id')
             ?? $newest(StoryQuery::visible($locale))->value('id');
 
-        $recent = $newest(StoryQuery::visible($locale))
+        $recent = StoryQuery::liveFirst(StoryQuery::visible($locale))
             ->limit(self::SECONDARY + self::LATEST_LIST + 1)
             ->pluck('id')
             ->map(fn ($id) => (int) $id)

@@ -40,6 +40,19 @@ final class StoryQuery
     }
 
     /**
+     * Newest by the moment a story really reached readers: its publish time, or the moment it was published if that
+     * came later (a story published now with an earlier time typed in still lands on top of "latest").
+     */
+    public static function liveFirst(Builder $query): Builder
+    {
+        $wentLive = "(SELECT MAX(c.created_at) FROM article_status_changes c WHERE c.article_translation_id = article_translations.id AND c.to_status = 'published')";
+
+        return $query
+            ->orderByRaw("CASE WHEN {$wentLive} > article_translations.published_at THEN {$wentLive} ELSE article_translations.published_at END DESC")
+            ->orderByDesc('id');
+    }
+
+    /**
      * Loads the given translations with their card relations, in the given order.
      * Ids that are no longer visible (unpublished while a cached list was alive) are dropped.
      *
