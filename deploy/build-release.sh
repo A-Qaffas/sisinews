@@ -31,6 +31,7 @@ echo "==> copying tree to staging (excluding secrets, dev files, machine-local s
   cd "$ROOT"
   tar -cf - \
     --exclude='./.git' --exclude='./.idea' --exclude='./.vscode' \
+    --exclude='./.claude' --exclude='./proposal' \
     --exclude='./.env' --exclude='./.env.*' \
     --exclude='./node_modules' --exclude='./vendor' \
     --exclude='./tests' --exclude='./phpunit.xml' --exclude='./.phpunit.cache' --exclude='./.phpunit.result.cache' \
@@ -65,9 +66,11 @@ for pkg in phpunit/phpunit fakerphp/faker laravel/pail laravel/pao laravel/pint 
   if grep -q "\"name\": \"$pkg\"" "$STAGE/vendor/composer/installed.json"; then echo "FAIL: dev package $pkg is in vendor"; fail=1; fi
 done
 # 2. none of these paths may exist
-for p in .env .git node_modules tests public/storage public/hot storage/app/public/articles; do
+for p in .env .git .claude proposal node_modules tests public/storage public/hot storage/app/public/articles; do
   if [ -e "$STAGE/$p" ]; then echo "FAIL: $p must not be in the release"; fail=1; fi
 done
+# 2b. no .env anywhere in the tree (a nested worktree or copy would carry real secrets; 2026-11-22 .claude/worktrees did)
+if find "$STAGE" -path "$STAGE/vendor" -prune -o -name '.env' -print | grep -q .; then echo "FAIL: a .env file is in the tree"; fail=1; fi
 # 3. no stale package manifest, no logs, no sqlite databases
 if ls "$STAGE"/bootstrap/cache/*.php >/dev/null 2>&1; then echo "FAIL: bootstrap/cache/*.php present"; fail=1; fi
 if find "$STAGE" -path "$STAGE/vendor" -prune -o \( -name '*.log' -o -name '*.sqlite' \) -print | grep -q .; then echo "FAIL: log or sqlite files present"; fail=1; fi
