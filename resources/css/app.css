@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import './article.css';
 @import './live.css';
+@import './home.css';
 
 /*
  * One stylesheet serves Arabic (rtl) and English (ltr): everything is written with
@@ -18,6 +19,12 @@
     --color-crimson: #9b2c2c;
     --color-crimson-deep: #7a2020;
     --color-alert-soft: #ffc9c9;
+    /* The navy of the logo, deepened for the header bar and the home page's top band. */
+    --color-navy: #0f2236;
+    --color-navy-soft: #18324b;
+    --color-navy-line: #2e4a66;
+    /* Crimson lifted so it still reads as the accent on navy. */
+    --color-crimson-bright: #c8363b;
 
     /* The `--font-*` variables inside var() come from the inline @fonts block the layout emits. */
     --font-sans: var(--font-ibm-plex-sans-arabic, 'IBM Plex Sans Arabic'), ui-sans-serif, system-ui, 'Segoe UI', Tahoma,

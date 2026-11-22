@@ -73,24 +73,60 @@ class HomePageTest extends TestCase
         $this->assertSame('Newest plain', $this->get('/ar')->viewData('lead')->title);
     }
 
-    public function test_stories_are_not_repeated_between_the_lead_the_secondary_and_the_latest_list(): void
+    public function test_stories_are_not_repeated_between_the_slider_the_strip_and_the_latest_list(): void
     {
-        foreach (range(1, 14) as $i) {
+        foreach (range(1, 16) as $i) {
             $this->story(['title' => "Story {$i}", 'published_at' => now()->subMinutes($i)]);
         }
 
         $response = $this->get('/ar')->assertOk();
 
-        $lead = $response->viewData('lead');
-        $secondary = $response->viewData('secondary');
+        $slides = $response->viewData('slides');
+        $strip = $response->viewData('strip');
         $latest = $response->viewData('latest');
 
-        $this->assertSame('Story 1', $lead->title);
-        $this->assertCount(3, $secondary);
+        $this->assertSame('Story 1', $response->viewData('lead')->title);
+        $this->assertSame($response->viewData('lead')->id, $slides->first()->id, 'the lead is the first slide');
+        $this->assertCount(5, $slides);
+        $this->assertCount(4, $strip);
         $this->assertCount(6, $latest);
-        $ids = array_merge([$lead->id], $secondary->pluck('id')->all(), $latest->pluck('id')->all());
+        $ids = array_merge($slides->pluck('id')->all(), $strip->pluck('id')->all(), $latest->pluck('id')->all());
         $this->assertSame($ids, array_values(array_unique($ids)));
         $this->assertCount(6, $response->viewData('sidebarLatest'));
+    }
+
+    public function test_the_weeks_featured_stories_follow_the_lead_in_the_slider(): void
+    {
+        $this->story(['title' => 'Newest plain', 'published_at' => now()->subMinutes(5)]);
+        $this->story(['title' => 'Lead featured', 'published_at' => now()->subHours(2)], ['is_featured' => true]);
+        $this->story(['title' => 'Older featured', 'published_at' => now()->subDays(3)], ['is_featured' => true]);
+        $this->story(['title' => 'Stale featured', 'published_at' => now()->subDays(30)], ['is_featured' => true]);
+
+        $titles = $this->get('/ar')->assertOk()->viewData('slides')->pluck('title')->all();
+
+        $this->assertSame(['Lead featured', 'Older featured', 'Newest plain', 'Stale featured'], $titles,
+            'featured from the last week come right after the lead; older ones only fill in as ordinary stories');
+    }
+
+    public function test_the_slider_works_without_javascript_and_ships_its_controls_hidden(): void
+    {
+        foreach (range(1, 3) as $i) {
+            $this->story(['title' => "Slide {$i}", 'published_at' => now()->subMinutes($i)]);
+        }
+
+        $html = $this->get('/ar')->assertOk()->getContent();
+
+        $this->assertSame(3, preg_match_all('/aria-roledescription="slide"/', $html));
+        $this->assertMatchesRegularExpression('/data-slider-controls hidden/', $html);
+        $this->assertMatchesRegularExpression('/data-slider-bars hidden/', $html);
+        $this->assertStringContainsString(__('layout.slider.pause', [], 'ar'), $html);
+    }
+
+    public function test_a_single_story_gets_no_slider_controls(): void
+    {
+        $this->story(['title' => 'Only one']);
+
+        $this->get('/ar')->assertOk()->assertSee('Only one')->assertDontSee('data-slider-controls', false);
     }
 
     public function test_each_category_with_remaining_stories_gets_a_block_of_at_most_four(): void
@@ -115,26 +151,23 @@ class HomePageTest extends TestCase
         );
     }
 
-    public function test_the_last_category_block_of_an_odd_count_spans_both_columns_so_the_grid_has_no_hole(): void
+    public function test_a_category_block_shows_its_cards_and_links_to_the_whole_section(): void
     {
-        $popular = $this->story(['title' => 'Popular lead', 'published_at' => now()->subDays(1)]);
-        $this->addViews($popular, 10);
-        foreach (range(1, 3) as $i) {
-            $category = Category::factory()->create(['sort_order' => $i]);
-            foreach (range(1, 4) as $n) {
-                $this->story(['title' => "Block {$i} story {$n}", 'published_at' => now()->subHours($i * 10 + $n)], ['category_id' => $category->id]);
-            }
+        foreach (range(1, 5) as $i) {
+            $this->story(['title' => "Filler {$i}", 'published_at' => now()->subMinutes($i)]);
+        }
+        $category = Category::factory()->create(['sort_order' => 1]);
+        foreach (range(1, 4) as $n) {
+            $this->story(['title' => "Section story {$n}", 'published_at' => now()->subDays($n)], ['category_id' => $category->id]);
         }
 
-        $html = $this->get('/ar')->assertOk()->getContent();
+        $response = $this->get('/ar')->assertOk();
+        $url = route('category', ['locale' => 'ar', 'slug' => $category->translate(Locale::Ar)->slug]);
 
-        $this->assertCount(3, $this->get('/ar')->viewData('blocks'));
-        $this->assertSame(1, substr_count($html, 'md:col-span-2'), 'only the odd last block is widened');
-
-        $category = Category::factory()->create(['sort_order' => 4]);
-        $this->story(['title' => 'Fourth block story'], ['category_id' => $category->id]);
-
-        $this->assertSame(0, substr_count($this->get('/ar')->getContent(), 'md:col-span-2'), 'an even count needs no widening');
+        $response->assertSee('class="section-more" href="'.$url.'"', false);
+        foreach (range(1, 4) as $n) {
+            $response->assertSee("Section story {$n}");
+        }
     }
 
     public function test_the_arabic_copyright_keeps_its_full_stop_after_the_latin_site_name(): void

@@ -12,11 +12,12 @@ use InvalidArgumentException;
 
 class ArticleCard extends Component
 {
-    public const VARIANTS = ['lead', 'card', 'row', 'compact'];
+    public const VARIANTS = ['lead', 'slide', 'card', 'row', 'compact'];
 
     /**
      * @param  ArticleTranslation  $translation  visible, with `article.category.translations` and `article.author` loaded
      * @param  bool|null  $priority  load the image eagerly at high priority; defaults to true for the lead variant only
+     *                               (the home slider passes it for its first slide)
      */
     public function __construct(
         public ArticleTranslation $translation,
@@ -60,7 +61,7 @@ class ArticleCard extends Component
     public function width(): int
     {
         return match ($this->variant) {
-            'lead' => 1280,
+            'lead', 'slide' => 1280,
             'card' => 800,
             default => 480,
         };
@@ -69,7 +70,7 @@ class ArticleCard extends Component
     public function height(): int
     {
         return match ($this->variant) {
-            'lead' => 720,
+            'lead', 'slide' => 720,
             'card' => 450,
             default => 360,
         };
@@ -78,7 +79,7 @@ class ArticleCard extends Component
     public function src(): ?string
     {
         return $this->url(match ($this->variant) {
-            'lead', 'card' => 'card',
+            'lead', 'slide', 'card' => 'card',
             default => 'thumb',
         });
     }
@@ -86,7 +87,7 @@ class ArticleCard extends Component
     public function srcset(): ?string
     {
         $widths = match ($this->variant) {
-            'lead' => ['thumb' => 480, 'card' => 800, 'full' => 1280],
+            'lead', 'slide' => ['thumb' => 480, 'card' => 800, 'full' => 1280],
             'card' => ['thumb' => 480, 'card' => 800],
             default => [],
         };
@@ -105,6 +106,7 @@ class ArticleCard extends Component
     {
         return match ($this->variant) {
             'lead' => '(min-width: 64rem) 780px, 100vw',
+            'slide' => '(min-width: 64rem) 820px, 100vw',
             'card' => '(min-width: 64rem) 380px, (min-width: 40rem) 50vw, 100vw',
             default => null,
         };

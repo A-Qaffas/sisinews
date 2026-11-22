@@ -28,23 +28,37 @@
 @section('content')
     <h1 class="sr-only">{{ $siteName }} | {{ $tagline }}</h1>
 
-    @include('site.partials.live-strip', ['items' => $liveNow])
-
     @if ($lead === null)
+        @include('site.partials.live-strip', ['items' => $liveNow])
         @include('site.partials.empty-state')
     @else
-        <section class="grid gap-8 lg:grid-cols-12 lg:gap-10" aria-labelledby="top-stories">
+        {{-- The navy band: the rotating slider, "top stories" beside it (desktop) and a row of cards under it. --}}
+        <section class="home-band on-dark" aria-labelledby="top-stories">
             <h2 id="top-stories" class="sr-only">{{ __('layout.top_stories') }}</h2>
 
-            <div class="lg:col-span-8">
-                <x-site.article-card :translation="$lead" variant="lead" :show-excerpt="true" />
+            @include('site.partials.live-strip', ['items' => $liveNow])
+
+            <div class="home-hero">
+                @include('site.partials.home-slider', ['slides' => $slides])
+
+                @if ($slides->count() > 1)
+                    <div class="hero-side">
+                        <p class="hero-side__title">{{ __('layout.top_stories') }}</p>
+                        <ol class="hero-side__list">
+                            @foreach ($slides as $story)
+                                <li data-slide-item="{{ $loop->index }}" @class(['is-current' => $loop->first])>
+                                    <x-site.article-card :translation="$story" variant="row" />
+                                </li>
+                            @endforeach
+                        </ol>
+                    </div>
+                @endif
             </div>
 
-            @if ($secondary->isNotEmpty())
-                <div class="flex flex-col gap-6 border-t border-line pt-6 lg:col-span-4 lg:border-t-0 lg:border-s lg:pt-0 lg:ps-8 [&>*+*]:border-t [&>*+*]:border-line [&>*+*]:pt-6">
-                    @foreach ($secondary as $story)
-                        {{-- On tablets the first card lies down beside its image so a full-width picture does not dwarf the page. --}}
-                        <x-site.article-card :translation="$story" :variant="$loop->first ? 'card' : 'row'" :class="$loop->first ? 'md:flex-row md:gap-6 md:[&>.media]:w-2/5 md:[&>.media]:shrink-0 lg:flex-col lg:gap-4 lg:[&>.media]:w-auto' : 'lg:[&>.media]:w-28 lg:[&_.story-title]:text-base xl:[&_.story-title]:text-lg'" />
+            @if ($strip->isNotEmpty())
+                <div class="hero-strip">
+                    @foreach ($strip as $story)
+                        <x-site.article-card :translation="$story" variant="card" />
                     @endforeach
                 </div>
             @endif
@@ -52,28 +66,15 @@
 
         {{-- The sidebar's Latest tab would only repeat the list beside it, so it appears once there is reading data to rank. --}}
         @php($hasSidebar = $mostRead->isNotEmpty())
-        <div class="mt-12 grid gap-12 lg:grid-cols-12 lg:gap-10">
-            <div @class(['space-y-12', 'lg:col-span-8' => $hasSidebar, 'lg:col-span-12' => ! $hasSidebar])>
+        <div class="mt-10 grid gap-12 lg:grid-cols-12 lg:gap-10">
+            <div @class(['min-w-0 space-y-12', 'lg:col-span-8' => $hasSidebar, 'lg:col-span-12' => ! $hasSidebar])>
                 @if ($latest->isNotEmpty())
-                    <section aria-labelledby="latest-title">
-                        <h2 id="latest-title" class="section-title">{{ __('layout.latest') }}</h2>
-                        <div class="divide-y divide-line">
-                            @foreach ($latest as $story)
-                                <div class="py-5 first:pt-0 last:pb-0">
-                                    <x-site.article-card :translation="$story" variant="row" :show-excerpt="true" />
-                                </div>
-                            @endforeach
-                        </div>
-                    </section>
+                    @include('site.partials.home-latest', ['stories' => $latest])
                 @endif
 
-                @if ($blocks !== [])
-                    <div @class(['grid gap-x-10 gap-y-12 md:grid-cols-2', 'lg:grid-cols-3' => ! $hasSidebar])>
-                        @foreach ($blocks as $block)
-                            @include('site.partials.category-block', ['block' => $block, 'id' => 'category-'.$loop->iteration, 'wide' => $hasSidebar && $loop->last && $loop->count % 2 === 1])
-                        @endforeach
-                    </div>
-                @endif
+                @foreach ($blocks as $block)
+                    @include('site.partials.category-block', ['block' => $block, 'id' => 'category-'.$loop->iteration])
+                @endforeach
             </div>
 
             @if ($hasSidebar)

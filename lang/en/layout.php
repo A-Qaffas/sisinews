@@ -18,6 +18,15 @@ return [
     'top_stories' => 'Top stories',
     'latest' => 'Latest news',
     'most_read' => 'Most read',
+    'slider' => [
+        'label' => 'Headlines',
+        'slide' => 'Story :n of :total',
+        'previous' => 'Previous story',
+        'next' => 'Next story',
+        'pause' => 'Pause rotation',
+        'play' => 'Resume rotation',
+    ],
+    'section_all' => 'More in this section',
     'tabs_label' => 'Most read and latest news',
     'empty' => [
         'title' => 'Our first stories are on the way',

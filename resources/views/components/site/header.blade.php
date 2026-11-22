@@ -38,7 +38,7 @@
         {{-- Phones: no room beside the logo (the Live link and Menu button sit there), so the credits get a line of their own. --}}
         <x-site.masthead-credits :locale="$locale" :credits="$credits" variant="strip" />
 
-        <nav id="site-nav" class="nav-bar nav-panel" aria-label="{{ __('layout.primary_nav') }}">
+        <nav id="site-nav" class="nav-bar nav-panel on-dark" aria-label="{{ __('layout.primary_nav') }}">
             <div class="container-site flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-6">
                 @php
                     $sections = $categories();

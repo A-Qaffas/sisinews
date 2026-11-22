@@ -15,7 +15,14 @@ use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
-    private const SECONDARY = 3;
+    /** Stories in the rotating slider at the top, the lead first. */
+    private const SLIDES = 5;
+
+    /** Cards in the row under the slider. */
+    private const STRIP = 4;
+
+    /** Featured stories older than this leave the slider to the news of the day (the lead keeps its own rule). */
+    private const FEATURED_DAYS = 7;
 
     private const LATEST_LIST = 6;
 
@@ -32,7 +39,8 @@ class HomeController extends Controller
         // Cached as plain ids: models do not survive the cache (unserialize is disabled), and
         // re-reading them by primary key is cheap next to the queries that pick them.
         $plan = Cache::remember(
-            "site:home:{$locale->value}",
+            // v2: the slider layout (2026-11) changed the plan's shape; a plan cached by the old code is never read.
+            "site:home:v2:{$locale->value}",
             (int) config('site.cache.home'),
             fn () => $this->plan($locale),
         );
@@ -40,14 +48,14 @@ class HomeController extends Controller
         $stories = StoryQuery::hydrate($locale, $this->idsIn($plan))->keyBy('id');
         $pick = fn (array $ids): Collection => (new Collection($ids))->map(fn (int $id) => $stories->get($id))->filter()->values();
 
-        $secondary = $pick($plan['secondary']);
-        // Unpublished within the cache window: promote the next story rather than show a hole.
-        $lead = $stories->get($plan['lead']) ?? $secondary->shift();
+        // Unpublished within the cache window: the next slide moves up rather than leaving a hole.
+        $slides = $pick($plan['slides']);
 
         return view('site.home', [
             'locale' => $locale,
-            'lead' => $lead,
-            'secondary' => $secondary,
+            'lead' => $slides->first(),
+            'slides' => $slides,
+            'strip' => $pick($plan['strip']),
             'latest' => $pick($plan['latest']),
             'sidebarLatest' => $pick($plan['sidebar']),
             'blocks' => $this->blocks($locale, $plan['blocks'], $pick),
@@ -57,7 +65,10 @@ class HomeController extends Controller
     }
 
     /**
-     * @return array{lead: int|null, secondary: list<int>, latest: list<int>, sidebar: list<int>, blocks: array<int, list<int>>}
+     * The slider: the lead (newest featured story, otherwise the newest), then the week's other featured stories,
+     * then the newest stories. The strip and the latest list continue with the newest stories not already shown.
+     *
+     * @return array{slides: list<int>, strip: list<int>, latest: list<int>, sidebar: list<int>, blocks: array<int, list<int>>}
      */
     private function plan(Locale $locale): array
     {
@@ -66,28 +77,37 @@ class HomeController extends Controller
         $lead = $newest(StoryQuery::visible($locale, fn ($article) => $article->where('is_featured', true)))->value('id')
             ?? $newest(StoryQuery::visible($locale))->value('id');
 
-        $recent = StoryQuery::liveFirst(StoryQuery::visible($locale))
-            ->limit(self::SECONDARY + self::LATEST_LIST + 1)
-            ->pluck('id')
-            ->map(fn ($id) => (int) $id)
-            ->all();
+        $ids = fn ($query) => $query->pluck('id')->map(fn ($id) => (int) $id)->all();
 
-        $pool = array_values(array_diff($recent, [$lead]));
-        $secondary = array_slice($pool, 0, self::SECONDARY);
+        $featured = $lead === null ? [] : $ids($newest(
+            StoryQuery::visible($locale, fn ($article) => $article->where('is_featured', true))
+                ->where('published_at', '>=', now()->subDays(self::FEATURED_DAYS))
+                ->whereKeyNot($lead),
+        )->limit(self::SLIDES - 1));
+
+        $recent = $ids(StoryQuery::liveFirst(StoryQuery::visible($locale))
+            ->limit(self::SLIDES + self::STRIP + self::LATEST_LIST));
+
+        $slides = array_slice(array_values(array_unique(array_merge(
+            $lead === null ? [] : [(int) $lead],
+            $featured,
+            $recent,
+        ))), 0, self::SLIDES);
+        $pool = array_values(array_diff($recent, $slides));
 
         return [
-            'lead' => $lead === null ? null : (int) $lead,
-            'secondary' => $secondary,
-            'latest' => array_slice($pool, self::SECONDARY, self::LATEST_LIST),
+            'slides' => $slides,
+            'strip' => array_slice($pool, 0, self::STRIP),
+            'latest' => array_slice($pool, self::STRIP, self::LATEST_LIST),
             'sidebar' => array_slice($recent, 0, self::SIDEBAR_LATEST),
-            'blocks' => $this->categoryPlan($locale, array_merge([$lead], $secondary)),
+            'blocks' => $this->categoryPlan($locale, $slides),
         ];
     }
 
     /**
-     * Newest stories per category, skipping those already in the lead area.
+     * Newest stories per category, skipping those already in the slider.
      *
-     * @param  list<int|null>  $exclude
+     * @param  list<int>  $exclude
      * @return array<int, list<int>> category id => translation ids
      */
     private function categoryPlan(Locale $locale, array $exclude): array
@@ -103,7 +123,7 @@ class HomeController extends Controller
         foreach ($categoryIds as $categoryId) {
             $ids = StoryQuery::newestFirst(
                 StoryQuery::visible($locale, fn ($article) => $article->where('category_id', $categoryId))
-                    ->whereNotIn('id', array_filter($exclude)),
+                    ->whereNotIn('id', $exclude),
             )->limit(self::PER_CATEGORY)->pluck('id')->map(fn ($id) => (int) $id)->all();
 
             if ($ids !== []) {
@@ -141,14 +161,14 @@ class HomeController extends Controller
     }
 
     /**
-     * @param  array{lead: int|null, secondary: list<int>, latest: list<int>, sidebar: list<int>, blocks: array<int, list<int>>}  $plan
+     * @param  array{slides: list<int>, strip: list<int>, latest: list<int>, sidebar: list<int>, blocks: array<int, list<int>>}  $plan
      * @return list<int>
      */
     private function idsIn(array $plan): array
     {
         return array_values(array_unique(array_merge(
-            $plan['lead'] === null ? [] : [$plan['lead']],
-            $plan['secondary'],
+            $plan['slides'],
+            $plan['strip'],
             $plan['latest'],
             $plan['sidebar'],
             ...array_values($plan['blocks']),

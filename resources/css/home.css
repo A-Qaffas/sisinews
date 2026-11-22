@@ -1,0 +1,596 @@
+/*
+ * The "news broadcast" look (option A, chosen 2026-11-22): a navy header bar, and on the home page a navy band
+ * holding the rotating slider, the top-stories list beside it and a row of cards under it; below it the latest
+ * timeline and the section rows. Imported by app.css outside any layer, so these rules win over the Tailwind
+ * utilities on the shared card markup. Logical properties only: one rule serves Arabic (rtl) and English (ltr).
+ */
+
+/* ---------- Header: navy navigation bar ---------- */
+
+.nav-bar {
+    border-block: 0;
+    background: var(--color-navy-soft);
+    color: #fff;
+}
+
+.nav-link:hover {
+    color: #f6d0d0;
+}
+
+.nav-link[aria-current='page'],
+.nav-more__toggle.is-current,
+.nav-more [open] > .nav-more__toggle {
+    color: #fff;
+    border-block-end-color: var(--color-crimson-bright);
+}
+
+.nav-bar .nav-link--live {
+    background: var(--color-crimson-bright);
+    color: #fff;
+}
+
+.nav-bar .nav-link--live:hover {
+    background: var(--color-crimson);
+    color: #fff;
+}
+
+.nav-bar .nav-link--live .live-dot {
+    background: #fff;
+}
+
+/* The dropdown keeps its cream panel, so its links go back to ink. */
+.nav-more__menu {
+    color: var(--color-ink);
+}
+
+.nav-more__menu :focus-visible {
+    outline-color: var(--color-crimson);
+}
+
+.nav-bar .search-form input {
+    border-color: var(--color-navy-line);
+}
+
+.nav-bar .search-form button {
+    border-color: var(--color-crimson-bright);
+    background: var(--color-crimson-bright);
+    color: #fff;
+}
+
+.nav-bar .search-form button:hover {
+    background: var(--color-crimson);
+}
+
+@media (width < 48rem) {
+    .nav-bar .nav-link {
+        border-block-end-color: rgb(255 255 255 / 0.12);
+    }
+
+    .nav-bar .nav-link[aria-current='page'] {
+        border-block-end-color: var(--color-crimson-bright);
+    }
+}
+
+.ticker {
+    background: #fff;
+}
+
+/* ---------- Text on navy ---------- */
+
+.on-dark .story-meta {
+    color: #a9b9ca;
+}
+
+.on-dark .story-cat {
+    color: #f3b8b8;
+}
+
+.on-dark .story:hover .story-title,
+.on-dark .story-title:has(.story-link:focus-visible) {
+    color: #f6d0d0;
+}
+
+.on-dark .story:has(.story-link:focus-visible) {
+    outline-color: #fff;
+}
+
+/* ---------- Home: the navy band ---------- */
+
+/* Full-bleed navy behind content that stays on the page grid: the shadow paints the sides, the clip stops overflow. */
+.home-band {
+    margin-block-start: -1.5rem;
+    padding-block: 0 1.25rem;
+    background: var(--color-navy);
+    box-shadow: 0 0 0 100vmax var(--color-navy);
+    clip-path: inset(0 -100vmax);
+    color: #fff;
+}
+
+.home-band .live-strip {
+    margin-block: 0 1rem;
+}
+
+.home-hero {
+    display: grid;
+    gap: 1.25rem;
+}
+
+@media (min-width: 48rem) {
+    .home-band {
+        margin-block-start: -2rem;
+        padding-block: 1.5rem 1.75rem;
+    }
+}
+
+@media (min-width: 64rem) {
+    .home-hero {
+        grid-template-columns: minmax(0, 1fr) 20rem;
+        align-items: start;
+    }
+}
+
+/* ---------- Slider ---------- */
+
+.slider {
+    position: relative;
+    min-width: 0;
+}
+
+/* Phones: the picture (and the live bar above it) runs edge to edge. */
+@media (width < 40rem) {
+    .slider,
+    .home-band .live-strip {
+        margin-inline: -1rem;
+    }
+}
+
+@media (40rem <= width < 48rem) {
+    .slider,
+    .home-band .live-strip {
+        margin-inline: -1.5rem;
+    }
+}
+
+.slider-track {
+    display: flex;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+}
+
+/* With the arrows and bars in place the scrollbar is noise; without JavaScript it is the way across. */
+.js .slider-track {
+    scrollbar-width: none;
+}
+
+.js .slider-track::-webkit-scrollbar {
+    display: none;
+}
+
+.slider-track:focus {
+    outline: none;
+}
+
+.slider-slide {
+    flex: 0 0 100%;
+    min-width: 0;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+}
+
+.story--slide {
+    height: 100%;
+    color: #fff;
+}
+
+.story--slide .media {
+    aspect-ratio: 4 / 3;
+    background: var(--color-navy-soft);
+}
+
+@media (min-width: 40rem) {
+    .story--slide .media {
+        aspect-ratio: 16 / 9;
+    }
+}
+
+/* No picture: the logo on cream at the top, clear of the caption. */
+.story--slide .media--placeholder {
+    place-items: start center;
+    padding-block-start: 10%;
+    border: 0;
+    background: var(--color-cream);
+}
+
+.story-caption {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    padding: 4.5rem 1rem 2.4rem;
+    background: linear-gradient(to bottom, transparent, rgb(9 22 36 / 0.6) 32%, rgb(9 22 36 / 0.94));
+}
+
+@media (min-width: 48rem) {
+    .story-caption {
+        padding: 6rem 1.75rem 2.9rem;
+    }
+}
+
+.story--slide .story-meta {
+    color: #c9d4e0;
+}
+
+.story--slide .story-cat {
+    padding: 0.05em 0.6em;
+    background: var(--color-crimson-bright);
+    color: #fff;
+}
+
+.story--slide .story-title {
+    margin-block-start: 0.4rem;
+    text-shadow: 0 1px 12px rgb(0 0 0 / 0.35);
+}
+
+.story--slide .story-caption > p {
+    max-width: 46rem;
+    color: #d5dde6;
+}
+
+.story--slide:hover .story-title {
+    color: #fff;
+}
+
+.story--slide:hover .story-link {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.3em;
+}
+
+.slider-controls {
+    position: absolute;
+    inset-block-start: 0.75rem;
+    inset-inline-end: 0.75rem;
+    z-index: 2;
+    display: flex;
+    gap: 0.4rem;
+}
+
+.slider-btn {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid rgb(255 255 255 / 0.3);
+    border-radius: 50%;
+    background: rgb(9 22 36 / 0.55);
+    color: #fff;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+}
+
+.slider-btn:hover {
+    border-color: var(--color-crimson-bright);
+    background: var(--color-crimson-bright);
+}
+
+.slider-btn:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 2px;
+}
+
+html[dir='rtl'] :is([data-slider-prev], [data-slider-next]) svg {
+    transform: scaleX(-1);
+}
+
+.slider .icon-play,
+.slider.is-paused .icon-pause {
+    display: none;
+}
+
+.slider.is-paused .icon-play {
+    display: block;
+}
+
+.slider-bars {
+    position: absolute;
+    inset-inline: 1rem;
+    inset-block-end: 0.6rem;
+    z-index: 2;
+    display: flex;
+    gap: 0.4rem;
+}
+
+@media (min-width: 48rem) {
+    .slider-bars {
+        inset-inline: 1.75rem;
+        inset-block-end: 1rem;
+    }
+}
+
+.slider-bar {
+    flex: 1;
+    padding-block: 0.6rem;
+    border: 0;
+    background: none;
+    cursor: pointer;
+}
+
+.slider-bar span {
+    position: relative;
+    display: block;
+    height: 3px;
+    overflow: hidden;
+    background: rgb(255 255 255 / 0.35);
+}
+
+.slider-bar span::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    transform: scaleX(0);
+    transform-origin: left;
+}
+
+html[dir='rtl'] .slider-bar span::after {
+    transform-origin: right;
+}
+
+.slider-bar[aria-current] span::after {
+    transform: scaleX(1);
+}
+
+.slider.is-ticking .slider-bar[aria-current] span::after {
+    animation: slider-progress 6s linear;
+}
+
+.slider-bar:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 1px;
+}
+
+@keyframes slider-progress {
+    from {
+        transform: scaleX(0);
+    }
+
+    to {
+        transform: scaleX(1);
+    }
+}
+
+/* ---------- Top stories beside the slider (desktop) ---------- */
+
+.hero-side {
+    display: none;
+}
+
+@media (min-width: 64rem) {
+    .hero-side {
+        display: block;
+    }
+}
+
+.hero-side__title {
+    margin: 0 0 0.25rem;
+    padding-block-end: 0.5rem;
+    border-block-end: 1px solid var(--color-navy-line);
+    color: #a9b9ca;
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+
+.hero-side__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.hero-side__list > li {
+    padding-block: 0.7rem;
+    padding-inline: 0.6rem 0;
+    border-block-end: 1px solid var(--color-navy-line);
+    border-inline-start: 3px solid transparent;
+    transition:
+        background-color 0.3s,
+        border-color 0.3s;
+}
+
+.hero-side__list > li:last-child {
+    border-block-end: 0;
+}
+
+.hero-side__list > li.is-current {
+    border-inline-start-color: var(--color-crimson-bright);
+    background: rgb(255 255 255 / 0.06);
+}
+
+.hero-side .story {
+    gap: 0.75rem;
+}
+
+.hero-side .media {
+    width: 5.5rem;
+}
+
+.hero-side .story-title {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+}
+
+html:lang(en) .hero-side .story-title {
+    line-height: 1.3;
+}
+
+.hero-side .story-meta {
+    font-size: 0.75rem;
+}
+
+/* ---------- Cards under the slider ---------- */
+
+.hero-strip {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 72%;
+    gap: 1rem;
+    margin-block-start: 1.25rem;
+    margin-inline: -1rem;
+    padding-inline: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 1rem;
+    scrollbar-width: none;
+}
+
+.hero-strip > .story {
+    gap: 0.6rem;
+    scroll-snap-align: start;
+}
+
+@media (min-width: 40rem) {
+    .hero-strip {
+        grid-auto-columns: 40%;
+        margin-inline: -1.5rem;
+        padding-inline: 1.5rem;
+    }
+}
+
+@media (min-width: 64rem) {
+    .hero-strip {
+        grid-auto-flow: row;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        margin-inline: 0;
+        padding-inline: 0;
+        overflow: visible;
+    }
+}
+
+.hero-strip .story-title,
+.section-cards .story-title {
+    font-size: 1rem;
+    line-height: 1.55;
+}
+
+html:lang(en) :is(.hero-strip, .section-cards) .story-title {
+    font-size: 1.05rem;
+    line-height: 1.3;
+}
+
+.hero-strip .story-byline,
+.section-cards .story-byline {
+    display: none;
+}
+
+/* ---------- Latest news timeline ---------- */
+
+.timeline {
+    margin: 0;
+    margin-inline-start: 4.25rem;
+    padding: 0;
+    border-inline-start: 2px solid var(--color-line);
+    list-style: none;
+}
+
+.timeline-item {
+    position: relative;
+    padding-inline-start: 1.25rem;
+    padding-block-end: 1.4rem;
+}
+
+.timeline-item:last-child {
+    padding-block-end: 0.25rem;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: -7px;
+    inset-block-start: 0.55rem;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--color-crimson);
+    border-radius: 50%;
+    background: var(--color-cream);
+}
+
+.timeline-item:first-child::before {
+    background: var(--color-crimson);
+}
+
+.timeline-time {
+    position: absolute;
+    inset-inline-end: calc(100% + 0.9rem);
+    inset-block-start: 0.2rem;
+    width: 3.5rem;
+    color: var(--color-muted);
+    font-size: 0.85rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.6;
+    text-align: end;
+}
+
+.timeline-item:first-child .timeline-time {
+    color: var(--color-crimson);
+}
+
+/* ---------- Section rows ---------- */
+
+.section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-block-end: 1rem;
+    padding-block-end: 0.55rem;
+    border-block-end: 2px solid var(--color-ink);
+}
+
+.section-head .section-title {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.section-more {
+    flex: none;
+    color: var(--color-crimson);
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.section-more:hover {
+    text-decoration: underline;
+}
+
+.section-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 1rem;
+}
+
+.section-cards > .story {
+    gap: 0.6rem;
+}
+
+@media (min-width: 48rem) {
+    .section-cards {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1.5rem 1.25rem;
+    }
+}
+
+@media (width < 40rem) {
+    .section-cards .story-title {
+        font-size: 0.9375rem;
+    }
+}
+
+/* ---------- Sidebar ---------- */
+
+.tabs-stack {
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--color-line);
+    background: #fff;
+}
