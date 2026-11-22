@@ -21,6 +21,7 @@ use Illuminate\Console\Command;
 #[Signature('sisi:translate-english
     {--limit=5 : Stories to translate in this run at most}
     {--pause=5 : Seconds to wait between two translations}
+    {--hours= : Only stories published (or scheduled) in the last N hours; the back catalogue is left alone}
     {--dry-run : List what would be translated, change nothing}')]
 #[Description('Translate published Arabic stories that have no up-to-date English version yet, newest first')]
 class TranslateEnglishCommand extends Command
@@ -87,6 +88,7 @@ class TranslateEnglishCommand extends Command
             ->where('locale', Locale::Ar->value)
             ->where('status', TranslationStatus::Published->value)
             ->whereHas('article')
+            ->when(filled($this->option('hours')), fn ($q) => $q->where('published_at', '>=', now()->subHours(max(1, (int) $this->option('hours')))))
             ->orderByDesc('published_at')
             ->orderByDesc('id')
             ->get()

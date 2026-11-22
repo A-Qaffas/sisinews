@@ -273,6 +273,19 @@ class AutoTranslationTest extends TestCase
             ->assertSuccessful();
     }
 
+    public function test_the_command_can_leave_the_back_catalogue_alone(): void
+    {
+        $old = $this->publishedArabicWithoutEnglish(now()->subDays(3)->toDateTimeString());
+        $recent = $this->publishedArabicWithoutEnglish(now()->subHours(2)->toDateTimeString());
+
+        $this->artisan('sisi:translate-english', ['--hours' => 24, '--pause' => 0])
+            ->expectsOutputToContain('1 stories need an English version')
+            ->assertSuccessful();
+
+        $this->assertNotNull($this->englishOf($recent));
+        $this->assertNull($this->englishOf($old));
+    }
+
     public function test_the_command_dry_run_changes_nothing(): void
     {
         $arabic = $this->publishedArabicWithoutEnglish('2026-11-20 08:00:00');
