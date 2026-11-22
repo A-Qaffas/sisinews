@@ -113,6 +113,9 @@ by Google Gemini with the key the Silka ERP already uses. Code: `app/Translation
 
 - `.env`: `GEMINI_API_KEY=<key>` (and optionally `TRANSLATOR_MODEL`, default `gemini-flash-latest`). Without the key the
   feature is off and publishing works as before. After editing `.env`: `php artisan config:cache`.
+  Live since 2026-11-22 with `TRANSLATOR_MODEL=gemini-2.5-flash`: on deploy day `gemini-flash-latest` answered only
+  HTTP 503 ("high demand"), and `gemini-2.5-pro` is closed to new users. The key line was copied server-side from
+  `~/erp-app/.env` (the `.env` before it is kept at `~/sisi.news-private/env.before-gemini-20261122`).
 - The translation runs right after the editor's "publish" response; a failure is only logged (`storage/logs`) and the
   Arabic stays live. The catch-up command fills the gaps, newest first, and also does the back catalogue:
   `php artisan sisi:translate-english --limit=5` (`--dry-run` lists what is missing).
