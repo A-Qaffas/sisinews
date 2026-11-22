@@ -106,6 +106,22 @@ This is the operational truth for the GoDaddy cPanel account `wxr46gn9f7ld@92.20
    names in bold ink (on a phone, two centred lines under the logo row), and in the footer's bottom bar. `/en` shows the English names the same way. Admins change any of the four
    names in the panel (Site > Site settings, admins only).
 
+## Automatic English edition (2026-11-22)
+
+Every Arabic story that goes live gets an English version published with it (same article, same publication time), made
+by Google Gemini with the key the Silka ERP already uses. Code: `app/Translation/`, decisions in the `EnglishEdition` docblock.
+
+- `.env`: `GEMINI_API_KEY=<key>` (and optionally `TRANSLATOR_MODEL`, default `gemini-flash-latest`). Without the key the
+  feature is off and publishing works as before. After editing `.env`: `php artisan config:cache`.
+- The translation runs right after the editor's "publish" response; a failure is only logged (`storage/logs`) and the
+  Arabic stays live. The catch-up command fills the gaps, newest first, and also does the back catalogue:
+  `php artisan sisi:translate-english --limit=5` (`--dry-run` lists what is missing).
+- Cron (every 10 minutes, appended without touching other lines, as `remote-cron.sh` does):
+  `*/10 * * * * cd /home/wxr46gn9f7ld/sisi.news && /usr/local/bin/php artisan sisi:translate-english --limit=4 >> storage/logs/translate.log 2>&1`
+  It stops at the first HTTP 429 (the free quota is shared with the ERP) and carries on at the next run.
+- The audit trail shows the "Auto-translation" account (`auto-translate@sisi.news`): created on first use, hidden from
+  the Team area, refused at the login. An English text a person edits is never overwritten again.
+
 ## Rollback
 
 - Code: re-run step 3 with the previous tarball from `~/sisi.news-uploads/`.
