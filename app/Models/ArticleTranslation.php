@@ -5,8 +5,10 @@ namespace App\Models;
 use App\Editorial\Transition;
 use App\Enums\Locale;
 use App\Enums\TranslationStatus;
+use App\Observers\ArticleTranslationObserver;
 use App\Support\HtmlSanitizer;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 // `status` and `published_at` are intentionally NOT fillable: status changes only
 // through App\Editorial\EditorialWorkflow, so a crafted form post cannot publish.
 #[Fillable(['article_id', 'locale', 'title', 'slug', 'excerpt', 'body', 'hero_caption', 'meta_description'])]
+#[ObservedBy(ArticleTranslationObserver::class)]
 class ArticleTranslation extends Model
 {
     use HasFactory;

@@ -106,6 +106,28 @@ This is the operational truth for the GoDaddy cPanel account `wxr46gn9f7ld@92.20
    names in bold ink (on a phone, two centred lines under the logo row), and in the footer's bottom bar. `/en` shows the English names the same way. Admins change any of the four
    names in the panel (Site > Site settings, admins only).
 
+## Automatic English edition (2026-11-22)
+
+Every Arabic story that goes live gets an English version published with it (same article, same publication time), made
+by Google Gemini with the key the Silka ERP already uses. Code: `app/Translation/`, decisions in the `EnglishEdition` docblock.
+
+- `.env`: `GEMINI_API_KEY=<key>` (and optionally `TRANSLATOR_MODEL`, default `gemini-flash-latest`). Without the key the
+  feature is off and publishing works as before. After editing `.env`: `php artisan config:cache`.
+  Live since 2026-11-22 with `TRANSLATOR_MODEL=gemini-2.5-flash` (flash-lite was tried for an hour, then dropped): on deploy day
+  `gemini-flash-latest` answered only HTTP 503 ("high demand"), `gemini-2.5-pro` is closed to new users, and the key is on
+  Google's FREE tier: 20 requests per day per model (`GenerateRequestsPerDayPerProjectPerModel-FreeTier=20`), reset at
+  midnight Pacific (10:00 Cairo). That cannot keep up with the site; enabling billing on the key's Google project lifts it. The key line was copied server-side from
+  `~/erp-app/.env` (the `.env` before it is kept at `~/sisi.news-private/env.before-gemini-20261122`).
+- The translation runs right after the editor's "publish" response; a failure is only logged (`storage/logs`) and the
+  Arabic stays live. The catch-up command fills the gaps, newest first, and also does the back catalogue:
+  `php artisan sisi:translate-english --limit=5` (`--dry-run` lists what is missing).
+- Cron (installed 2026-11-22, appended without touching other lines; previous crontab kept in `~/sisi.news-backups/`).
+  Owner's decision: new stories only, the back catalogue stays Arabic-only:
+  `*/5 * * * * cd /home/wxr46gn9f7ld/sisi.news && /usr/bin/flock -n .../storage/translate.lock /usr/local/bin/php artisan sisi:translate-english --hours=24 --limit=5 --pause=3 >> storage/logs/translate.log 2>&1`
+  It stops at the first HTTP 429 and carries on at the next run.
+- The audit trail shows the "Auto-translation" account (`auto-translate@sisi.news`): created on first use, hidden from
+  the Team area, refused at the login. An English text a person edits is never overwritten again.
+
 ## Rollback
 
 - Code: re-run step 3 with the previous tarball from `~/sisi.news-uploads/`.

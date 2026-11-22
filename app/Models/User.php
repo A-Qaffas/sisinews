@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\Locale;
 use App\Enums\Permission;
 use App\Enums\Role;
+use App\Filament\Resources\Users\Support\TeamGuard;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
@@ -45,10 +46,10 @@ class User extends Authenticatable implements FilamentUser
         return $this->locale ?? Locale::tryFrom((string) config('site.admin_locale')) ?? Locale::default();
     }
 
-    /** Every account is staff; the only gate is the admin's "active" switch. */
+    /** Every account is staff; the gate is the admin's "active" switch. The automatic-translation account is not a person and never signs in. */
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->is_active;
+        return $this->is_active && strtolower((string) $this->email) !== TeamGuard::AUTO_TRANSLATION_EMAIL;
     }
 
     public function articles(): HasMany

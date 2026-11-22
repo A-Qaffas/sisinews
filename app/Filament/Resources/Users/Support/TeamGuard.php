@@ -26,9 +26,15 @@ final class TeamGuard
     /** Same address as LaunchContentImporter::BYLINE_EMAIL (a test keeps the two equal). */
     public const BYLINE_EMAIL = 'desk@sisi.news';
 
+    /** Same address as EnglishEdition::ACCOUNT_EMAIL: the system account that publishes the automatic English edition. */
+    public const AUTO_TRANSLATION_EMAIL = 'auto-translate@sisi.news';
+
+    /** Accounts that are not people: not listed, not reachable, and their addresses cannot be given to anybody. */
+    public const RESERVED_EMAILS = [self::BYLINE_EMAIL, self::AUTO_TRANSLATION_EMAIL];
+
     public static function isReservedEmail(?string $email): bool
     {
-        return strtolower(trim((string) $email)) === self::BYLINE_EMAIL;
+        return in_array(strtolower(trim((string) $email)), self::RESERVED_EMAILS, true);
     }
 
     public static function isProtected(User $user): bool
@@ -43,7 +49,7 @@ final class TeamGuard
     public static function withoutProtectedAccounts(Builder $query): Builder
     {
         // LOWER() because SQLite compares case-sensitively while MySQL/MariaDB do not.
-        return $query->whereRaw('LOWER(email) <> ?', [self::BYLINE_EMAIL]);
+        return $query->whereRaw('LOWER(email) NOT IN (?, ?)', self::RESERVED_EMAILS);
     }
 
     /**
