@@ -54,7 +54,14 @@
         @endif
 
         @if ($byline && in_array($variant, ['lead', 'card'], true))
-            <p class="story-byline mt-2 text-sm text-muted">{{ __('layout.by', ['name' => $byline]) }}</p>
+            @php($bylineUrl = $authorUrl())
+            <p class="story-byline mt-2 text-sm text-muted">
+                @if ($bylineUrl)
+                    {{ __('article.by') }} <a class="story-byline-link" href="{{ $bylineUrl }}" rel="author">{{ $byline }}</a>
+                @else
+                    {{ __('layout.by', ['name' => $byline]) }}
+                @endif
+            </p>
         @endif
     </div>
 </article>

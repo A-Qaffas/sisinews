@@ -88,7 +88,11 @@ final class ArticleSeo
                 'description' => $description,
                 'datePublished' => $published->toAtomString(),
                 'dateModified' => $modified->toAtomString(),
-                'author' => [['@type' => 'Person', 'name' => $article->author->displayName($locale)]],
+                'author' => [array_filter([
+                    '@type' => 'Person',
+                    'name' => $article->author->displayName($locale),
+                    'url' => $article->author->writerUrl($locale),
+                ])],
                 'image' => [$image],
                 'articleSection' => $section,
                 'inLanguage' => $locale->value,

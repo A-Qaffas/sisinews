@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\Locale;
+use App\Support\Slugger;
+use App\Translation\EnglishEdition;
 use App\Enums\Permission;
 use App\Enums\Role;
 use App\Filament\Resources\Users\Support\TeamGuard;
@@ -162,5 +164,25 @@ class User extends Authenticatable implements FilamentUser
     public function displayName(Locale $locale): string
     {
         return $locale === Locale::Ar && filled($this->name_ar) ? $this->name_ar : $this->name;
+    }
+
+    /** The hidden "Auto-translation" account that publishes the machine-made English edition: never shown as a writer. */
+    public function isSystemAccount(): bool
+    {
+        return strcasecmp((string) $this->email, EnglishEdition::ACCOUNT_EMAIL) === 0;
+    }
+
+    /** "12-ahmed-ali": the id is the identity, the name part is cosmetic (Arabic kept as Unicode, like story slugs). */
+    public function writerIdSlug(Locale $locale): string
+    {
+        $slug = Slugger::make($this->displayName($locale));
+
+        return $slug === '' ? (string) $this->id : "{$this->id}-{$slug}";
+    }
+
+    /** The public page listing this writer's stories; null for the system account, which has none. */
+    public function writerUrl(Locale $locale): ?string
+    {
+        return $this->isSystemAccount() ? null : route('writer', ['locale' => $locale->value, 'idSlug' => $this->writerIdSlug($locale)]);
     }
 }

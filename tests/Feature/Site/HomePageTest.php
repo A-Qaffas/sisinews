@@ -73,7 +73,7 @@ class HomePageTest extends TestCase
         $this->assertSame('Newest plain', $this->get('/ar')->viewData('lead')->title);
     }
 
-    public function test_stories_are_not_repeated_between_the_slider_the_strip_and_the_latest_list(): void
+    public function test_the_slider_and_the_strip_do_not_repeat_each_other(): void
     {
         foreach (range(1, 16) as $i) {
             $this->story(['title' => "Story {$i}", 'published_at' => now()->subMinutes($i)]);
@@ -83,16 +83,50 @@ class HomePageTest extends TestCase
 
         $slides = $response->viewData('slides');
         $strip = $response->viewData('strip');
-        $latest = $response->viewData('latest');
 
         $this->assertSame('Story 1', $response->viewData('lead')->title);
         $this->assertSame($response->viewData('lead')->id, $slides->first()->id, 'the lead is the first slide');
         $this->assertCount(5, $slides);
         $this->assertCount(4, $strip);
-        $this->assertCount(6, $latest);
-        $ids = array_merge($slides->pluck('id')->all(), $strip->pluck('id')->all(), $latest->pluck('id')->all());
+        $ids = array_merge($slides->pluck('id')->all(), $strip->pluck('id')->all());
         $this->assertSame($ids, array_values(array_unique($ids)));
         $this->assertCount(6, $response->viewData('sidebarLatest'));
+    }
+
+    /** Mona, 2026-11-26: the latest list skipped the nine newest stories because they were already in the slider and the strip. */
+    public function test_the_latest_list_always_starts_with_the_newest_stories_even_those_in_the_slider(): void
+    {
+        foreach (range(1, 16) as $i) {
+            $this->story(['title' => "Story {$i}", 'published_at' => now()->subMinutes($i)], ['is_featured' => $i <= 5]);
+        }
+
+        $response = $this->get('/ar')->assertOk();
+
+        $this->assertSame(
+            array_map(fn ($i) => "Story {$i}", range(1, 10)),
+            $response->viewData('latest')->pluck('title')->all(),
+        );
+        $html = $response->getContent();
+        $latest = substr($html, strpos($html, 'id="latest-title"'));
+        $this->assertStringContainsString('Story 1<', $latest);
+    }
+
+    public function test_a_story_published_a_moment_ago_tops_the_latest_list_although_its_time_was_typed_earlier(): void
+    {
+        foreach (range(1, 12) as $i) {
+            $this->story(['title' => "Story {$i}", 'published_at' => now()->subMinutes($i)]);
+        }
+        // Published just now, with an earlier publication time typed in: it reached readers last, so it is the latest.
+        $late = $this->story(['title' => 'Just published', 'published_at' => now()->subHours(3)]);
+        DB::table('article_status_changes')->insert([
+            'article_translation_id' => $late->id,
+            'transition' => 'approve',
+            'from_status' => 'in_review',
+            'to_status' => 'published',
+            'created_at' => now(),
+        ]);
+
+        $this->assertSame('Just published', $this->get('/ar')->viewData('latest')->first()->title);
     }
 
     public function test_the_weeks_featured_stories_follow_the_lead_in_the_slider(): void

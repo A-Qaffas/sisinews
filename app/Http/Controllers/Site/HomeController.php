@@ -24,7 +24,8 @@ class HomeController extends Controller
     /** Featured stories older than this leave the slider to the news of the day (the lead keeps its own rule). */
     private const FEATURED_DAYS = 7;
 
-    private const LATEST_LIST = 6;
+    /** The "latest news" timeline: always the newest stories, even those also in the slider or the strip (owner, 2026-11-26). */
+    private const LATEST_LIST = 10;
 
     private const SIDEBAR_LATEST = 6;
 
@@ -39,8 +40,8 @@ class HomeController extends Controller
         // Cached as plain ids: models do not survive the cache (unserialize is disabled), and
         // re-reading them by primary key is cheap next to the queries that pick them.
         $plan = Cache::remember(
-            // v2: the slider layout (2026-11) changed the plan's shape; a plan cached by the old code is never read.
-            "site:home:v2:{$locale->value}",
+            // v3: the latest list became the plain newest stories (2026-11-26); a plan cached by older code is never read.
+            "site:home:v3:{$locale->value}",
             (int) config('site.cache.home'),
             fn () => $this->plan($locale),
         );
@@ -66,7 +67,8 @@ class HomeController extends Controller
 
     /**
      * The slider: the lead (newest featured story, otherwise the newest), then the week's other featured stories,
-     * then the newest stories. The strip and the latest list continue with the newest stories not already shown.
+     * then the newest stories. The strip continues with the newest stories not in the slider; the latest list is
+     * simply the newest stories, so a story published a minute ago is always at its top.
      *
      * @return array{slides: list<int>, strip: list<int>, latest: list<int>, sidebar: list<int>, blocks: array<int, list<int>>}
      */
@@ -86,7 +88,7 @@ class HomeController extends Controller
         )->limit(self::SLIDES - 1));
 
         $recent = $ids(StoryQuery::liveFirst(StoryQuery::visible($locale))
-            ->limit(self::SLIDES + self::STRIP + self::LATEST_LIST));
+            ->limit(max(self::SLIDES + self::STRIP, self::LATEST_LIST, self::SIDEBAR_LATEST)));
 
         $slides = array_slice(array_values(array_unique(array_merge(
             $lead === null ? [] : [(int) $lead],
@@ -98,7 +100,7 @@ class HomeController extends Controller
         return [
             'slides' => $slides,
             'strip' => array_slice($pool, 0, self::STRIP),
-            'latest' => array_slice($pool, self::STRIP, self::LATEST_LIST),
+            'latest' => array_slice($recent, 0, self::LATEST_LIST),
             'sidebar' => array_slice($recent, 0, self::SIDEBAR_LATEST),
             'blocks' => $this->categoryPlan($locale, $slides),
         ];

@@ -39,6 +39,12 @@ return [
             'archived' => 'مؤرشف',
         ],
     ],
+    'writer' => [
+        'label' => 'الكاتب',
+        'title' => 'أخبار بقلم :name',
+        'description' => 'كل أخبار :name على :site، الأحدث أولًا.',
+        'link' => 'كل أخبار :name',
+    ],
     'category' => [
         'description' => 'آخر أخبار وتقارير :name من :site.',
         'empty_title' => 'لا توجد أخبار في هذا القسم بعد',

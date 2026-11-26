@@ -14,7 +14,8 @@
 <header>
     <h1 class="sn-title">{{ $translation->title }}</h1>
     <p class="sn-meta">
-        <span>{{ __('article.by') }} <strong>{{ $article->author->displayName($locale) }}</strong></span>
+        @php($writerUrl = $article->author->writerUrl($locale))
+        <span>{{ __('article.by') }} @if ($writerUrl)<a class="sn-byline-link" href="{{ $writerUrl }}" rel="author" title="{{ __('article.writer.link', ['name' => $article->author->displayName($locale)]) }}"><strong>{{ $article->author->displayName($locale) }}</strong></a>@else<strong>{{ $article->author->displayName($locale) }}</strong>@endif</span>
         @if ($publishedAt)
             <time datetime="{{ $publishedAt->toAtomString() }}">
                 <span>{{ $publishedAt->translatedFormat('l j F Y') }}</span><span>{{ $publishedAt->translatedFormat('g:i A') }}</span>

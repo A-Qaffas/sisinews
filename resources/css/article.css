@@ -130,6 +130,16 @@
     color: var(--color-ink, #162938);
 }
 
+.sn-byline-link {
+    text-decoration: none;
+}
+
+.sn-byline-link:hover strong,
+.sn-byline-link:focus-visible strong {
+    color: var(--color-crimson, #9b2c2c);
+    text-decoration: underline;
+}
+
 .sn-meta time span + span::before {
     content: '·';
     margin-inline: 0.5rem;

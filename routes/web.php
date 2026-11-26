@@ -12,6 +12,7 @@ use App\Http\Controllers\Site\PageController;
 use App\Http\Controllers\Site\RootRedirectController;
 use App\Http\Controllers\Site\SearchController;
 use App\Http\Controllers\Site\SitemapController;
+use App\Http\Controllers\Site\WriterController;
 use App\Models\Page;
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +49,10 @@ Route::prefix('{locale}')
             ->where('idSlug', '[0-9]+(?:-.*)?')
             ->name('article');
         // Search scans article bodies with LIKE: cap it per IP so one client cannot pin the shared CPU.
+        // All of one writer's stories. {idSlug} = "7-writer-name": the user id is the identity, the name is cosmetic.
+        Route::get('/writer/{idSlug}', WriterController::class)
+            ->where('idSlug', '[0-9]+(?:-.*)?')
+            ->name('writer');
         Route::get('/search', SearchController::class)->middleware('throttle:30,1')->name('search');
         Route::get('/feed.xml', FeedController::class)->name('feed');
         // Static pages (About, Privacy...). The slug shape is the one the staff form enforces.

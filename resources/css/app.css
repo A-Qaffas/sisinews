@@ -599,6 +599,27 @@ html:lang(en) {
         text-decoration: underline;
     }
 
+    /* The writer's name sits above the stretched headline link, like the section label. */
+    .story-byline-link {
+        position: relative;
+        z-index: 2;
+        color: var(--color-ink);
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .story-byline-link::before {
+        content: '';
+        position: absolute;
+        inset: -0.55rem -0.4rem;
+    }
+
+    .story-byline-link:hover,
+    .story-byline-link:focus-visible {
+        color: var(--color-crimson);
+        text-decoration: underline;
+    }
+
     .story-meta {
         display: flex;
         flex-wrap: wrap;

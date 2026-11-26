@@ -39,6 +39,12 @@ return [
             'archived' => 'Archived',
         ],
     ],
+    'writer' => [
+        'label' => 'Writer',
+        'title' => 'Stories by :name',
+        'description' => 'All stories by :name on :site, newest first.',
+        'link' => 'All stories by :name',
+    ],
     'category' => [
         'description' => 'The latest :name news and reports from :site.',
         'empty_title' => 'No stories in this section yet',

@@ -136,6 +136,12 @@ class ArticleCard extends Component
         return $this->article()->author?->displayName($this->locale());
     }
 
+    /** The byline's link to the writer's page; null for the hidden system account. */
+    public function authorUrl(): ?string
+    {
+        return $this->article()->author?->writerUrl($this->locale());
+    }
+
     public function isoDate(): ?string
     {
         return $this->translation->published_at?->toIso8601String();
