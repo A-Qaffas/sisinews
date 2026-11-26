@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use App\Enums\Locale;
-use App\Support\Slugger;
-use App\Translation\EnglishEdition;
 use App\Enums\Permission;
 use App\Enums\Role;
 use App\Filament\Resources\Users\Support\TeamGuard;
+use App\Support\Slugger;
+use App\Translation\EnglishEdition;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
