@@ -128,6 +128,15 @@ by Google Gemini with the key the Silka ERP already uses. Code: `app/Translation
 - The audit trail shows the "Auto-translation" account (`auto-translate@sisi.news`): created on first use, hidden from
   the Team area, refused at the login. An English text a person edits is never overwritten again.
 
+## Writer pages and the latest-news fix (2026-11-26)
+
+Full release `sisi-news-20261126-133957.tgz` (previous: `sisi-news-20261122-083506.tgz`, kept in `~/sisi.news-uploads/`
+for rollback; backup `sisi-db-20261126-0446.sql.gz` taken just before). Asked by Mona (Silka team):
+- `/{locale}/writer/{id}-{name}`: every byline links to the writer's stories. The Auto-translation account gets no page.
+  A writer whose Team record has no Latin name shows the Arabic name on the English site too (fill the name in Team).
+- Home "latest news" is now the 10 newest stories. Before, it skipped the 9 already in the slider and the strip.
+- Before installing, the server's code was compared with the last deployed commit: only line endings differed.
+
 ## Rollback
 
 - Code: re-run step 3 with the previous tarball from `~/sisi.news-uploads/`.
